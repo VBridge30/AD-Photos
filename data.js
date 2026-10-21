@@ -89,6 +89,24 @@ window.GALLERY={
    "title": "The Hall of Shadows",
    "w": 1200,
    "h": 1600
+  },
+  {
+   "id": "monochrome-16",
+   "title": "Coffee, Black and White",
+   "w": 1151,
+   "h": 1340
+  },
+  {
+   "id": "monochrome-17",
+   "title": "The Pavilion by the Water",
+   "w": 1170,
+   "h": 1434
+  },
+  {
+   "id": "monochrome-18",
+   "title": "Clover and Two Yellows",
+   "w": 1170,
+   "h": 1462
   }
  ],
  "macro": [
@@ -241,6 +259,54 @@ window.GALLERY={
    "title": "Hanging Garden",
    "w": 1440,
    "h": 1920
+  },
+  {
+   "id": "macro-26",
+   "title": "Two Gerberas",
+   "w": 1103,
+   "h": 1154
+  },
+  {
+   "id": "macro-27",
+   "title": "Sunflower",
+   "w": 1170,
+   "h": 1449
+  },
+  {
+   "id": "macro-28",
+   "title": "Dahlia in Pink",
+   "w": 1170,
+   "h": 1151
+  },
+  {
+   "id": "macro-29",
+   "title": "Yellow Stars",
+   "w": 1170,
+   "h": 1506
+  },
+  {
+   "id": "macro-30",
+   "title": "White Osteospermum",
+   "w": 1169,
+   "h": 882
+  },
+  {
+   "id": "macro-31",
+   "title": "Gerbera, Half in Colour",
+   "w": 1085,
+   "h": 1448
+  },
+  {
+   "id": "macro-32",
+   "title": "Clematis",
+   "w": 1129,
+   "h": 830
+  },
+  {
+   "id": "macro-33",
+   "title": "Purple Verbena",
+   "w": 1170,
+   "h": 766
   }
  ],
  "story": [
@@ -309,6 +375,24 @@ window.GALLERY={
    "title": "The Lounge",
    "w": 1440,
    "h": 1921
+  },
+  {
+   "id": "story-12",
+   "title": "Peeking Through",
+   "w": 1170,
+   "h": 1147
+  },
+  {
+   "id": "story-13",
+   "title": "Mother and Child",
+   "w": 1052,
+   "h": 1444
+  },
+  {
+   "id": "story-14",
+   "title": "Yellow Wall, Leaf Shadow",
+   "w": 1170,
+   "h": 1444
   }
  ],
  "street": [
@@ -427,6 +511,12 @@ window.GALLERY={
    "title": "Manhole, Blue",
    "w": 1440,
    "h": 1921
+  },
+  {
+   "id": "abstract-10",
+   "title": "Stripes of Light",
+   "w": 1170,
+   "h": 1451
   }
  ],
  "landscape": [
@@ -555,6 +645,18 @@ window.GALLERY={
    "title": "The Line Ahead",
    "w": 1441,
    "h": 1921
+  },
+  {
+   "id": "landscape-22",
+   "title": "The Bamboo Path",
+   "w": 412,
+   "h": 515
+  },
+  {
+   "id": "landscape-23",
+   "title": "Mountain Over the Fields",
+   "w": 872,
+   "h": 637
   }
  ],
  "unforced": [
@@ -733,6 +835,18 @@ window.GALLERY={
    "title": "The Quiet Courtyard",
    "w": 1440,
    "h": 1920
+  },
+  {
+   "id": "architecture-18",
+   "title": "The Wheel and the Skyline",
+   "w": 837,
+   "h": 1443
+  },
+  {
+   "id": "architecture-19",
+   "title": "Window in Slate",
+   "w": 1129,
+   "h": 851
   }
  ]
 };
