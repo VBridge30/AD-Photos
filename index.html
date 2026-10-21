@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aashish Deshpande · Photographs</title>
+<meta name="description" content="A collection of photographs by Prof. Aashish Deshpande: Monochrome, Macro, Story, Street, Architecture, Abstract, Landscape and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <img src="photos/hero.jpg" alt="Aashish Deshpande photographing, framed by marble pillars">
+  <div class="hero-text">
+    <p class="eyebrow">A collection of photographs</p>
+    <h1>Aashish<br>Deshpande</h1>
+    <p class="tagline">Eight ways of looking at the world</p>
+    <a class="enter" href="#gallery">See the photographs <span>↓</span></a>
+  </div>
+</header>
+
+<nav id="nav" aria-label="Categories">
+  <a class="brand" href="#top">A. Deshpande</a>
+  <div class="nav-right"><div class="filters" id="filters"></div><button class="theme" id="theme" aria-label="Switch between black and white background" title="Black / white background">◐</button></div>
+</nav>
+
+<section class="about" id="about">
+  <img class="avatar" src="photos/about.jpg" alt="Prof. Aashish Deshpande">
+  <div>
+    <p class="eyebrow">The photographer</p>
+    <h2>Prof. Aashish Deshpande</h2>
+    <p class="bio">A professor, traveller and minimalist.</p>
+    <p>These are his photographs, grouped into eight chapters. Look through them in order, or jump to the one you like.</p>
+  </div>
+</section>
+
+<main id="gallery"></main>
+
+<footer>
+  <h2>Thank you for visiting</h2>
+  <p>All photographs © Prof. Aashish Deshpande. Please do not reproduce without permission.</p>
+</footer>
+
+<div id="lb" class="lb" hidden aria-modal="true" role="dialog">
+  <button class="lb-close" aria-label="Close">×</button>
+  <button class="lb-prev" aria-label="Previous">‹</button>
+  <figure>
+    <img id="lb-img" alt="">
+    <figcaption><span id="lb-title"></span><span id="lb-count"></span></figcaption>
+  </figure>
+  <button class="lb-next" aria-label="Next">›</button>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
