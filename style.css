@@ -1,6 +1,6 @@
 :root{
   --bg:#0b0b0b; --bg2:#121212; --ink:#ece8e1; --mute:#8d8a85; --line:#2a2a2a; --accent:#d9b779;
-  --nav:rgba(11,11,11,.88); --tilebg:#1b1b1b; --lbbg:rgba(0,0,0,.96); --num:#2a2a2a;
+  --nav:rgba(11,11,11,.88); --peekbg:rgba(0,0,0,.45); --tilebg:#1b1b1b; --lbbg:rgba(0,0,0,.96); --num:#2a2a2a;
   --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
   --gutter:clamp(16px,4vw,56px);
 }
@@ -113,10 +113,21 @@ footer a{text-decoration:none;border-bottom:1px solid var(--line)}
 /* light theme */
 :root[data-theme="light"]{
   --bg:#ffffff; --bg2:#f7f6f3; --ink:#1c1b19; --mute:#6f6c66; --line:#e2dfd8; --accent:#9a7430;
-  --nav:rgba(255,255,255,.92); --tilebg:#ecebe7; --lbbg:rgba(255,255,255,.97); --num:#d6d2c8;
+  --nav:rgba(255,255,255,.92); --peekbg:rgba(255,255,255,.5); --tilebg:#ecebe7; --lbbg:rgba(255,255,255,.97); --num:#d6d2c8;
 }
 .theme{background:none;border:1px solid var(--line);color:var(--ink);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;line-height:1;flex:none;display:grid;place-items:center;transition:border-color .2s}
 .theme:hover{border-color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:.6rem;min-width:0}
 
 .about .bio{font-family:var(--serif);font-style:italic;font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.3;color:var(--ink)}
+
+/* hold-to-preview */
+.peek{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:var(--peekbg);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);opacity:0;pointer-events:none;transition:opacity .4s}
+.peek.on{opacity:1}
+.peek figure{display:flex;flex-direction:column;align-items:center;gap:.7rem;transform:scale(.94);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.peek.on figure{transform:scale(1)}
+.peek img{max-width:80vw;max-height:78vh;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.peek figcaption{font-family:var(--serif);font-size:1.2rem;color:var(--ink)}
+/* music button */
+#music.on{border-color:var(--accent);color:var(--accent);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 5px rgba(217,183,121,.12)}}
