@@ -81,12 +81,12 @@ function show(){
   [idx+1,idx-1].forEach(i=>{const q=set[(i+set.length)%set.length];if(q)new Image().src='photos/'+q.dataset.id+'.jpg'});
 }
 function open(t){
-  set=[...t.closest('.chapter,.featured').querySelectorAll('.tile')];idx=set.indexOf(t);
+  set=[...t.closest('.chapter,.featured').querySelectorAll('.tile,.slide')].filter(e=>e.offsetParent!==null);idx=set.indexOf(t);
   lb.hidden=false;document.body.style.overflow='hidden';show();
 }
 function close(){lb.hidden=true;document.body.style.overflow='';lbImg.src=''}
 const step=d=>{idx=(idx+d+set.length)%set.length;show()};
-main.addEventListener('click',e=>{const t=e.target.closest('.tile');if(t)open(t)});
+main.addEventListener('click',e=>{const t=e.target.closest('.tile,.slide');if(t&&!window.__dragged)open(t)});
 $('.lb-close').onclick=close;$('.lb-prev').onclick=()=>step(-1);$('.lb-next').onclick=()=>step(1);
 lb.addEventListener('click',e=>{if(e.target===lb)close()});
 document.addEventListener('keydown',e=>{if(lb.hidden)return;
@@ -186,4 +186,55 @@ $('#theme').addEventListener('click',()=>{
     fade(0,1.2,()=>{if(!on){if(file)file.pause();else if(ctx)ctx.suspend()}});
   }
   btn.addEventListener('click',()=>on?stop():play());
+})();
+
+/* Sway-style slider: each chapter can switch between the grid and a swipeable slider */
+(function(){
+  const SLIDER_FIRST=['landscape','architecture'];
+  document.querySelectorAll('.chapter').forEach(ch=>{
+    const k=ch.dataset.cat,list=GALLERY[k];if(!list)return;
+    // slider markup
+    const wrap=document.createElement('div');wrap.className='slider';
+    wrap.innerHTML='<button class="sl-btn sl-prev" aria-label="Previous photo">‹</button><div class="track" tabindex="0" aria-label="'+k+' slider"></div><button class="sl-btn sl-next" aria-label="Next photo">›</button><p class="sl-info"><span class="sl-title"></span><span class="sl-count"></span></p>';
+    const track=wrap.querySelector('.track');
+    list.forEach(p=>{
+      const s=document.createElement('button');s.className='slide';s.dataset.id=p.id;s.dataset.cat=k;s.setAttribute('aria-label','View '+p.title);
+      s.innerHTML='<img src="photos/'+p.id+'.jpg" width="'+p.w+'" height="'+p.h+'" alt="'+p.title+'" loading="lazy" decoding="async" draggable="false">';
+      track.appendChild(s);
+    });
+    ch.appendChild(wrap);
+    // view switch next to the photo count
+    const head=ch.querySelector('.chapter-head'),count=head.querySelector('.count');
+    const right=document.createElement('div');right.className='head-right';
+    const view=document.createElement('div');view.className='view';
+    view.innerHTML='<button data-v="grid">'+(k==='story'?'Story':'Grid')+'</button><button data-v="slider">Slider</button>';
+    count.replaceWith(right);right.append(count,view);
+    const slides=[...track.children],title=wrap.querySelector('.sl-title'),cnt=wrap.querySelector('.sl-count');
+    let idx=0;
+    const mark=()=>{
+      const mid=track.scrollLeft+track.clientWidth/2;let best=0,bd=1e9;
+      slides.forEach((s,i)=>{const d=Math.abs(s.offsetLeft+s.offsetWidth/2-mid);if(d<bd){bd=d;best=i}});
+      idx=best;slides.forEach((s,i)=>s.classList.toggle('active',i===best));
+      title.textContent=list[best].title;cnt.textContent=pad(best+1)+' / '+pad(list.length);
+    };
+    const go=i=>{i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
+    let raf=0;track.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(mark)},{passive:true});
+    wrap.querySelector('.sl-prev').onclick=()=>go(idx-1);
+    wrap.querySelector('.sl-next').onclick=()=>go(idx+1);
+    track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(idx+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(idx-1)}});
+    // click slide that is off-centre: bring it to the centre first, open only when it is the centred one
+    track.addEventListener('click',e=>{const s=e.target.closest('.slide');if(s&&!s.classList.contains('active')&&!window.__dragged){e.stopPropagation();go(slides.indexOf(s))}},true);
+    // mouse drag
+    let down=false,x0=0,sl0=0,moved=0;
+    track.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')return;down=true;x0=e.clientX;sl0=track.scrollLeft;moved=0});
+    addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-x0;moved=Math.max(moved,Math.abs(dx));if(moved>5){track.classList.add('drag');track.scrollLeft=sl0-dx}});
+    addEventListener('pointerup',()=>{if(!down)return;down=false;if(moved>5){window.__dragged=true;setTimeout(()=>window.__dragged=false,60);track.classList.remove('drag');go(idx)}});
+    // switch
+    const set=v=>{
+      ch.dataset.view=v;view.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+      if(v==='slider')requestAnimationFrame(()=>{mark();go(idx)});
+    };
+    view.addEventListener('click',e=>{const b=e.target.closest('button');if(b)set(b.dataset.v)});
+    set(SLIDER_FIRST.includes(k)?'slider':'grid');
+  });
 })();
