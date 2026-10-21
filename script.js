@@ -238,3 +238,11 @@ $('#theme').addEventListener('click',()=>{
     set(SLIDER_FIRST.includes(k)?'slider':'grid');
   });
 })();
+
+/* back to top */
+(function(){
+  const b=$('#top');
+  const upd=()=>b.classList.toggle('show',scrollY>innerHeight*1.2&&lb.hidden);
+  addEventListener('scroll',upd,{passive:true});upd();
+  b.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+})();
