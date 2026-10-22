@@ -133,7 +133,7 @@ $('#theme').addEventListener('click',()=>{
   addEventListener('keydown',hide);
 })();
 
-/* background music: plays music.mp3 if you add one next to index.html, otherwise a soft generated piano */
+/* background music: plays music.mp3 if you add one next to index.html, otherwise a generated fingerpicked guitar */
 (function(){
   const btn=$('#music');let on=false,file=null,ctx=null,master=null,timers=[],running=false,kick=null;
   const probe=new Audio();probe.src='music.mp3';probe.loop=true;probe.volume=0;
@@ -151,32 +151,31 @@ $('#theme').addEventListener('click',()=>{
     const rev=ctx.createConvolver();rev.buffer=ir;
     const wet=ctx.createGain();wet.gain.value=.55;
     lp.connect(master);lp.connect(rev);rev.connect(wet);wet.connect(master);master.connect(ctx.destination);
-    // soft piano: sparse notes over a slow Am - F - C - G cycle
-    const prog=[{b:45,s:[57,60,64,67,69,72]},{b:41,s:[57,60,64,65,69,72]},{b:48,s:[55,60,64,67,72,76]},{b:43,s:[55,59,62,67,71,74]}];
-    function note(m,vel,dur){
-      const t=ctx.currentTime+.02,f=hz(m);
-      [[1,1],[2,.35],[3,.14],[4,.05]].forEach(([k,a])=>{
-        const o=ctx.createOscillator(),g=ctx.createGain();
-        o.type='sine';o.frequency.value=f*k*(k>1?1.0008:1);
-        const top=vel*a*.16,len=dur/(1+k*.5);
-        g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(top,t+.01);g.gain.exponentialRampToValueAtTime(.0004,t+len);
-        o.connect(g);g.connect(lp);o.start(t);o.stop(t+len+.1);
+    // fingerpicked acoustic guitar: Am - F - C - G, eighth-note picking pattern
+    const prog=[[45,57,60,64,69,64,60,57],[41,53,57,60,65,60,57,53],[48,55,60,64,67,64,60,55],[43,55,59,62,67,62,59,55]];
+    const pick=[0,2,3,4,3,2,4,3]; // order of picking within a bar
+    function pluck(m,vel){
+      const t=ctx.currentTime+.03,f=hz(m);
+      const flt=ctx.createBiquadFilter();flt.type='lowpass';flt.Q.value=1.2;
+      flt.frequency.setValueAtTime(3800,t);flt.frequency.exponentialRampToValueAtTime(600,t+.9);
+      const g=ctx.createGain();
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel*.2,t+.006);g.gain.exponentialRampToValueAtTime(.0004,t+2.4);
+      [['triangle',1,1],['sawtooth',1.002,.35],['sine',2,.25]].forEach(([ty,k,a])=>{
+        const o=ctx.createOscillator(),og=ctx.createGain();
+        o.type=ty;o.frequency.value=f*k;og.gain.value=a;
+        o.connect(og);og.connect(flt);o.start(t);o.stop(t+2.5);
       });
+      flt.connect(g);g.connect(lp);
     }
-    let bar=0,step=0,last=2;
+    let bar=0,step=0;
     kick=()=>{if(!running)tick()};
     function tick(){
       if(!on){running=false;return}
       running=true;
       const c=prog[bar%prog.length];
-      if(step===0)note(c.b,.9,6.5);
-      if(step===0||step===4)note(c.b+12,.5,5);
-      if(Math.random()<.72){
-        last=Math.max(0,Math.min(c.s.length-1,last+[-2,-1,-1,0,1,1,2][Math.floor(Math.random()*7)]));
-        note(c.s[last]+(Math.random()<.15?12:0),.45+Math.random()*.4,4.5);
-      }
+      pluck(c[step===0?0:pick[step]],step===0?.95:.5+Math.random()*.3);
       step=(step+1)%8;if(step===0)bar++;
-      timers.push(setTimeout(tick,1500+Math.random()*900));
+      timers.push(setTimeout(tick,430+Math.random()*30));
     }
     kick();
   }
