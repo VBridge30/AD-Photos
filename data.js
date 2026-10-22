@@ -8,105 +8,179 @@ window.GALLERY={
   },
   {
    "id": "monochrome-02",
-   "title": "Empty Table, Afternoon",
-   "w": 1024,
-   "h": 1365
-  },
-  {
-   "id": "monochrome-03",
    "title": "The Quiet Room",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "monochrome-04",
+   "id": "monochrome-03",
    "title": "The Vine Leaf",
    "w": 1024,
    "h": 1365
   },
   {
-   "id": "monochrome-05",
-   "title": "Garden Table",
-   "w": 1178,
-   "h": 1570
-  },
-  {
-   "id": "monochrome-06",
+   "id": "monochrome-04",
    "title": "Light Through the Gate",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "monochrome-07",
+   "id": "monochrome-05",
    "title": "Balcony Garden",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "monochrome-08",
+   "id": "monochrome-06",
    "title": "Jasmine in Grey",
    "w": 1440,
    "h": 1918
   },
   {
-   "id": "monochrome-09",
+   "id": "monochrome-07",
    "title": "A Touch of Yellow",
    "w": 1024,
    "h": 1365
   },
   {
-   "id": "monochrome-10",
+   "id": "monochrome-08",
    "title": "Colour Remains",
    "w": 1024,
    "h": 1365
   },
   {
-   "id": "monochrome-11",
+   "id": "monochrome-09",
    "title": "Two Chairs, One Shed",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "monochrome-12",
-   "title": "Roses in Grey",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "monochrome-13",
-   "title": "Shadow on the Lid",
-   "w": 1440,
-   "h": 1921
-  },
-  {
-   "id": "monochrome-14",
-   "title": "Lattice of Light",
-   "w": 960,
-   "h": 1280
-  },
-  {
-   "id": "monochrome-15",
-   "title": "The Hall of Shadows",
-   "w": 1200,
-   "h": 1600
-  },
-  {
-   "id": "monochrome-16",
+   "id": "monochrome-10",
    "title": "Coffee, Black and White",
    "w": 1151,
    "h": 1340
   },
   {
-   "id": "monochrome-17",
+   "id": "monochrome-11",
+   "title": "Clover and Two Yellows",
+   "w": 1170,
+   "h": 1462
+  }
+ ],
+ "light": [
+  {
+   "id": "light-01",
+   "title": "Empty Table, Afternoon",
+   "w": 1024,
+   "h": 1365
+  },
+  {
+   "id": "light-02",
+   "title": "Garden Table",
+   "w": 1178,
+   "h": 1570
+  },
+  {
+   "id": "light-03",
+   "title": "Roses in Grey",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "light-04",
+   "title": "Shadow on the Lid",
+   "w": 1440,
+   "h": 1921
+  },
+  {
+   "id": "light-05",
+   "title": "Lattice of Light",
+   "w": 960,
+   "h": 1280
+  },
+  {
+   "id": "light-06",
+   "title": "The Hall of Shadows",
+   "w": 1200,
+   "h": 1600
+  },
+  {
+   "id": "light-07",
    "title": "The Pavilion by the Water",
    "w": 1170,
    "h": 1434
   },
   {
-   "id": "monochrome-18",
-   "title": "Clover and Two Yellows",
+   "id": "light-08",
+   "title": "The Kitchen Window",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "light-09",
+   "title": "Light on the Wall",
+   "w": 1024,
+   "h": 768
+  },
+  {
+   "id": "light-10",
+   "title": "Hotel at Night",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "light-11",
+   "title": "Yellow Wall, Leaf Shadow",
    "w": 1170,
-   "h": 1462
+   "h": 1444
+  },
+  {
+   "id": "light-12",
+   "title": "Silhouettes at Play",
+   "w": 1080,
+   "h": 810
+  },
+  {
+   "id": "light-13",
+   "title": "Stripes of Light",
+   "w": 1170,
+   "h": 1451
+  },
+  {
+   "id": "light-14",
+   "title": "Morning Mist",
+   "w": 1080,
+   "h": 810
+  },
+  {
+   "id": "light-15",
+   "title": "The Lone Tree",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "light-16",
+   "title": "The Fence and the Oak",
+   "w": 1138,
+   "h": 640
+  },
+  {
+   "id": "light-17",
+   "title": "The Bamboo Path",
+   "w": 412,
+   "h": 515
+  },
+  {
+   "id": "light-18",
+   "title": "Backlit Blossoms",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "light-19",
+   "title": "Arch and Silhouette",
+   "w": 1440,
+   "h": 1921
   }
  ],
  "macro": [
@@ -244,66 +318,60 @@ window.GALLERY={
   },
   {
    "id": "macro-23",
-   "title": "Backlit Blossoms",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "macro-24",
    "title": "Dahlia from Behind",
    "w": 973,
    "h": 1305
   },
   {
-   "id": "macro-25",
+   "id": "macro-24",
    "title": "Hanging Garden",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "macro-26",
+   "id": "macro-25",
    "title": "Two Gerberas",
    "w": 1103,
    "h": 1154
   },
   {
-   "id": "macro-27",
+   "id": "macro-26",
    "title": "Sunflower",
    "w": 1170,
    "h": 1449
   },
   {
-   "id": "macro-28",
+   "id": "macro-27",
    "title": "Dahlia in Pink",
    "w": 1170,
    "h": 1151
   },
   {
-   "id": "macro-29",
+   "id": "macro-28",
    "title": "Yellow Stars",
    "w": 1170,
    "h": 1506
   },
   {
-   "id": "macro-30",
+   "id": "macro-29",
    "title": "White Osteospermum",
    "w": 1169,
    "h": 882
   },
   {
-   "id": "macro-31",
+   "id": "macro-30",
    "title": "Gerbera, Half in Colour",
    "w": 1085,
    "h": 1448
   },
   {
-   "id": "macro-32",
+   "id": "macro-31",
    "title": "Clematis",
    "w": 1129,
    "h": 830
   },
   {
-   "id": "macro-33",
+   "id": "macro-32",
    "title": "Purple Verbena",
    "w": 1170,
    "h": 766
@@ -318,80 +386,56 @@ window.GALLERY={
   },
   {
    "id": "story-02",
-   "title": "The Kitchen Window",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "story-03",
-   "title": "Light on the Wall",
-   "w": 1024,
-   "h": 768
-  },
-  {
-   "id": "story-04",
    "title": "The Dining Room",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "story-05",
+   "id": "story-03",
    "title": "Table, Laid",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "story-06",
+   "id": "story-04",
    "title": "Evening at the Ground",
    "w": 1024,
    "h": 768
   },
   {
-   "id": "story-07",
+   "id": "story-05",
    "title": "Lantern Light",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "story-08",
-   "title": "Hotel at Night",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "story-09",
+   "id": "story-06",
    "title": "The Closed Door",
    "w": 1441,
    "h": 1921
   },
   {
-   "id": "story-10",
+   "id": "story-07",
    "title": "Breakfast, Quietly",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "story-11",
+   "id": "story-08",
    "title": "The Lounge",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "story-12",
+   "id": "story-09",
    "title": "Peeking Through",
    "w": 1170,
    "h": 1147
   },
   {
-   "id": "story-13",
+   "id": "story-10",
    "title": "Mother and Child",
    "w": 1052,
-   "h": 1444
-  },
-  {
-   "id": "story-14",
-   "title": "Yellow Wall, Leaf Shadow",
-   "w": 1170,
    "h": 1444
   }
  ],
@@ -416,42 +460,36 @@ window.GALLERY={
   },
   {
    "id": "street-04",
-   "title": "Silhouettes at Play",
-   "w": 1080,
-   "h": 810
-  },
-  {
-   "id": "street-05",
    "title": "Flower Baskets",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "street-06",
+   "id": "street-05",
    "title": "The Guard",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "street-07",
+   "id": "street-06",
    "title": "Cutty Sark",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "street-08",
+   "id": "street-07",
    "title": "The Royal Barge",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "street-09",
+   "id": "street-08",
    "title": "Rider on the Plinth",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "street-10",
+   "id": "street-09",
    "title": "Stone Spheres",
    "w": 1441,
    "h": 1921
@@ -511,149 +549,119 @@ window.GALLERY={
    "title": "Manhole, Blue",
    "w": 1440,
    "h": 1921
-  },
-  {
-   "id": "abstract-10",
-   "title": "Stripes of Light",
-   "w": 1170,
-   "h": 1451
   }
  ],
  "landscape": [
   {
    "id": "landscape-01",
-   "title": "Morning Mist",
-   "w": 1080,
-   "h": 810
-  },
-  {
-   "id": "landscape-02",
-   "title": "The Lone Tree",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "landscape-03",
    "title": "Sunset, Heron",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "landscape-04",
+   "id": "landscape-02",
    "title": "Egret at Dusk",
    "w": 1179,
    "h": 884
   },
   {
-   "id": "landscape-05",
+   "id": "landscape-03",
    "title": "Sun Through the Haze",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "landscape-06",
+   "id": "landscape-04",
    "title": "A Peak from Above",
    "w": 490,
    "h": 749
   },
   {
-   "id": "landscape-07",
+   "id": "landscape-05",
    "title": "First Snow",
    "w": 1320,
    "h": 1760
   },
   {
-   "id": "landscape-08",
+   "id": "landscape-06",
    "title": "Snow on the Park",
    "w": 990,
    "h": 742
   },
   {
-   "id": "landscape-09",
+   "id": "landscape-07",
    "title": "Snowy Path",
    "w": 1310,
    "h": 1528
   },
   {
-   "id": "landscape-10",
+   "id": "landscape-08",
    "title": "Above the Clouds",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "landscape-11",
+   "id": "landscape-09",
    "title": "Fuji at Dawn",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "landscape-12",
+   "id": "landscape-10",
    "title": "Waiting on the Path",
    "w": 1281,
    "h": 960
   },
   {
-   "id": "landscape-13",
+   "id": "landscape-11",
    "title": "Through the Branches",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "landscape-14",
+   "id": "landscape-12",
    "title": "The Avenue",
    "w": 1308,
    "h": 1745
   },
   {
-   "id": "landscape-15",
+   "id": "landscape-13",
    "title": "Evening Sky",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "landscape-16",
+   "id": "landscape-14",
    "title": "Canal at Dusk",
    "w": 1441,
    "h": 1921
   },
   {
-   "id": "landscape-17",
+   "id": "landscape-15",
    "title": "Under the Arch",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "landscape-18",
-   "title": "The Fence and the Oak",
-   "w": 1138,
-   "h": 640
-  },
-  {
-   "id": "landscape-19",
+   "id": "landscape-16",
    "title": "Statue in the Field",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "landscape-20",
+   "id": "landscape-17",
    "title": "The Stag",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "landscape-21",
+   "id": "landscape-18",
    "title": "The Line Ahead",
    "w": 1441,
    "h": 1921
   },
   {
-   "id": "landscape-22",
-   "title": "The Bamboo Path",
-   "w": 412,
-   "h": 515
-  },
-  {
-   "id": "landscape-23",
+   "id": "landscape-19",
    "title": "Mountain Over the Fields",
    "w": 872,
    "h": 637
@@ -826,24 +834,18 @@ window.GALLERY={
   },
   {
    "id": "architecture-16",
-   "title": "Arch and Silhouette",
-   "w": 1440,
-   "h": 1921
-  },
-  {
-   "id": "architecture-17",
    "title": "The Quiet Courtyard",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "architecture-18",
+   "id": "architecture-17",
    "title": "The Wheel and the Skyline",
    "w": 837,
    "h": 1443
   },
   {
-   "id": "architecture-19",
+   "id": "architecture-18",
    "title": "Window in Slate",
    "w": 1129,
    "h": 851

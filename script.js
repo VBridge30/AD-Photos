@@ -1,5 +1,6 @@
 const CHAPTERS=[
  {k:'monochrome',t:'Monochrome',d:'Colour removed, so light, shape and shadow can speak.'},
+ {k:'light',t:'Light and Shadow',d:'Where the light falls, and what it leaves behind: rays through mist, a shadow on a wall, a silhouette against the glow.'},
  {k:'unforced',t:'The Art of Not Forcing Frames',l:'Unforced Frames',d:'No grid, no thirds, no centring. The subject sits where it fell: pushed to an edge, cropped, half-hidden. The frame follows the moment, not the rules.',g:'c2'},
  {k:'macro',t:'Macro',d:'A closer look at petals, dewdrops and the small worlds in between.'},
  {k:'story',t:'Story',d:'Quiet moments that suggest more than they show.'},

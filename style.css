@@ -164,3 +164,6 @@ footer a{text-decoration:none;border-bottom:1px solid var(--line)}
   .grid.c2{columns:3}
   .fgrid{max-width:1100px}
 }
+
+/* nine chapters: tighter nav on laptops */
+@media (max-width:1700px){.filters button{letter-spacing:.08em;padding:.45rem .55rem}}
