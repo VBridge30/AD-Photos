@@ -276,7 +276,7 @@ $('#theme').addEventListener('click',()=>{
       f.classList.add('paper-note');f.textContent=pg.text;
     }else if(pg.t==='divider'){
       f.classList.add('divider');
-      f.innerHTML='<div class="dn">'+pg.n+'</div><div class="dt">'+pg.title+'</div><div class="dd">'+pg.desc+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
+      f.innerHTML='<div class="dn">'+pg.n+'</div><div class="dt">'+pg.title+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
     }else{
       const q=QUOTES[pg.p.title];
       f.innerHTML='<div class="pgphoto"><img data-src="photos/'+pg.p.id+'.jpg" alt="'+pg.p.title+'" draggable="false"></div><div class="pgcap">'+(q?'“'+q+'”':pg.p.title)+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
