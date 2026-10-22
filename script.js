@@ -9,11 +9,7 @@ const CHAPTERS=[
  {k:'abstract',t:'Abstract',d:'Where the subject dissolves into line, colour and feeling.'},
  {k:'landscape',t:'Landscape',d:'Mist, water, snow and the long light of the day.',g:'c2'}
 ];
-const QUOTES={
- 'Last Light, Still Water':'The day does not end. It softens.',
- 'Zinnia':'Come close enough and even a flower becomes a landscape.',
- 'Egret at Dusk':'Stillness is also a way of travelling.'
-};
+const QUOTES={};
 const $=(s,r=document)=>r.querySelector(s);
 const main=$('#gallery'),filters=$('#filters');
 const pad=n=>String(n).padStart(2,'0');
