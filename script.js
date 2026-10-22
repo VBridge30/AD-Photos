@@ -275,7 +275,7 @@ $('#theme').addEventListener('click',()=>{
     const f=document.createElement('div');f.className='face '+side;
     if(pg.t==='cover'||pg.t==='backcover'){
       f.classList.add('cover');
-      if(pg.t==='cover')f.innerHTML='<div class="ct">Aashish<br>Deshpande</div><div class="rule"></div><div class="cs">A collection of photographs</div>';
+      if(pg.t==='cover')f.innerHTML='<div class="ct">A. Deshpande</div><div class="rule"></div><div class="cs">A minimalist’s eye</div>';
     }else if(pg.t==='note'){
       f.classList.add('paper-note');f.textContent=pg.text;
     }else if(pg.t==='divider'){
