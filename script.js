@@ -278,8 +278,7 @@ $('#theme').addEventListener('click',()=>{
       f.classList.add('divider');
       f.innerHTML='<div class="dn">'+pg.n+'</div><div class="dt">'+pg.title+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
     }else{
-      const q=QUOTES[pg.p.title];
-      f.innerHTML='<div class="pgphoto"><img data-src="photos/'+pg.p.id+'.jpg" alt="'+pg.p.title+'" draggable="false"></div><div class="pgcap">'+(q?'“'+q+'”':pg.p.title)+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
+      f.innerHTML='<div class="pgphoto"><img data-src="photos/'+pg.p.id+'.jpg" alt="'+pg.p.title+'" draggable="false"></div><span class="pgnum">'+pad(idx-1)+'</span>';
     }
     f._pg=pg;return f;
   }

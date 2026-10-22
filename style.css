@@ -216,3 +216,4 @@ body.album-open .to-top{display:none}
 .book::before{content:"";position:absolute;left:0;top:2%;width:100%;height:98%;transform:translateZ(-80px);box-shadow:0 25px 70px rgba(0,0,0,.65);pointer-events:none;transition:left .9s,width .9s}
 .book.at-start::before{left:50%;width:50%}
 .book.at-end::before{left:0;width:50%}
+.face:has(.pgphoto){padding-bottom:9%}
