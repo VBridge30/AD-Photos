@@ -157,3 +157,10 @@ footer a{text-decoration:none;border-bottom:1px solid var(--line)}
 .to-top{position:fixed;right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);z-index:30;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--nav);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer;display:grid;place-items:center;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s,transform .3s,border-color .2s}
 .to-top.show{opacity:1;transform:none;pointer-events:auto}
 .to-top:hover{border-color:var(--accent)}
+
+/* smaller photos on laptop-width screens */
+@media (min-width:1100px){
+  .grid{columns:4}
+  .grid.c2{columns:3}
+  .fgrid{max-width:1100px}
+}
