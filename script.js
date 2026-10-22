@@ -350,3 +350,10 @@ $('#theme').addEventListener('click',()=>{
     if(Math.abs(dx)>50)go(dx<0?1:-1);
   },{passive:true});
 })();
+
+/* brand link: back to the home view (all chapters, top of page) */
+$('.brand').addEventListener('click',e=>{
+  e.preventDefault();
+  if(typeof setFilter==='function'&&active!=='all')setFilter('all');
+  scrollTo({top:0,behavior:'smooth'});
+});
