@@ -12,25 +12,7 @@ const CHAPTERS=[
 const QUOTES={
  'Last Light, Still Water':'The day does not end. It softens.',
  'Zinnia':'Come close enough and even a flower becomes a landscape.',
- 'Egret at Dusk':'Stillness is also a way of travelling.',
- 'Fog and Wires':'Some mornings only whisper the city.',
- 'The Clock at St Pancras':'Every journey begins under a ceiling of patience.',
- 'Above the Clouds':'Up here, the world is quiet and very large.',
- 'Morning Mist':'Light arrives slowly, and the hills let it in.',
- 'The Lone Tree':'One tree is enough to hold the whole sky.',
- 'Chai Time':'The smallest pause can be the whole afternoon.',
- 'Lattice of Light':'A window is only a frame the sun borrows.',
- 'Silhouettes at Play':'Joy needs no faces.',
- 'Yellow Wall, Leaf Shadow':'Shadows are the light\'s handwriting.',
- 'Light on the Wall':'Nothing happened here, and it was lovely.',
- 'The Bamboo Path':'Walk slowly. The forest keeps the time.',
- 'Rain Lily, Open':'It opened because the rain asked.',
- 'A Single Drop':'A whole world, hanging by a thread.',
- 'Colour Remains':'Take away the colour; keep what it meant.',
- 'Arch and Silhouette':'Every doorway asks you to step through.',
- 'Stripes of Light':'Light, drawn with a ruler.',
- 'Fuji at Dawn':'A mountain does not hurry the sunrise.',
- 'Empty Table, Afternoon':'An empty chair is a story still waiting.'
+ 'Egret at Dusk':'Stillness is also a way of travelling.'
 };
 const $=(s,r=document)=>r.querySelector(s);
 const main=$('#gallery'),filters=$('#filters');

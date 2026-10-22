@@ -169,7 +169,7 @@ footer a{text-decoration:none;border-bottom:1px solid var(--line)}
 @media (max-width:1700px){.filters button{letter-spacing:.08em;padding:.45rem .55rem}}
 
 /* photo album */
-.album{position:fixed;inset:0;z-index:110;background:radial-gradient(ellipse at 50% 40%,#2b2622 0%,#0e0c0b 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;--ph:min(76vh,calc(46vw*1.3333),760px);--pw:calc(var(--ph)*.75);opacity:0;transition:opacity .4s}
+.album{position:fixed;inset:0;z-index:110;background:radial-gradient(ellipse at 50% 40%,#2b2622 0%,#0e0c0b 75%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;--ar:1.12;--pw:min(46vw,calc(76vh*var(--ar)),820px);--ph:calc(var(--pw)/var(--ar));opacity:0;transition:opacity .4s}
 .album.show{opacity:1}
 .album[hidden]{display:none}
 body.album-open{overflow:hidden}
