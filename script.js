@@ -9,6 +9,29 @@ const CHAPTERS=[
  {k:'abstract',t:'Abstract',d:'Where the subject dissolves into line, colour and feeling.'},
  {k:'landscape',t:'Landscape',d:'Mist, water, snow and the long light of the day.',g:'c2'}
 ];
+const QUOTES={
+ 'Last Light, Still Water':'The day does not end. It softens.',
+ 'Zinnia':'Come close enough and even a flower becomes a landscape.',
+ 'Egret at Dusk':'Stillness is also a way of travelling.',
+ 'Fog and Wires':'Some mornings only whisper the city.',
+ 'The Clock at St Pancras':'Every journey begins under a ceiling of patience.',
+ 'Above the Clouds':'Up here, the world is quiet and very large.',
+ 'Morning Mist':'Light arrives slowly, and the hills let it in.',
+ 'The Lone Tree':'One tree is enough to hold the whole sky.',
+ 'Chai Time':'The smallest pause can be the whole afternoon.',
+ 'Lattice of Light':'A window is only a frame the sun borrows.',
+ 'Silhouettes at Play':'Joy needs no faces.',
+ 'Yellow Wall, Leaf Shadow':'Shadows are the light\'s handwriting.',
+ 'Light on the Wall':'Nothing happened here, and it was lovely.',
+ 'The Bamboo Path':'Walk slowly. The forest keeps the time.',
+ 'Rain Lily, Open':'It opened because the rain asked.',
+ 'A Single Drop':'A whole world, hanging by a thread.',
+ 'Colour Remains':'Take away the colour; keep what it meant.',
+ 'Arch and Silhouette':'Every doorway asks you to step through.',
+ 'Stripes of Light':'Light, drawn with a ruler.',
+ 'Fuji at Dawn':'A mountain does not hurry the sunrise.',
+ 'Empty Table, Afternoon':'An empty chair is a story still waiting.'
+};
 const $=(s,r=document)=>r.querySelector(s);
 const main=$('#gallery'),filters=$('#filters');
 const pad=n=>String(n).padStart(2,'0');
@@ -78,6 +101,7 @@ const lb=$('#lb'),lbImg=$('#lb-img');let set=[],idx=0;
 function show(){
   const p=set[idx];lbImg.src='photos/'+p.dataset.id+'.jpg';lbImg.alt=p.getAttribute('aria-label');
   $('#lb-title').textContent=p.getAttribute('aria-label').replace('View ','');
+  $('#lb-quote').textContent=QUOTES[$('#lb-title').textContent]||'';
   $('#lb-count').textContent=`${idx+1} / ${set.length}`;
   [idx+1,idx-1].forEach(i=>{const q=set[(i+set.length)%set.length];if(q)new Image().src='photos/'+q.dataset.id+'.jpg'});
 }
@@ -246,4 +270,101 @@ $('#theme').addEventListener('click',()=>{
   const upd=()=>b.classList.toggle('show',scrollY>innerHeight*1.2&&lb.hidden);
   addEventListener('scroll',upd,{passive:true});upd();
   b.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+})();
+
+/* photo album: page-turning book */
+(function(){
+  const view=$('#album-view'),book=$('#book'),prev=$('#al-prev'),next=$('#al-next'),count=$('#al-count');
+  const PER=7;
+  const pages=[];
+  pages.push({t:'cover'});
+  pages.push({t:'note',text:'A collection of photographs'});
+  CHAPTERS.forEach((c,i)=>{
+    pages.push({t:'divider',n:pad(i+1),title:c.t,desc:c.d});
+    GALLERY[c.k].slice(0,PER).forEach(p=>pages.push({t:'photo',p}));
+  });
+  pages.push({t:'note',text:'Thank you for looking.'});
+  if(pages.length%2===0)pages.push({t:'note',text:''});
+  pages.push({t:'backcover'});
+  const N=pages.length/2;
+  let cur=0,opened=false;
+
+  function face(pg,idx,side){
+    const f=document.createElement('div');f.className='face '+side;
+    if(pg.t==='cover'||pg.t==='backcover'){
+      f.classList.add('cover');
+      if(pg.t==='cover')f.innerHTML='<div class="ct">Aashish<br>Deshpande</div><div class="rule"></div><div class="cs">A collection of photographs</div>';
+    }else if(pg.t==='note'){
+      f.classList.add('paper-note');f.textContent=pg.text;
+    }else if(pg.t==='divider'){
+      f.classList.add('divider');
+      f.innerHTML='<div class="dn">'+pg.n+'</div><div class="dt">'+pg.title+'</div><div class="dd">'+pg.desc+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
+    }else{
+      const q=QUOTES[pg.p.title];
+      f.innerHTML='<div class="pgphoto"><img data-src="photos/'+pg.p.id+'.jpg" alt="'+pg.p.title+'" draggable="false"></div><div class="pgcap">'+(q?'“'+q+'”':pg.p.title)+'</div><span class="pgnum">'+pad(idx-1)+'</span>';
+    }
+    f._pg=pg;return f;
+  }
+  const sheets=[];
+  for(let i=0;i<N;i++){
+    const s=document.createElement('div');s.className='sheet';s.style.setProperty('--i',i);
+    s.appendChild(face(pages[2*i],2*i,'front'));
+    s.appendChild(face(pages[2*i+1],2*i+1,'back'));
+    book.appendChild(s);sheets.push(s);
+  }
+  function load(){
+    for(let i=Math.max(0,cur-3);i<Math.min(N,cur+4);i++)sheets[i].querySelectorAll('img[data-src]').forEach(im=>{
+      im.src=im.dataset.src;im.removeAttribute('data-src');
+      im.addEventListener('load',()=>im.classList.add('ok'),{once:true});
+    });
+  }
+  function z(){sheets.forEach((s,i)=>{s.style.zIndex=i<cur?i:N-i})}
+  function render(animate){
+    sheets.forEach((s,i)=>{
+      const was=s.classList.contains('flipped'),now=i<cur;
+      if(was!==now&&animate){
+        s.style.zIndex=N+5;
+        setTimeout(z,1000);
+      }
+      s.classList.toggle('flipped',now);
+    });
+    if(!animate)z();
+    book.classList.toggle('at-start',cur===0);
+    book.classList.toggle('at-end',cur===N);
+    prev.disabled=cur===0;next.disabled=cur===N;
+    count.textContent=cur===0?'Cover':cur===N?'The end':pad(cur)+' / '+pad(N-1);
+    load();
+  }
+  function go(d){const n=Math.min(N,Math.max(0,cur+d));if(n!==cur){cur=n;render(true)}}
+  function openAlbum(){
+    view.hidden=false;document.body.classList.add('album-open');
+    if(!opened){opened=true;cur=0;render(false)}
+    requestAnimationFrame(()=>view.classList.add('show'));
+    view.querySelector('.al-close').focus();
+  }
+  function closeAlbum(){
+    view.classList.remove('show');document.body.classList.remove('album-open');
+    setTimeout(()=>{view.hidden=true},400);
+  }
+  $('#album').addEventListener('click',openAlbum);
+  view.querySelector('.al-close').addEventListener('click',closeAlbum);
+  prev.addEventListener('click',()=>go(-1));next.addEventListener('click',()=>go(1));
+  book.addEventListener('click',e=>{
+    const f=e.target.closest('.face');if(!f)return;
+    go(f.classList.contains('back')?-1:1);
+  });
+  addEventListener('keydown',e=>{
+    if(view.hidden)return;
+    if(e.key==='Escape')closeAlbum();
+    else if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1)}
+    else if(e.key==='Home'){cur=0;render(true)}
+    else if(e.key==='End'){cur=N;render(true)}
+  });
+  let sx=null;
+  view.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+  view.addEventListener('touchend',e=>{
+    if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;
+    if(Math.abs(dx)>50)go(dx<0?1:-1);
+  },{passive:true});
 })();
