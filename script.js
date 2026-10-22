@@ -133,9 +133,9 @@ $('#theme').addEventListener('click',()=>{
   addEventListener('keydown',hide);
 })();
 
-/* background music: plays music.mp3 if you add one next to index.html, otherwise a soft generated ambient pad */
+/* background music: plays music.mp3 if you add one next to index.html, otherwise a soft generated piano */
 (function(){
-  const btn=$('#music');let on=false,file=null,ctx=null,master=null,timers=[];
+  const btn=$('#music');let on=false,file=null,ctx=null,master=null,timers=[],running=false,kick=null;
   const probe=new Audio();probe.src='music.mp3';probe.loop=true;probe.volume=0;
   let hasFile=null;
   probe.addEventListener('canplaythrough',()=>hasFile=true,{once:true});
@@ -144,36 +144,41 @@ $('#theme').addEventListener('click',()=>{
   function ambient(){
     ctx=new (window.AudioContext||window.webkitAudioContext)();
     master=ctx.createGain();master.gain.value=0;
-    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;
     // simple generated reverb
     const len=ctx.sampleRate*3.5,ir=ctx.createBuffer(2,len,ctx.sampleRate);
     for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}
     const rev=ctx.createConvolver();rev.buffer=ir;
     const wet=ctx.createGain();wet.gain.value=.55;
     lp.connect(master);lp.connect(rev);rev.connect(wet);wet.connect(master);master.connect(ctx.destination);
-    const chords=[[57,60,64,67],[53,57,60,64],[48,52,55,59],[55,59,62,66]]; // Am7, Fmaj7, Cmaj7, G6
-    const scale=[69,72,74,76,79,81];
-    let n=0;
-    function pad(){
-      const t=ctx.currentTime,ch=chords[n++%chords.length],dur=9;
-      ch.forEach((m,i)=>{
-        [-6,6].forEach(det=>{
-          const o=ctx.createOscillator(),g=ctx.createGain();
-          o.type=i%2?'triangle':'sine';o.frequency.value=hz(m);o.detune.value=det;
-          g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+3.5);g.gain.linearRampToValueAtTime(0,t+dur+1.5);
-          o.connect(g);g.connect(lp);o.start(t);o.stop(t+dur+2);
-        });
+    // soft piano: sparse notes over a slow Am - F - C - G cycle
+    const prog=[{b:45,s:[57,60,64,67,69,72]},{b:41,s:[57,60,64,65,69,72]},{b:48,s:[55,60,64,67,72,76]},{b:43,s:[55,59,62,67,71,74]}];
+    function note(m,vel,dur){
+      const t=ctx.currentTime+.02,f=hz(m);
+      [[1,1],[2,.35],[3,.14],[4,.05]].forEach(([k,a])=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.type='sine';o.frequency.value=f*k*(k>1?1.0008:1);
+        const top=vel*a*.16,len=dur/(1+k*.5);
+        g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(top,t+.01);g.gain.exponentialRampToValueAtTime(.0004,t+len);
+        o.connect(g);g.connect(lp);o.start(t);o.stop(t+len+.1);
       });
     }
-    function bell(){
-      const t=ctx.currentTime,m=scale[Math.floor(Math.random()*scale.length)];
-      const o=ctx.createOscillator(),g=ctx.createGain();
-      o.type='sine';o.frequency.value=hz(m);
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.06,t+.02);g.gain.exponentialRampToValueAtTime(.0005,t+3.5);
-      o.connect(g);g.connect(lp);o.start(t);o.stop(t+3.6);
+    let bar=0,step=0,last=2;
+    kick=()=>{if(!running)tick()};
+    function tick(){
+      if(!on){running=false;return}
+      running=true;
+      const c=prog[bar%prog.length];
+      if(step===0)note(c.b,.9,6.5);
+      if(step===0||step===4)note(c.b+12,.5,5);
+      if(Math.random()<.72){
+        last=Math.max(0,Math.min(c.s.length-1,last+[-2,-1,-1,0,1,1,2][Math.floor(Math.random()*7)]));
+        note(c.s[last]+(Math.random()<.15?12:0),.45+Math.random()*.4,4.5);
+      }
+      step=(step+1)%8;if(step===0)bar++;
+      timers.push(setTimeout(tick,1500+Math.random()*900));
     }
-    pad();timers.push(setInterval(pad,9000));
-    (function next(){timers.push(setTimeout(()=>{if(on){bell();next()}},2500+Math.random()*4500))})();
+    kick();
   }
   function fade(to,sec,done){
     if(file){const s=file.volume,t0=performance.now();(function f(){const k=Math.min(1,(performance.now()-t0)/(sec*1000));file.volume=s+(to-s)*k;k<1?requestAnimationFrame(f):done&&done()})()}
@@ -182,7 +187,7 @@ $('#theme').addEventListener('click',()=>{
   function play(){
     on=true;btn.classList.add('on');btn.setAttribute('aria-pressed','true');
     if(hasFile){file=probe;file.volume=0;file.play().catch(()=>{});fade(.5,3)}
-    else{if(!ctx)ambient();ctx.resume();fade(.9,4)}
+    else{if(!ctx)ambient();ctx.resume();kick&&kick();fade(.9,4)}
   }
   function stop(){
     on=false;btn.classList.remove('on');btn.setAttribute('aria-pressed','false');
