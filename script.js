@@ -49,7 +49,7 @@ CHAPTERS.forEach((c,i)=>{
 });
 
 /* featured: six favourites, one look at the range */
-const FEATURED=[['landscape','Egret at Dusk'],['macro','Zinnia'],['architecture','The Clock at St Pancras'],['unforced','Fog and Wires'],['monochrome','Last Light, Still Water'],['landscape','Above the Clouds']];
+const FEATURED=[['landscape','Egret at Dusk'],['macro','Zinnia'],['architecture','The Clock at St Pancras'],['street','Fog and Wires'],['monochrome','Last Light, Still Water'],['landscape','Above the Clouds']];
 const fs=document.createElement('section');fs.className='featured';fs.id='featured';
 fs.innerHTML='<div class="chapter-head"><div><h2>Selected Works</h2><p>Six photographs to begin with.</p></div></div>';
 const fg=document.createElement('div');fg.className='fgrid';
@@ -358,80 +358,108 @@ $('.brand').addEventListener('click',e=>{
 });
 
 
-/* "Drift": the Art of Not Forcing Frames. Vertical scrolling slides a strip of photos sideways.
-   Each photo is placed off-centre on purpose: pushed to an edge, cut by the frame, floating in empty space. */
+/* "The Unframed Board": the Art of Not Forcing Frames.
+   The photos are scattered over one large board. Drag it, swipe it, or use the arrows;
+   the camera flies to each photo and parks it off-centre, never in the middle and never on the thirds. */
 (function(){
   const ch=$('#unforced');if(!ch)return;
   const list=GALLERY.unforced;
-  ch.classList.add('drift-ch');
-  // [height in vh, top offset in vh, gap before it in vw, parallax]
-  const PRE=[[60,34,-6,.10],[44,-7,9,-.06],[80,42,5,.14],[32,58,13,-.10],[68,4,-9,.08],[50,50,8,-.12],[38,9,15,.12],[84,24,3,-.05]];
-  const wrap=document.createElement('div');wrap.className='drift';
-  wrap.innerHTML='<div class="d-stage"><div class="d-track"></div><div class="d-hud" aria-hidden="true"><span class="d-bar"><i></i></span><span class="d-cnt">00 / '+pad(list.length)+'</span></div></div>';
-  const track=wrap.querySelector('.d-track'),fill=wrap.querySelector('.d-bar i'),cnt=wrap.querySelector('.d-cnt');
-  const cover=document.createElement('div');cover.className='d-cover';
-  cover.innerHTML='<img src="photos/unforced-cover.jpg" alt="A man photographing, pushed to the left edge of the frame" decoding="async"><h3 class="d-title">No grid.<br>No thirds.<br><em>No centre.</em></h3><p class="d-hint"><span>keep scrolling</span><i></i></p>';
-  track.appendChild(cover);
+  ch.classList.add('board-ch');
+  const W=[74,46,92,38,64,84,42,68,54,78,40,60];     // photo widths, in board units (1 unit = 1% of board height)
+  const Y=[96,10,126,58,18,112,44,104,6,78,32,118];  // vertical positions
+  const AX=[.21,.74,.58,.17,.83,.43,.24,.79,.56,.14,.68,.38]; // where each photo is parked in view
+  const AY=[.58,.41,.72,.31,.64,.24,.76,.28,.69,.47,.18,.73];
+  const U=n=>'calc(var(--u)*'+n.toFixed(2)+')';
   const items=[];
+  let x=150,seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  // the cover is the first thing on the board
+  items.push({cover:true,x:12,y:44,w:128,h:96});
   list.forEach((p,i)=>{
-    const P=PRE[i%PRE.length];
-    const it=document.createElement('div');it.className='d-item';
-    it.style.cssText='--h:'+P[0]+'vh;--ar:'+(p.w/p.h).toFixed(4)+';margin-left:'+P[2]+'vw;margin-top:'+P[1]+'vh';
-    const t=tile(p,'unforced',1);
-    const img=t.firstChild;img.src='photos/'+p.id+'.jpg';img.loading=i<3?'eager':'lazy';
-    it.innerHTML='<span class="d-num">'+pad(i+1)+'</span><div class="d-in"></div><span class="d-cap">'+p.title+'</span>';
-    it.querySelector('.d-in').appendChild(t);
-    track.appendChild(it);items.push({el:it,inn:it.querySelector('.d-in'),num:it.querySelector('.d-num'),sp:P[3]});
+    const ar=p.w/p.h,w=Math.min(W[i%W.length],96*ar),h=w/ar;
+    const o={p,i,x,y:Math.min(Y[i%Y.length],208-h),w,h};
+    items.push(o);x+=w*.62+8+rnd()*16;
   });
-  const end=document.createElement('div');end.className='d-end';end.innerHTML='<p>The frame follows<br>the moment.</p>';
-  track.appendChild(end);
+  const PW=x+items[items.length-1].w+60,PH=210;
+  const wrap=document.createElement('div');wrap.className='board-wrap';
+  wrap.innerHTML='<div class="board" tabindex="0" aria-label="Photographs scattered on a board. Drag or use the arrow keys."><div class="plane"></div></div>'+
+    '<div class="b-ui"><button class="b-btn b-prev" aria-label="Previous photo">‹</button><button class="b-btn b-next" aria-label="Next photo">›</button><span class="b-info"><span class="b-title"></span><span class="b-cnt"></span></span><div class="b-map" aria-hidden="true"><i></i></div></div>';
+  const board=wrap.querySelector('.board'),plane=wrap.querySelector('.plane'),map=wrap.querySelector('.b-map'),view=wrap.querySelector('.b-map i');
+  const title=wrap.querySelector('.b-title'),cnt=wrap.querySelector('.b-cnt');
+  plane.style.width=U(PW);plane.style.height=U(PH);
+  items.forEach((o,n)=>{
+    const el=document.createElement('div');el.className='b-item'+(o.cover?' b-cover':'');
+    el.style.cssText='left:'+U(o.x)+';top:'+U(o.y)+';width:'+U(o.w)+';height:'+U(o.h)+';--r:'+((n%2?1:-1)*(.4+rnd()*1.4)).toFixed(2)+'deg';
+    if(o.cover){
+      el.innerHTML='<img src="photos/unforced-cover.jpg" alt="A man photographing, pushed to the left edge of the frame" decoding="async" draggable="false"><h3 class="b-head">No grid.<br>No thirds.<br><em>No centre.</em></h3>';
+    }else{
+      const t=tile(o.p,'unforced',1);const img=t.firstChild;img.src='photos/'+o.p.id+'.jpg';img.draggable=false;
+      el.appendChild(t);el.insertAdjacentHTML('beforeend','<span class="b-num">'+pad(o.i+1)+'</span>');
+    }
+    plane.appendChild(el);o.el=el;
+    const m=document.createElement('b');m.style.cssText='left:'+(o.x/PW*100)+'%;top:'+(o.y/PH*100)+'%;width:'+(o.w/PW*100)+'%;height:'+(o.h/PH*100)+'%';map.appendChild(m);
+  });
   ch.appendChild(wrap);
 
-  // Drift / Grid switch next to the photo count
+  // Board | Grid switch next to the photo count
   const head=ch.querySelector('.chapter-head'),count=head.querySelector('.count');
   const right=document.createElement('div');right.className='head-right';
-  const view=document.createElement('div');view.className='view';
-  view.innerHTML='<button data-v="drift">Drift</button><button data-v="grid">Grid</button>';
-  count.replaceWith(right);right.append(count,view);
-  const setView=v=>{ch.dataset.view=v;view.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));frame()};
-  view.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
+  const sw=document.createElement('div');sw.className='view';
+  sw.innerHTML='<button data-v="board">Board</button><button data-v="grid">Grid</button>';
+  count.replaceWith(right);right.append(count,sw);
+  const setView=v=>{ch.dataset.view=v;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='board')requestAnimationFrame(()=>{measure();place(false)})};
+  sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
 
-  const mq=matchMedia('(max-width:820px), (prefers-reduced-motion:reduce)');
-  let trackW=0,vw=0,vh=0,lefts=[],widths=[],ticking=false;
-  function measure(){
-    wrap.classList.toggle('flat',mq.matches);
-    vw=innerWidth;vh=innerHeight;
-    if(mq.matches){wrap.style.height='';track.style.transform='';items.forEach(o=>{o.inn.style.transform='';o.num.style.transform='';o.el.style.opacity=''});return}
-    trackW=track.scrollWidth;
-    lefts=items.map(o=>o.el.offsetLeft);widths=items.map(o=>o.el.offsetWidth);
-    wrap.style.height=(trackW-vw+vh)+'px';
+  // camera
+  let u=1,bw=0,bh=0,tx=0,ty=0,cur=-1;
+  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+  function measure(){const r=board.getBoundingClientRect();bw=r.width;bh=r.height;u=bh/100}
+  function apply(fly){
+    plane.classList.toggle('fly',!!fly);
+    tx=clamp(tx,-(PW*u-bw),0);ty=clamp(ty,-(PH*u-bh),0);
+    plane.style.transform='translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
+    // minimap viewport
+    view.style.cssText='left:'+(-tx/(PW*u)*100)+'%;top:'+(-ty/(PH*u)*100)+'%;width:'+(bw/(PW*u)*100)+'%;height:'+(bh/(PH*u)*100)+'%';
+    // which photo is closest to the view centre
+    let best=0,bd=1e18;
+    items.forEach((o,n)=>{const cx=(o.x+o.w/2)*u+tx-bw/2,cy=(o.y+o.h/2)*u+ty-bh/2,d=cx*cx+cy*cy;if(d<bd){bd=d;best=n}});
+    cur=best;const o=items[best];
+    title.textContent=o.cover?'The Art of Not Forcing Frames':o.p.title;
+    cnt.textContent=pad(best)+' / '+pad(items.length-1);
   }
-  function frame(){
-    ticking=false;
-    if(mq.matches||ch.dataset.view==='grid')return;
-    if(track.scrollWidth!==trackW)measure();
-    const max=wrap.offsetHeight-vh;if(max<=0)return;
-    const top=wrap.getBoundingClientRect().top;
-    const p=Math.min(1,Math.max(0,-top/max));
-    const tx=p*(trackW-vw);
-    track.style.transform='translate3d('+(-tx).toFixed(1)+'px,0,0)';
-    fill.style.transform='scaleY('+p.toFixed(4)+')';
-    let seen=0;
-    items.forEach((o,i)=>{
-      const cx=lefts[i]-tx+widths[i]/2,d=cx-vw/2;
-      if(cx<vw*.5)seen=i+1;
-      o.inn.style.transform='translate3d('+(d*o.sp).toFixed(1)+'px,0,0)';
-      o.num.style.transform='translate3d('+(d*-.28).toFixed(1)+'px,0,0)';
-      const far=Math.max(0,Math.abs(d)-vw*.32)/(vw*.45);
-      o.el.style.opacity=Math.max(.28,1-far).toFixed(2);
-    });
-    cnt.textContent=pad(seen)+' / '+pad(list.length);
+  function place(fly,n=cur<0?0:cur){
+    const o=items[n],k=Math.max(0,n-1);
+    const ax=o.cover?.12:AX[k%AX.length],ay=o.cover?.30:AY[k%AY.length];
+    tx=bw*ax-(o.x+o.w/2)*u;ty=bh*ay-(o.y+o.h/2)*u;
+    apply(fly);cur=n;
+    const q=items[n];title.textContent=q.cover?'The Art of Not Forcing Frames':q.p.title;cnt.textContent=pad(n)+' / '+pad(items.length-1);
   }
-  const req=()=>{if(!ticking){ticking=true;requestAnimationFrame(frame)}};
-  addEventListener('scroll',req,{passive:true});
-  addEventListener('resize',()=>{measure();req()});
-  mq.addEventListener('change',()=>{measure();req()});
-  addEventListener('load',()=>{measure();req()});
-  filters.addEventListener('click',()=>setTimeout(()=>{measure();req()},60));
-  setView('drift');measure();req();
+  const go=d=>place(true,clamp((cur<0?0:cur)+d,0,items.length-1));
+  wrap.querySelector('.b-prev').onclick=()=>go(-1);
+  wrap.querySelector('.b-next').onclick=()=>go(1);
+  board.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();go(1)}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(-1)}
+  });
+  // drag / swipe
+  let sx=0,sy=0,bx=0,by=0,down=false,moved=false;
+  board.addEventListener('pointerdown',e=>{
+    if(e.button>0)return;
+    down=true;moved=false;sx=e.clientX;sy=e.clientY;bx=tx;by=ty;plane.classList.remove('fly');
+  });
+  addEventListener('pointermove',e=>{
+    if(!down)return;
+    const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(!moved&&Math.hypot(dx,dy)>6){moved=true;window.__dragged=true;board.classList.add('grab');try{board.setPointerCapture(e.pointerId)}catch(_){}}
+    if(moved){tx=bx+dx;ty=by+dy;apply(false)}
+  });
+  const up=()=>{if(!down)return;down=false;board.classList.remove('grab');setTimeout(()=>{window.__dragged=false},60)};
+  addEventListener('pointerup',up);addEventListener('pointercancel',up);
+  // sideways trackpad scroll pans the board; ordinary vertical scrolling still moves the page
+  board.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();tx-=e.deltaX;apply(false)}
+  },{passive:false});
+  addEventListener('resize',()=>{measure();place(false)});
+  addEventListener('load',()=>{measure();place(false)});
+  filters.addEventListener('click',()=>setTimeout(()=>{measure();place(false,cur<0?0:cur)},60));
+  setView('board');measure();place(false,0);
 })();

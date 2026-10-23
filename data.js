@@ -71,6 +71,18 @@ window.GALLERY={
    "title": "Empty Chairs, Grey Terrace",
    "w": 1440,
    "h": 1920
+  },
+  {
+   "id": "monochrome-13",
+   "title": "Doorway",
+   "w": 1320,
+   "h": 1760
+  },
+  {
+   "id": "monochrome-14",
+   "title": "Curves and Reflections",
+   "w": 1176,
+   "h": 1566
   }
  ],
  "light": [
@@ -193,6 +205,12 @@ window.GALLERY={
    "title": "The Bandstand at Night",
    "w": 1440,
    "h": 1920
+  },
+  {
+   "id": "light-21",
+   "title": "Chains and Shadows",
+   "w": 1182,
+   "h": 1578
   }
  ],
  "macro": [
@@ -387,6 +405,12 @@ window.GALLERY={
    "title": "Purple Verbena",
    "w": 1170,
    "h": 766
+  },
+  {
+   "id": "macro-33",
+   "title": "Bleeding Heart",
+   "w": 2048,
+   "h": 1536
   }
  ],
  "story": [
@@ -455,6 +479,30 @@ window.GALLERY={
    "title": "Stairs and Shrine",
    "w": 1440,
    "h": 1920
+  },
+  {
+   "id": "story-12",
+   "title": "A Quiet Wait",
+   "w": 1024,
+   "h": 768
+  },
+  {
+   "id": "story-13",
+   "title": "The Effigy Through the Gap",
+   "w": 1536,
+   "h": 2048
+  },
+  {
+   "id": "story-14",
+   "title": "Behind the Bars",
+   "w": 1600,
+   "h": 1200
+  },
+  {
+   "id": "story-15",
+   "title": "Bars and Floodlights",
+   "w": 2048,
+   "h": 1536
   }
  ],
  "street": [
@@ -505,6 +553,12 @@ window.GALLERY={
    "title": "Stone Spheres",
    "w": 1441,
    "h": 1921
+  },
+  {
+   "id": "street-09",
+   "title": "Fog and Wires",
+   "w": 1170,
+   "h": 1560
   }
  ],
  "abstract": [
@@ -560,6 +614,18 @@ window.GALLERY={
    "id": "abstract-09",
    "title": "Manhole, Blue",
    "w": 1440,
+   "h": 1921
+  },
+  {
+   "id": "abstract-10",
+   "title": "Glass",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "abstract-11",
+   "title": "Through the Grille",
+   "w": 1441,
    "h": 1921
   }
  ],
@@ -695,149 +761,83 @@ window.GALLERY={
    "title": "The Old Stone Bridge",
    "w": 1080,
    "h": 810
+  },
+  {
+   "id": "landscape-23",
+   "title": "Contrail",
+   "w": 1000,
+   "h": 2166
   }
  ],
  "unforced": [
   {
    "id": "unforced-01",
-   "title": "Bleeding Heart",
-   "w": 2048,
-   "h": 1536
-  },
-  {
-   "id": "unforced-02",
-   "title": "Fog and Wires",
-   "w": 1170,
-   "h": 1560
-  },
-  {
-   "id": "unforced-03",
-   "title": "Chains and Shadows",
-   "w": 1182,
-   "h": 1578
-  },
-  {
-   "id": "unforced-04",
-   "title": "Doorway",
-   "w": 1320,
-   "h": 1760
-  },
-  {
-   "id": "unforced-05",
-   "title": "Curves and Reflections",
-   "w": 1176,
-   "h": 1566
-  },
-  {
-   "id": "unforced-06",
-   "title": "Glass",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "unforced-07",
-   "title": "Contrail",
-   "w": 1000,
-   "h": 2166
-  },
-  {
-   "id": "unforced-08",
-   "title": "Through the Grille",
-   "w": 1441,
-   "h": 1921
-  },
-  {
-   "id": "unforced-09",
-   "title": "A Quiet Wait",
-   "w": 1024,
-   "h": 768
-  },
-  {
-   "id": "unforced-10",
-   "title": "The Effigy Through the Gap",
-   "w": 1536,
-   "h": 2048
-  },
-  {
-   "id": "unforced-11",
-   "title": "Behind the Bars",
-   "w": 1600,
-   "h": 1200
-  },
-  {
-   "id": "unforced-12",
-   "title": "Bars and Floodlights",
-   "w": 2048,
-   "h": 1536
-  },
-  {
-   "id": "unforced-13",
    "title": "A Plane in the Blue",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-14",
+   "id": "unforced-02",
    "title": "Walking the Edge",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-15",
+   "id": "unforced-03",
    "title": "The Dog Looks Away",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "unforced-16",
+   "id": "unforced-04",
    "title": "Two Towers, Low Horizon",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "unforced-17",
+   "id": "unforced-05",
    "title": "Glass Facade",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "unforced-18",
+   "id": "unforced-06",
    "title": "Butterfly Pea, Leaning In",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-19",
+   "id": "unforced-07",
    "title": "The Barrel's Eye",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-20",
+   "id": "unforced-08",
    "title": "The Long Fence",
    "w": 1080,
    "h": 809
   },
   {
-   "id": "unforced-21",
+   "id": "unforced-09",
    "title": "The Shard",
    "w": 1441,
    "h": 1921
   },
   {
-   "id": "unforced-22",
+   "id": "unforced-10",
    "title": "The Royal Barge",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-23",
+   "id": "unforced-11",
    "title": "Dome, Looking Up",
    "w": 1221,
    "h": 1625
   },
   {
-   "id": "unforced-24",
+   "id": "unforced-12",
    "title": "River Bend",
    "w": 1440,
    "h": 1920
