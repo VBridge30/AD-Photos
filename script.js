@@ -9,7 +9,6 @@ const CHAPTERS=[
  {k:'abstract',t:'Abstract',d:'Where the subject dissolves into line, colour and feeling.'},
  {k:'landscape',t:'Landscape',d:'Mist, water, snow and the long light of the day.',g:'c2'}
 ];
-const QUOTES={};
 const $=(s,r=document)=>r.querySelector(s);
 const main=$('#gallery'),filters=$('#filters');
 const pad=n=>String(n).padStart(2,'0');
@@ -75,19 +74,18 @@ const io=new IntersectionObserver(es=>{
 document.querySelectorAll('.chapter').forEach(s=>io.observe(s));
 
 /* lightbox */
-const lb=$('#lb'),lbImg=$('#lb-img');let set=[],idx=0;
+const lb=$('#lb'),lbImg=$('#lb-img');let set=[],idx=0,opener=null;
 function show(){
   const p=set[idx];lbImg.src='photos/'+p.dataset.id+'.jpg';lbImg.alt=p.getAttribute('aria-label');
   $('#lb-title').textContent=p.getAttribute('aria-label').replace('View ','');
-  $('#lb-quote').textContent=QUOTES[$('#lb-title').textContent]||'';
   $('#lb-count').textContent=`${idx+1} / ${set.length}`;
   [idx+1,idx-1].forEach(i=>{const q=set[(i+set.length)%set.length];if(q)new Image().src='photos/'+q.dataset.id+'.jpg'});
 }
 function open(t){
   set=[...t.closest('.chapter,.featured').querySelectorAll('.tile,.slide')].filter(e=>e.offsetParent!==null);idx=set.indexOf(t);
-  lb.hidden=false;document.body.style.overflow='hidden';show();
+  opener=document.activeElement;lb.hidden=false;document.body.style.overflow='hidden';show();$('.lb-close').focus();
 }
-function close(){lb.hidden=true;document.body.style.overflow='';lbImg.src=''}
+function close(){lb.hidden=true;document.body.style.overflow='';lbImg.src='';if(opener&&opener.focus)opener.focus()}
 const step=d=>{idx=(idx+d+set.length)%set.length;show()};
 main.addEventListener('click',e=>{const t=e.target.closest('.tile,.slide');if(t&&!window.__dragged)open(t)});
 $('.lb-close').onclick=close;$('.lb-prev').onclick=()=>step(-1);$('.lb-next').onclick=()=>step(1);
@@ -238,7 +236,7 @@ $('#theme').addEventListener('click',()=>{
     addEventListener('pointerup',()=>{if(!down)return;down=false;if(moved>5){window.__dragged=true;setTimeout(()=>window.__dragged=false,60);track.classList.remove('drag');go(idx)}});
     // switch
     const set=v=>{
-      ch.dataset.view=v;view.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+      ch.dataset.view=v;view.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===v);b.setAttribute('aria-pressed',b.dataset.v===v)});
       if(v==='slider')requestAnimationFrame(()=>{mark();go(idx)});
     };
     view.addEventListener('click',e=>{const b=e.target.closest('button');if(b)set(b.dataset.v)});
@@ -269,7 +267,7 @@ $('#theme').addEventListener('click',()=>{
   if(pages.length%2===0)pages.push({t:'note',text:''});
   pages.push({t:'backcover'});
   const N=pages.length/2;
-  let cur=0,opened=false;
+  let cur=0,opened=false,albumOpener=null;
 
   function face(pg,idx,side){
     const f=document.createElement('div');f.className='face '+side;
@@ -321,11 +319,12 @@ $('#theme').addEventListener('click',()=>{
     view.hidden=false;document.body.classList.add('album-open');
     if(!opened){opened=true;cur=0;render(false)}
     requestAnimationFrame(()=>view.classList.add('show'));
-    view.querySelector('.al-close').focus();
+    albumOpener=document.activeElement;view.querySelector('.al-close').focus();
   }
   function closeAlbum(){
     view.classList.remove('show');document.body.classList.remove('album-open');
     setTimeout(()=>{view.hidden=true},400);
+    if(albumOpener&&albumOpener.focus)albumOpener.focus();
   }
   $('#album').addEventListener('click',openAlbum);
   view.querySelector('.al-close').addEventListener('click',closeAlbum);
@@ -357,6 +356,9 @@ $('.brand').addEventListener('click',e=>{
   scrollTo({top:0,behavior:'smooth'});
 });
 
+
+/* keep the calendar exactly one screen tall under the sticky menu */
+(function(){const n=$('#nav'),f=()=>document.documentElement.style.setProperty('--navh',n.offsetHeight+'px');f();addEventListener('resize',f);addEventListener('load',f)})();
 
 /* "The Calendar": the Art of Not Forcing Frames.
    Every photo is a full-screen leaf hinged at the top. Click and the leaf folds upward,
@@ -397,7 +399,7 @@ $('.brand').addEventListener('click',e=>{
   const sw=document.createElement('div');sw.className='view';
   sw.innerHTML='<button data-v="cal">Calendar</button><button data-v="grid">Grid</button>';
   count.replaceWith(right);right.append(count,sw);
-  const setView=v=>{ch.dataset.view=v;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='cal')requestAnimationFrame(layout)};
+  const setView=v=>{ch.dataset.view=v;sw.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===v);b.setAttribute('aria-pressed',b.dataset.v===v)});if(v==='cal')requestAnimationFrame(layout)};
   sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
 
   let cur=0,busy=false;
