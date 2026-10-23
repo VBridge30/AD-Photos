@@ -211,6 +211,12 @@ window.GALLERY={
    "title": "Chains and Shadows",
    "w": 1182,
    "h": 1578
+  },
+  {
+   "id": "light-22",
+   "title": "Avenue of Shade",
+   "w": 1440,
+   "h": 1921
   }
  ],
  "macro": [
@@ -497,6 +503,12 @@ window.GALLERY={
    "title": "Bars and Floodlights",
    "w": 2048,
    "h": 1536
+  },
+  {
+   "id": "story-15",
+   "title": "Gloves, Hung to Dry",
+   "w": 1440,
+   "h": 1921
   }
  ],
  "street": [
@@ -761,6 +773,12 @@ window.GALLERY={
    "title": "Contrail",
    "w": 1000,
    "h": 2166
+  },
+  {
+   "id": "landscape-24",
+   "title": "The Fountain",
+   "w": 1440,
+   "h": 1921
   }
  ],
  "unforced": [
@@ -927,6 +945,12 @@ window.GALLERY={
    "title": "Window in Slate",
    "w": 1129,
    "h": 851
+  },
+  {
+   "id": "architecture-17",
+   "title": "The Brick Bridge",
+   "w": 1440,
+   "h": 1920
   }
  ]
 };
