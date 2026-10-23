@@ -371,9 +371,9 @@ $('.brand').addEventListener('click',e=>{
   const AY=[.58,.41,.72,.31,.64,.24,.76,.28,.69,.47,.18,.73];
   const U=n=>'calc(var(--u)*'+n.toFixed(2)+')';
   const items=[];
-  let x=150,seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  let x=196,seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
   // the cover is the first thing on the board
-  items.push({cover:true,x:12,y:44,w:128,h:96});
+  items.push({cover:true,x:6,y:7,w:112,h:84});
   list.forEach((p,i)=>{
     const ar=p.w/p.h,w=Math.min(W[i%W.length],96*ar),h=w/ar;
     const o={p,i,x,y:Math.min(Y[i%Y.length],208-h),w,h};
@@ -428,8 +428,8 @@ $('.brand').addEventListener('click',e=>{
   }
   function place(fly,n=cur<0?0:cur){
     const o=items[n],k=Math.max(0,n-1);
-    const ax=o.cover?.12:AX[k%AX.length],ay=o.cover?.30:AY[k%AY.length];
-    tx=bw*ax-(o.x+o.w/2)*u;ty=bh*ay-(o.y+o.h/2)*u;
+    const ax=AX[k%AX.length],ay=AY[k%AY.length];
+    if(o.cover){tx=0;ty=0}else{tx=bw*ax-(o.x+o.w/2)*u;ty=bh*ay-(o.y+o.h/2)*u}
     apply(fly);cur=n;
     const q=items[n];title.textContent=q.cover?'The Art of Not Forcing Frames':q.p.title;cnt.textContent=pad(n)+' / '+pad(items.length-1);
   }

@@ -452,54 +452,48 @@ window.GALLERY={
   },
   {
    "id": "story-07",
-   "title": "Breakfast, Quietly",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "story-08",
    "title": "The Lounge",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "story-09",
+   "id": "story-08",
    "title": "Peeking Through",
    "w": 1170,
    "h": 1147
   },
   {
-   "id": "story-10",
+   "id": "story-09",
    "title": "Mother and Child",
    "w": 1052,
    "h": 1444
   },
   {
-   "id": "story-11",
+   "id": "story-10",
    "title": "Stairs and Shrine",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "story-12",
+   "id": "story-11",
    "title": "A Quiet Wait",
    "w": 1024,
    "h": 768
   },
   {
-   "id": "story-13",
+   "id": "story-12",
    "title": "The Effigy Through the Gap",
    "w": 1536,
    "h": 2048
   },
   {
-   "id": "story-14",
+   "id": "story-13",
    "title": "Behind the Bars",
    "w": 1600,
    "h": 1200
   },
   {
-   "id": "story-15",
+   "id": "story-14",
    "title": "Bars and Floodlights",
    "w": 2048,
    "h": 1536
