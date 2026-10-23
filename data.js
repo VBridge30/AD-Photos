@@ -790,48 +790,42 @@ window.GALLERY={
   },
   {
    "id": "unforced-05",
-   "title": "Glass Facade",
-   "w": 1080,
-   "h": 810
-  },
-  {
-   "id": "unforced-06",
    "title": "Butterfly Pea, Leaning In",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-07",
+   "id": "unforced-06",
    "title": "The Barrel's Eye",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-08",
+   "id": "unforced-07",
    "title": "The Long Fence",
    "w": 1080,
    "h": 809
   },
   {
-   "id": "unforced-09",
+   "id": "unforced-08",
    "title": "The Shard",
    "w": 1441,
    "h": 1921
   },
   {
-   "id": "unforced-10",
+   "id": "unforced-09",
    "title": "The Royal Barge",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "unforced-11",
+   "id": "unforced-10",
    "title": "Dome, Looking Up",
    "w": 1221,
    "h": 1625
   },
   {
-   "id": "unforced-12",
+   "id": "unforced-11",
    "title": "River Bend",
    "w": 1440,
    "h": 1920
