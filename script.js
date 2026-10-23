@@ -358,108 +358,100 @@ $('.brand').addEventListener('click',e=>{
 });
 
 
-/* "The Unframed Board": the Art of Not Forcing Frames.
-   The photos are scattered over one large board. Drag it, swipe it, or use the arrows;
-   the camera flies to each photo and parks it off-centre, never in the middle and never on the thirds. */
+/* "The Calendar": the Art of Not Forcing Frames.
+   Every photo is a full-screen leaf hinged at the top. Click and the leaf folds upward,
+   like the pages of a wall calendar, and the next photograph is underneath. */
 (function(){
   const ch=$('#unforced');if(!ch)return;
   const list=GALLERY.unforced;
-  ch.classList.add('board-ch');
-  const W=[74,46,92,38,64,84,42,68,54,78,40,60];     // photo widths, in board units (1 unit = 1% of board height)
-  const Y=[96,10,126,58,18,112,44,104,6,78,32,118];  // vertical positions
-  const AX=[.21,.74,.58,.17,.83,.43,.24,.79,.56,.14,.68,.38]; // where each photo is parked in view
-  const AY=[.58,.41,.72,.31,.64,.24,.76,.28,.69,.47,.18,.73];
-  const U=n=>'calc(var(--u)*'+n.toFixed(2)+')';
-  const items=[];
-  let x=196,seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
-  // the cover is the first thing on the board
-  items.push({cover:true,x:6,y:7,w:112,h:84});
-  list.forEach((p,i)=>{
-    const ar=p.w/p.h,w=Math.min(W[i%W.length],96*ar),h=w/ar;
-    const o={p,i,x,y:Math.min(Y[i%Y.length],208-h),w,h};
-    items.push(o);x+=w*.62+8+rnd()*16;
-  });
-  const PW=x+items[items.length-1].w+60,PH=210;
-  const wrap=document.createElement('div');wrap.className='board-wrap';
-  wrap.innerHTML='<div class="board" tabindex="0" aria-label="Photographs scattered on a board. Drag or use the arrow keys."><div class="plane"></div></div>'+
-    '<div class="b-ui"><button class="b-btn b-prev" aria-label="Previous photo">‹</button><button class="b-btn b-next" aria-label="Next photo">›</button><span class="b-info"><span class="b-title"></span><span class="b-cnt"></span></span><div class="b-map" aria-hidden="true"><i></i></div></div>';
-  const board=wrap.querySelector('.board'),plane=wrap.querySelector('.plane'),map=wrap.querySelector('.b-map'),view=wrap.querySelector('.b-map i');
-  const title=wrap.querySelector('.b-title'),cnt=wrap.querySelector('.b-cnt');
-  plane.style.width=U(PW);plane.style.height=U(PH);
-  items.forEach((o,n)=>{
-    const el=document.createElement('div');el.className='b-item'+(o.cover?' b-cover':'');
-    el.style.cssText='left:'+U(o.x)+';top:'+U(o.y)+';width:'+U(o.w)+';height:'+U(o.h)+';--r:'+((n%2?1:-1)*(.4+rnd()*1.4)).toFixed(2)+'deg';
+  ch.classList.add('cal-ch');
+  const pages=[{cover:true},...list.map((p,i)=>({p,i}))];
+  const N=pages.length;
+  const wrap=document.createElement('div');wrap.className='cal';
+  wrap.innerHTML='<div class="cal-stage" tabindex="0" aria-label="Photographs as calendar pages. Click, or use the arrow keys, to turn the page."><div class="cal-bind" aria-hidden="true"></div><div class="cal-leaves"></div>'+
+    '<div class="cal-ui"><span class="cal-hint">Click to turn the page</span><button class="cal-btn cal-prev" aria-label="Previous page">↓</button><button class="cal-btn cal-next" aria-label="Turn the page">↑</button></div></div>';
+  const stage=wrap.querySelector('.cal-stage'),box=wrap.querySelector('.cal-leaves'),hint=wrap.querySelector('.cal-hint');
+  const leaves=pages.map((o,n)=>{
+    const L=document.createElement('div');L.className='leaf';
+    let front;
     if(o.cover){
-      el.innerHTML='<img src="photos/unforced-cover.jpg" alt="A man photographing, pushed to the left edge of the frame" decoding="async" draggable="false"><h3 class="b-head">No grid.<br>No thirds.<br><em>No centre.</em></h3>';
+      front='<div class="fr fill cover"><img src="photos/unforced-cover.jpg" alt="A man photographing, pushed to the left edge of the frame" decoding="async" draggable="false">'+
+        '<div class="cv-text"><span class="cv-eyebrow">Chapter</span><h3>The Art of<br>Not Forcing<br><em>Frames</em></h3><p>No grid. No thirds. No centre.</p></div></div>';
     }else{
-      const t=tile(o.p,'unforced',1);const img=t.firstChild;img.src='photos/'+o.p.id+'.jpg';img.draggable=false;
-      el.appendChild(t);el.insertAdjacentHTML('beforeend','<span class="b-num">'+pad(o.i+1)+'</span>');
+      const p=o.p,side=o.i%2?'r':'l';
+      front='<div class="fr split side-'+side+'" data-ar="'+(p.w/p.h).toFixed(4)+'"><img class="bd" data-src="photos/'+p.id+'.jpg" alt="" aria-hidden="true" draggable="false"><img class="ph" data-src="photos/'+p.id+'.jpg" alt="'+p.title+'" draggable="false">'+
+        '<div class="lf-text"><span class="lf-num">'+pad(o.i+1)+'</span><span class="lf-title">'+p.title+'</span></div></div>';
     }
-    plane.appendChild(el);o.el=el;
-    const m=document.createElement('b');m.style.cssText='left:'+(o.x/PW*100)+'%;top:'+(o.y/PH*100)+'%;width:'+(o.w/PW*100)+'%;height:'+(o.h/PH*100)+'%';map.appendChild(m);
+    L.innerHTML=front+'<div class="bk"><span>'+pad(n)+'</span></div><span class="shade"></span>';
+    if(!o.cover){
+      const t=tile(o.p,'unforced',1);t.classList.add('expand');t.setAttribute('aria-label','View '+o.p.title);t.querySelector('img').remove();
+      L.querySelector('.fr').appendChild(t);
+    }
+    box.appendChild(L);return L;
   });
   ch.appendChild(wrap);
 
-  // Board | Grid switch next to the photo count
+  // Calendar | Grid switch next to the photo count
   const head=ch.querySelector('.chapter-head'),count=head.querySelector('.count');
   const right=document.createElement('div');right.className='head-right';
   const sw=document.createElement('div');sw.className='view';
-  sw.innerHTML='<button data-v="board">Board</button><button data-v="grid">Grid</button>';
+  sw.innerHTML='<button data-v="cal">Calendar</button><button data-v="grid">Grid</button>';
   count.replaceWith(right);right.append(count,sw);
-  const setView=v=>{ch.dataset.view=v;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='board')requestAnimationFrame(()=>{measure();place(false)})};
+  const setView=v=>{ch.dataset.view=v;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='cal')requestAnimationFrame(layout)};
   sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
 
-  // camera
-  let u=1,bw=0,bh=0,tx=0,ty=0,cur=-1;
-  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-  function measure(){const r=board.getBoundingClientRect();bw=r.width;bh=r.height;u=bh/100}
-  function apply(fly){
-    plane.classList.toggle('fly',!!fly);
-    tx=clamp(tx,-(PW*u-bw),0);ty=clamp(ty,-(PH*u-bh),0);
-    plane.style.transform='translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0)';
-    // minimap viewport
-    view.style.cssText='left:'+(-tx/(PW*u)*100)+'%;top:'+(-ty/(PH*u)*100)+'%;width:'+(bw/(PW*u)*100)+'%;height:'+(bh/(PH*u)*100)+'%';
-    // which photo is closest to the view centre
-    let best=0,bd=1e18;
-    items.forEach((o,n)=>{const cx=(o.x+o.w/2)*u+tx-bw/2,cy=(o.y+o.h/2)*u+ty-bh/2,d=cx*cx+cy*cy;if(d<bd){bd=d;best=n}});
-    cur=best;const o=items[best];
-    title.textContent=o.cover?'The Art of Not Forcing Frames':o.p.title;
-    cnt.textContent=pad(best)+' / '+pad(items.length-1);
+  let cur=0,busy=false;
+  const MS=1100;
+  // decide, per photo, whether it fills the screen or sits flush to one side over a blurred copy
+  function layout(){
+    const r=box.getBoundingClientRect();if(!r.width)return;
+    const sar=r.width/r.height;
+    leaves.forEach(L=>{
+      const fr=L.querySelector('.fr.split');if(!fr)return;
+      const ar=parseFloat(fr.dataset.ar);
+      fr.classList.toggle('fill',Math.abs(Math.log(ar/sar))<.3);
+    });
   }
-  function place(fly,n=cur<0?0:cur){
-    const o=items[n],k=Math.max(0,n-1);
-    const ax=AX[k%AX.length],ay=AY[k%AY.length];
-    if(o.cover){tx=0;ty=0}else{tx=bw*ax-(o.x+o.w/2)*u;ty=bh*ay-(o.y+o.h/2)*u}
-    apply(fly);cur=n;
-    const q=items[n];title.textContent=q.cover?'The Art of Not Forcing Frames':q.p.title;cnt.textContent=pad(n)+' / '+pad(items.length-1);
+  function load(){
+    for(let i=Math.max(0,cur-1);i<Math.min(N,cur+4);i++)leaves[i].querySelectorAll('img[data-src]').forEach(im=>{im.src=im.dataset.src;im.removeAttribute('data-src')});
   }
-  const go=d=>place(true,clamp((cur<0?0:cur)+d,0,items.length-1));
-  wrap.querySelector('.b-prev').onclick=()=>go(-1);
-  wrap.querySelector('.b-next').onclick=()=>go(1);
-  board.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();go(1)}
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(-1)}
+  function z(){leaves.forEach((L,i)=>{L.style.zIndex=i<cur?i:N-i})}
+  function render(){
+    leaves.forEach((L,i)=>L.classList.toggle('flipped',i<cur));
+    wrap.querySelector('.cal-prev').disabled=cur===0;
+    hint.classList.toggle('gone',cur>0);
+    load();
+  }
+  function turn(i,up){
+    const L=leaves[i];L.style.zIndex=N+5;
+    setTimeout(z,MS);
+    if(up&&leaves[i+1]){const nx=leaves[i+1];nx.classList.remove('rev');void nx.offsetWidth;nx.classList.add('rev')}
+  }
+  function next(){
+    if(busy)return;
+    if(cur>=N-1){ // last page: fold everything back down to the start
+      busy=true;
+      for(let i=cur-1;i>=0;i--){const k=i;setTimeout(()=>{leaves[k].style.zIndex=N+5+(N-k);leaves[k].classList.remove('flipped')},(cur-1-i)*70)}
+      setTimeout(()=>{cur=0;z();render();busy=false},(cur)*70+MS);
+      return;
+    }
+    busy=true;turn(cur,true);cur++;render();setTimeout(()=>{busy=false},MS*.7);
+  }
+  function prev(){
+    if(busy||cur===0)return;
+    busy=true;cur--;turn(cur,false);render();setTimeout(()=>{busy=false},MS*.7);
+  }
+  stage.addEventListener('click',e=>{
+    if(e.target.closest('.cal-btn,.expand'))return;
+    next();
   });
-  // drag / swipe
-  let sx=0,sy=0,bx=0,by=0,down=false,moved=false;
-  board.addEventListener('pointerdown',e=>{
-    if(e.button>0)return;
-    down=true;moved=false;sx=e.clientX;sy=e.clientY;bx=tx;by=ty;plane.classList.remove('fly');
+  wrap.querySelector('.cal-next').addEventListener('click',next);
+  wrap.querySelector('.cal-prev').addEventListener('click',prev);
+  stage.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowUp'||e.key===' '){e.preventDefault();next()}
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown'){e.preventDefault();prev()}
   });
-  addEventListener('pointermove',e=>{
-    if(!down)return;
-    const dx=e.clientX-sx,dy=e.clientY-sy;
-    if(!moved&&Math.hypot(dx,dy)>6){moved=true;window.__dragged=true;board.classList.add('grab');try{board.setPointerCapture(e.pointerId)}catch(_){}}
-    if(moved){tx=bx+dx;ty=by+dy;apply(false)}
-  });
-  const up=()=>{if(!down)return;down=false;board.classList.remove('grab');setTimeout(()=>{window.__dragged=false},60)};
-  addEventListener('pointerup',up);addEventListener('pointercancel',up);
-  // sideways trackpad scroll pans the board; ordinary vertical scrolling still moves the page
-  board.addEventListener('wheel',e=>{
-    if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();tx-=e.deltaX;apply(false)}
-  },{passive:false});
-  addEventListener('resize',()=>{measure();place(false)});
-  addEventListener('load',()=>{measure();place(false)});
-  filters.addEventListener('click',()=>setTimeout(()=>{measure();place(false,cur<0?0:cur)},60));
-  setView('board');measure();place(false,0);
+  addEventListener('resize',layout);
+  filters.addEventListener('click',()=>setTimeout(layout,60));
+  setView('cal');z();render();layout();
 })();
