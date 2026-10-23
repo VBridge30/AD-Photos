@@ -65,6 +65,12 @@ window.GALLERY={
    "title": "Clover and Two Yellows",
    "w": 1170,
    "h": 1462
+  },
+  {
+   "id": "monochrome-12",
+   "title": "Empty Chairs, Grey Terrace",
+   "w": 1440,
+   "h": 1920
   }
  ],
  "light": [
@@ -181,6 +187,12 @@ window.GALLERY={
    "title": "Arch and Silhouette",
    "w": 1440,
    "h": 1921
+  },
+  {
+   "id": "light-20",
+   "title": "The Bandstand at Night",
+   "w": 1440,
+   "h": 1920
   }
  ],
  "macro": [
@@ -437,6 +449,12 @@ window.GALLERY={
    "title": "Mother and Child",
    "w": 1052,
    "h": 1444
+  },
+  {
+   "id": "story-11",
+   "title": "Stairs and Shrine",
+   "w": 1440,
+   "h": 1920
   }
  ],
  "street": [
@@ -478,18 +496,12 @@ window.GALLERY={
   },
   {
    "id": "street-07",
-   "title": "The Royal Barge",
-   "w": 1440,
-   "h": 1920
-  },
-  {
-   "id": "street-08",
    "title": "Rider on the Plinth",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "street-09",
+   "id": "street-08",
    "title": "Stone Spheres",
    "w": 1441,
    "h": 1921
@@ -665,6 +677,24 @@ window.GALLERY={
    "title": "Mountain Over the Fields",
    "w": 872,
    "h": 637
+  },
+  {
+   "id": "landscape-20",
+   "title": "Cormorant and Swan",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "landscape-21",
+   "title": "Autumn Over the Stream",
+   "w": 1320,
+   "h": 2096
+  },
+  {
+   "id": "landscape-22",
+   "title": "The Old Stone Bridge",
+   "w": 1080,
+   "h": 810
   }
  ],
  "unforced": [
@@ -739,6 +769,78 @@ window.GALLERY={
    "title": "Bars and Floodlights",
    "w": 2048,
    "h": 1536
+  },
+  {
+   "id": "unforced-13",
+   "title": "A Plane in the Blue",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "unforced-14",
+   "title": "Walking the Edge",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "unforced-15",
+   "title": "The Dog Looks Away",
+   "w": 1080,
+   "h": 810
+  },
+  {
+   "id": "unforced-16",
+   "title": "Two Towers, Low Horizon",
+   "w": 1080,
+   "h": 810
+  },
+  {
+   "id": "unforced-17",
+   "title": "Glass Facade",
+   "w": 1080,
+   "h": 810
+  },
+  {
+   "id": "unforced-18",
+   "title": "Butterfly Pea, Leaning In",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "unforced-19",
+   "title": "The Barrel's Eye",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "unforced-20",
+   "title": "The Long Fence",
+   "w": 1080,
+   "h": 809
+  },
+  {
+   "id": "unforced-21",
+   "title": "The Shard",
+   "w": 1441,
+   "h": 1921
+  },
+  {
+   "id": "unforced-22",
+   "title": "The Royal Barge",
+   "w": 1440,
+   "h": 1920
+  },
+  {
+   "id": "unforced-23",
+   "title": "Dome, Looking Up",
+   "w": 1221,
+   "h": 1625
+  },
+  {
+   "id": "unforced-24",
+   "title": "River Bend",
+   "w": 1440,
+   "h": 1920
   }
  ],
  "architecture": [
@@ -792,60 +894,48 @@ window.GALLERY={
   },
   {
    "id": "architecture-09",
-   "title": "The Shard",
-   "w": 1441,
-   "h": 1921
-  },
-  {
-   "id": "architecture-10",
-   "title": "Glass Facade",
-   "w": 1080,
-   "h": 810
-  },
-  {
-   "id": "architecture-11",
    "title": "Cranes at Sunset",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "architecture-12",
+   "id": "architecture-10",
    "title": "Museum Tower",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "architecture-13",
+   "id": "architecture-11",
    "title": "Wollaton Hall",
    "w": 1249,
    "h": 720
   },
   {
-   "id": "architecture-14",
+   "id": "architecture-12",
    "title": "The Great House",
    "w": 1080,
    "h": 810
   },
   {
-   "id": "architecture-15",
+   "id": "architecture-13",
    "title": "Red Brick Gothic",
    "w": 1440,
    "h": 1921
   },
   {
-   "id": "architecture-16",
+   "id": "architecture-14",
    "title": "The Quiet Courtyard",
    "w": 1440,
    "h": 1920
   },
   {
-   "id": "architecture-17",
+   "id": "architecture-15",
    "title": "The Wheel and the Skyline",
    "w": 837,
    "h": 1443
   },
   {
-   "id": "architecture-18",
+   "id": "architecture-16",
    "title": "Window in Slate",
    "w": 1129,
    "h": 851

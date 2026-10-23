@@ -199,7 +199,7 @@ $('#theme').addEventListener('click',()=>{
 (function(){
   const SLIDER_FIRST=['landscape','architecture'];
   document.querySelectorAll('.chapter').forEach(ch=>{
-    const k=ch.dataset.cat,list=GALLERY[k];if(!list)return;
+    const k=ch.dataset.cat,list=GALLERY[k];if(!list||k==='unforced')return;
     // slider markup
     const wrap=document.createElement('div');wrap.className='slider';
     wrap.innerHTML='<button class="sl-btn sl-prev" aria-label="Previous photo">‹</button><div class="track" tabindex="0" aria-label="'+k+' slider"></div><button class="sl-btn sl-next" aria-label="Next photo">›</button><p class="sl-info"><span class="sl-title"></span><span class="sl-count"></span></p>';
@@ -356,3 +356,82 @@ $('.brand').addEventListener('click',e=>{
   if(typeof setFilter==='function'&&active!=='all')setFilter('all');
   scrollTo({top:0,behavior:'smooth'});
 });
+
+
+/* "Drift": the Art of Not Forcing Frames. Vertical scrolling slides a strip of photos sideways.
+   Each photo is placed off-centre on purpose: pushed to an edge, cut by the frame, floating in empty space. */
+(function(){
+  const ch=$('#unforced');if(!ch)return;
+  const list=GALLERY.unforced;
+  ch.classList.add('drift-ch');
+  // [height in vh, top offset in vh, gap before it in vw, parallax]
+  const PRE=[[60,34,-6,.10],[44,-7,9,-.06],[80,42,5,.14],[32,58,13,-.10],[68,4,-9,.08],[50,50,8,-.12],[38,9,15,.12],[84,24,3,-.05]];
+  const wrap=document.createElement('div');wrap.className='drift';
+  wrap.innerHTML='<div class="d-stage"><div class="d-track"></div><div class="d-hud" aria-hidden="true"><span class="d-bar"><i></i></span><span class="d-cnt">00 / '+pad(list.length)+'</span></div></div>';
+  const track=wrap.querySelector('.d-track'),fill=wrap.querySelector('.d-bar i'),cnt=wrap.querySelector('.d-cnt');
+  const cover=document.createElement('div');cover.className='d-cover';
+  cover.innerHTML='<img src="photos/unforced-cover.jpg" alt="A man photographing, pushed to the left edge of the frame" decoding="async"><h3 class="d-title">No grid.<br>No thirds.<br><em>No centre.</em></h3><p class="d-hint"><span>keep scrolling</span><i></i></p>';
+  track.appendChild(cover);
+  const items=[];
+  list.forEach((p,i)=>{
+    const P=PRE[i%PRE.length];
+    const it=document.createElement('div');it.className='d-item';
+    it.style.cssText='--h:'+P[0]+'vh;--ar:'+(p.w/p.h).toFixed(4)+';margin-left:'+P[2]+'vw;margin-top:'+P[1]+'vh';
+    const t=tile(p,'unforced',1);
+    const img=t.firstChild;img.src='photos/'+p.id+'.jpg';img.loading=i<3?'eager':'lazy';
+    it.innerHTML='<span class="d-num">'+pad(i+1)+'</span><div class="d-in"></div><span class="d-cap">'+p.title+'</span>';
+    it.querySelector('.d-in').appendChild(t);
+    track.appendChild(it);items.push({el:it,inn:it.querySelector('.d-in'),num:it.querySelector('.d-num'),sp:P[3]});
+  });
+  const end=document.createElement('div');end.className='d-end';end.innerHTML='<p>The frame follows<br>the moment.</p>';
+  track.appendChild(end);
+  ch.appendChild(wrap);
+
+  // Drift / Grid switch next to the photo count
+  const head=ch.querySelector('.chapter-head'),count=head.querySelector('.count');
+  const right=document.createElement('div');right.className='head-right';
+  const view=document.createElement('div');view.className='view';
+  view.innerHTML='<button data-v="drift">Drift</button><button data-v="grid">Grid</button>';
+  count.replaceWith(right);right.append(count,view);
+  const setView=v=>{ch.dataset.view=v;view.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));frame()};
+  view.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
+
+  const mq=matchMedia('(max-width:820px), (prefers-reduced-motion:reduce)');
+  let trackW=0,vw=0,vh=0,lefts=[],widths=[],ticking=false;
+  function measure(){
+    wrap.classList.toggle('flat',mq.matches);
+    vw=innerWidth;vh=innerHeight;
+    if(mq.matches){wrap.style.height='';track.style.transform='';items.forEach(o=>{o.inn.style.transform='';o.num.style.transform='';o.el.style.opacity=''});return}
+    trackW=track.scrollWidth;
+    lefts=items.map(o=>o.el.offsetLeft);widths=items.map(o=>o.el.offsetWidth);
+    wrap.style.height=(trackW-vw+vh)+'px';
+  }
+  function frame(){
+    ticking=false;
+    if(mq.matches||ch.dataset.view==='grid')return;
+    if(track.scrollWidth!==trackW)measure();
+    const max=wrap.offsetHeight-vh;if(max<=0)return;
+    const top=wrap.getBoundingClientRect().top;
+    const p=Math.min(1,Math.max(0,-top/max));
+    const tx=p*(trackW-vw);
+    track.style.transform='translate3d('+(-tx).toFixed(1)+'px,0,0)';
+    fill.style.transform='scaleY('+p.toFixed(4)+')';
+    let seen=0;
+    items.forEach((o,i)=>{
+      const cx=lefts[i]-tx+widths[i]/2,d=cx-vw/2;
+      if(cx<vw*.5)seen=i+1;
+      o.inn.style.transform='translate3d('+(d*o.sp).toFixed(1)+'px,0,0)';
+      o.num.style.transform='translate3d('+(d*-.28).toFixed(1)+'px,0,0)';
+      const far=Math.max(0,Math.abs(d)-vw*.32)/(vw*.45);
+      o.el.style.opacity=Math.max(.28,1-far).toFixed(2);
+    });
+    cnt.textContent=pad(seen)+' / '+pad(list.length);
+  }
+  const req=()=>{if(!ticking){ticking=true;requestAnimationFrame(frame)}};
+  addEventListener('scroll',req,{passive:true});
+  addEventListener('resize',()=>{measure();req()});
+  mq.addEventListener('change',()=>{measure();req()});
+  addEventListener('load',()=>{measure();req()});
+  filters.addEventListener('click',()=>setTimeout(()=>{measure();req()},60));
+  setView('drift');measure();req();
+})();
