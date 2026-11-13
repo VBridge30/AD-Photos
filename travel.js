@@ -40,27 +40,36 @@ const rng=seed=>{let a=seed;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a
 const f1=v=>v.toFixed(1);
 
 /* ---------- the uncle ---------- */
-const K={skin:'#dba27a',skinD:'#bd8260',skinO:'#8f5a42',hair:'#2a2830',grey:'#9a9aa2',shirt:'#f7f3ea',shirtD:'#dcd5c4',shirtO:'#a89f8b',pant:'#2f3242',pantF:'#262833',pantO:'#171822',shoe:'#5a3b2a',shoeO:'#2e1d14',pack:'#3f918b',packD:'#2c6b67',packO:'#1e4a47',trim:'#e6b565',tr:'#e0654d',trD:'#b44a37',trO:'#7d2f23'};
+const K={skin:'#e0a77d',skinD:'#c08560',skinO:'#8a553d',skinL:'#f2c39c',hair:'#23212a',hairL:'#4b4a5a',grey:'#b5b5bd',shirt:'#fbf8f0',shirtD:'#d9d2c0',shirtO:'#9d947f',pant:'#2b2e3d',pantD:'#1d1f2b',pantL:'#4c5270',pantO:'#12131b',shoe:'#34261f',shoeL:'#7a5a48',shoeO:'#15100d',pack:'#3f918b',packD:'#2a6864',packL:'#6cc0b8',packO:'#1b4542',trim:'#e6b565',tr:'#e0654d',trD:'#b44a37',trL:'#f08a73',trO:'#7d2f23',rim:'rgba(255,238,205,.75)'};
 const tb=(d,w,f,o)=>`<path d="${d}" stroke="${o}" stroke-width="${w+3}"/><path d="${d}" stroke="${f}" stroke-width="${w}"/>`;
-const leg=(cls,f)=>`<g class="${cls}">${tb('M98 150V198',19,f,K.pantO)}<g class="kn">${tb('M98 198V236',15,f,K.pantO)}<path d="M89 237H104C113 237 123 243 123 248H89Z" fill="${K.shoe}" stroke="${K.shoeO}" stroke-width="1.6"/></g></g>`;
-const arm=cls=>`<g class="${cls}"><g class="up">${tb('M98 86V120',11,K.skin,K.skinO)}${tb('M98 86V104',16,K.shirt,K.shirtO)}<g class="fo">${tb('M98 120V154',10,K.skin,K.skinO)}<rect x="93.5" y="141" width="9" height="7" rx="2.2" fill="#efe7d3" stroke="#9c927b" stroke-width="1"/><circle cx="98" cy="157" r="6" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/></g></g></g>`;
+const leg=(cls,far)=>{const p=far?K.pantD:K.pant;
+  return`<g class="${cls}"><g class="kn"><path d="M89 196H107C106.5 214 105.5 228 104.5 237H92C91 228 90 214 89 196Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M89 196L92 237H96C94 225 93 212 93 196Z" fill="${K.pantD}" opacity=".55"/>`}<path d="M89 237H104.5C112 238 120 241 124 246C125 248.5 123.5 249.5 121 249.5H90C87.5 249.5 87 247 88 245Z" fill="${K.shoe}" stroke="${K.shoeO}" stroke-width="1.6"/><path d="M97 241.5Q109 240.5 119.5 245.5" stroke="${K.shoeL}" stroke-width="1.5" opacity=".85"/><path d="M89 247.6H122" stroke="${K.shoeO}" stroke-width="2"/></g><path d="M87.5 148C85.5 168 87 186 89 199H108C110.5 186 111 168 108.5 148Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M87.5 148C85.5 168 87 186 89 199H94C92 184 91 166 93 148Z" fill="${K.pantD}" opacity=".5"/><path d="M107 152C108.5 168 108 184 107 197" stroke="${K.rim}" stroke-width="1.4" opacity=".55"/>`}<path d="M98 158V194" stroke="${K.pantL}" stroke-width="1.2" opacity=".5"/></g>`;
+};
+const arm=(cls,far)=>{const s=far?K.shirtD:K.shirt,sk=far?K.skinD:K.skin;
+  return`<g class="${cls}"><g class="up">${tb('M98 86V121',11,sk,K.skinO)}<g class="fo">${tb('M98 120V153',10,sk,K.skinO)}${far?'':`<path d="M95 126V146" stroke="${K.skinL}" stroke-width="1.6" opacity=".55"/>`}<rect x="93" y="139" width="10" height="8" rx="2.4" fill="#2c2f3a" stroke="#d8d1bd" stroke-width="2"/><circle cx="98" cy="157" r="6" fill="${sk}" stroke="${K.skinO}" stroke-width="1.5"/><ellipse cx="102.8" cy="153" rx="2.3" ry="4.3" transform="rotate(-24 102.8 153)" fill="${sk}" stroke="${K.skinO}" stroke-width="1.2"/></g><path d="M89 82C87 90 88 99 90 106H106C108 99 109 90 107 82Z" fill="${s}" stroke="${K.shirtO}" stroke-width="1.7"/><path d="M90.5 104.5H105.5" stroke="${K.shirtO}" stroke-width="2.2"/></g></g>`;
+};
 const HEADSVG=`<g class="head">
-<path d="M92 62L93 80H110L111 62Z" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.5"/>
 <path d="M82 40C80 20 92 12 104 14C114 16 119 25 119 33C122 38 126 43 124 46C122 48 119 48 119 50C120 54 119 58 116 61C112 70 100 72 92 68C84 62 82 52 82 40Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.7"/>
-<path d="M80 44C75 20 92 7 108 11C118 13 121 23 119 29C110 22 98 22 92 30C88 36 88 46 86 56C82 54 80 50 80 44Z" fill="${K.hair}"/>
-<path d="M88 28C92 22 100 20 108 22C100 22 94 26 91 32Z" fill="${K.grey}"/>
-<ellipse cx="89" cy="46" rx="4" ry="6.5" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.3"/>
-<ellipse cx="109" cy="48" rx="6" ry="3.6" fill="#e0806f" opacity=".3"/>
-<rect x="103" y="30" width="16" height="12" rx="4.5" fill="#cfe6f3" fill-opacity=".28" stroke="#b9bcc6" stroke-width="1.7"/>
-<path d="M103 34L88 36" stroke="#b9bcc6" stroke-width="1.5"/>
-<circle cx="112" cy="36" r="1.9" fill="#1d1b22"/>
-<path d="M105 27.5Q111 25 118 27" stroke="${K.hair}" stroke-width="2" fill="none"/>
-<path d="M110 51C114 47.5 121 47.5 123 51C120 54 113 55 107 52.5Z" fill="#26232a"/>
-<path d="M111 58.5Q115.5 62 119.5 58" stroke="#7b3d33" stroke-width="1.7" fill="none"/>
+<path d="M84 52C86 62 94 69 104 69C110 69 114 66 116 61C110 66 98 66 92 58Z" fill="${K.skinD}" opacity=".5"/>
+<path d="M92 58C98 68 110 68 116 61L113 56C108 62 98 62 94 54Z" fill="${K.hair}" opacity=".14"/>
+<ellipse cx="89" cy="46" rx="4" ry="6.5" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.3"/><path d="M88 43Q91 46 88 50" stroke="${K.skinO}" stroke-width="1" fill="none"/>
+<ellipse cx="109" cy="48.5" rx="6" ry="3.4" fill="#e0806f" opacity=".28"/>
+<path d="M79 46C72 22 90 5 109 10C121 13 124 24 121 31C112 22 100 20 93 28C89 33 88 42 87 52C83 51 80 49 79 46Z" fill="${K.hair}"/>
+<path d="M84 28C92 14 106 12 116 18M82 36C84 24 96 16 110 17" stroke="${K.hairL}" stroke-width="1.3" fill="none"/>
+<path d="M88 30C92 24 100 21 108 22C101 23 95 27 92 33Z" fill="${K.grey}"/><path d="M86 41C86 36 88 32 91 30L93 36C90 37 88 39 87 43Z" fill="${K.grey}"/>
+<path d="M107.5 35.5Q112.5 31.5 118.5 35Q113.5 39.2 107.5 35.5Z" fill="#fff"/>
+<ellipse cx="113" cy="35.4" rx="2.6" ry="3.1" fill="#3a2418"/><circle cx="113.4" cy="35.4" r="1.2" fill="#0e0a0c"/><circle cx="114.2" cy="34.4" r=".9" fill="#fff"/>
+<path d="M107 35.8Q112.5 31 119 34.6" stroke="#1c1620" stroke-width="1.7" fill="none"/>
+<path d="M104.5 28.5Q111.5 24.5 119.5 28.2" stroke="${K.hair}" stroke-width="2.6" fill="none"/>
+<rect x="102.5" y="29.5" width="18" height="13.5" rx="5" fill="#cfe6f3" fill-opacity=".2" stroke="#3a4152" stroke-width="1.7"/><path d="M102.5 34L88 36" stroke="#3a4152" stroke-width="1.5"/><path d="M106 32.5L111 31.3M105 36L109 34.6" stroke="#fff" stroke-width="1.2" opacity=".75"/>
+<path d="M120.5 37C125.5 42 125.5 46 121 47.5C119.5 47.5 119 46.5 119.5 45" stroke="${K.skinO}" stroke-width="1.5" fill="none"/>
+<path d="M107.5 52C112 47.5 120.5 47.5 124.5 51.5C122 56 114 57 107 53.5Z" fill="#1d1a22"/><path d="M111 51Q116 49.5 121 51" stroke="${K.hairL}" stroke-width="1" fill="none" opacity=".8"/>
+<path d="M112.5 60Q118 64.5 122.5 59" stroke="#7b3d33" stroke-width="1.8" fill="none"/><path d="M123.5 54C125 56.5 124.5 59 123 60" stroke="${K.skinO}" stroke-width="1.1" fill="none"/>
 </g>`;
 const CAMSVG=`<g class="cam">
 <rect x="-18" y="-10" width="36" height="21" rx="3.5" fill="#222226" stroke="#0b0b0d" stroke-width="1.4"/>
 <path d="M-18 -7V-12Q-18 -14 -16 -14H16Q18 -14 18 -12V-5H-18Z" fill="#d8d8d2" stroke="#8d8d88" stroke-width="1.2"/>
+<path d="M-16 -12.5H16" stroke="#fff" stroke-width="1" opacity=".7"/>
 <rect x="-16" y="-18" width="10" height="5" rx="1.3" fill="#2d2d32" stroke="#0b0b0d" stroke-width="1"/>
 <rect x="3" y="-18" width="7" height="4" rx="1" fill="#bcbcb5" stroke="#85857f" stroke-width=".8"/>
 <rect x="-9" y="-17" width="6" height="3.5" rx="1" fill="#bcbcb5" stroke="#85857f" stroke-width=".8"/>
@@ -72,25 +81,33 @@ const CAMSVG=`<g class="cam">
 </g>`;
 
 function uncle(withCam){
-  const pk=`<g class="pack"><rect x="57" y="76" width="31" height="66" rx="13" fill="${K.pack}" stroke="${K.packO}" stroke-width="1.8"/><path d="M57 100Q72 108 88 100V92Q72 99 57 92Z" fill="${K.packD}"/><rect x="62" y="108" width="21" height="24" rx="7" fill="${K.packD}" stroke="${K.packO}" stroke-width="1.4"/><path d="M66 100v6M79 100v6" stroke="${K.trim}" stroke-width="3"/><path d="M62 78Q72 66 82 78" fill="none" stroke="${K.packO}" stroke-width="3"/><rect x="50" y="108" width="9" height="22" rx="4" fill="#8fb8c9" stroke="#46687a" stroke-width="1.3"/></g>`;
+  const pk=`<g class="pack"><rect x="57" y="76" width="31" height="66" rx="13" fill="${K.pack}" stroke="${K.packO}" stroke-width="1.8"/><path d="M57 100Q72 108 88 100V92Q72 99 57 92Z" fill="${K.packD}"/><path d="M62 84C60 100 60 122 64 136" stroke="${K.packL}" stroke-width="2.2" opacity=".5"/><rect x="62" y="108" width="21" height="24" rx="7" fill="${K.packD}" stroke="${K.packO}" stroke-width="1.4"/><rect x="68.5" y="104" width="8" height="6" rx="1.5" fill="${K.trim}" stroke="${K.packO}" stroke-width="1"/><path d="M62 78Q72 66 82 78" fill="none" stroke="${K.packO}" stroke-width="3"/><path d="M60 138Q72 143 85 138" stroke="${K.packO}" stroke-width=".9" stroke-dasharray="2 2"/><rect x="50" y="108" width="9" height="22" rx="4" fill="#8fb8c9" stroke="#46687a" stroke-width="1.3"/></g>`;
   const tro=`<g class="trol"><path d="M41 168L84 153" stroke="#8d8d92" stroke-width="3.4"/>
-<g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${K.trO}" stroke-width="1.8"/><path d="M-6 176V232M7 176V232M20 176V232" stroke="${K.trD}" stroke-width="3"/><rect x="-12" y="172" width="8" height="10" rx="2" fill="${K.trim}" stroke="${K.trO}" stroke-width="1"/></g>
+<g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${K.trO}" stroke-width="1.8"/><path d="M-12 174C-14 196 -14 220 -11 234" stroke="${K.trL}" stroke-width="2.4" opacity=".6"/><path d="M-6 176V232M7 176V232M20 176V232" stroke="${K.trD}" stroke-width="3"/><rect x="-12" y="172" width="8" height="10" rx="2" fill="${K.trim}" stroke="${K.trO}" stroke-width="1"/></g>
 <g class="wh"><circle cx="24" cy="242" r="6" fill="#2b2b30" stroke="#111" stroke-width="1.2"/><path class="sp" d="M24 237V247M19 242H29" stroke="#8a8a92" stroke-width="1.6"/></g></g>`;
   return `<svg class="man" viewBox="-30 0 220 256" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="98" cy="249" rx="54" ry="5.5" fill="rgba(0,0,0,.26)" stroke="none"/>
 ${withCam?'':tro}
 <g class="bob">
-${leg('lgF',K.pantF)}${leg('lgN',K.pant)}
+${leg('lgF',true)}${leg('lgN',false)}
 <ellipse cx="98" cy="150" rx="21" ry="12" fill="${K.pant}"/>
-${arm('arF')}
+${arm('arF',true)}
 ${pk}
 <path d="M80 80Q98 70 116 80Q122 96 119 112Q132 130 122 152L82 154Q74 120 80 80Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.8"/>
 <path d="M80 80Q86 82 90 90Q84 120 88 154L82 154Q74 120 80 80Z" fill="${K.shirtD}"/>
-<path d="M96 77L104 88L111 79" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/>
-<path d="M82 147H123L122.5 155L83 156Z" fill="#1e1f28"/><rect x="113" y="148" width="6" height="6" rx="1.2" fill="#c9c9cf" stroke="#77777f" stroke-width=".8"/>
+<path d="M90 134Q108 142 123 146L122 152L84 154Z" fill="${K.shirtD}" opacity=".6"/>
+<path d="M84 120Q91 125 98 123M86 102Q92 106 97 104" stroke="${K.shirtO}" stroke-width=".9" opacity=".5"/>
+<path d="M112 84C117 98 117 108 114 114C124 130 121 142 120.5 150" stroke="${K.shirtO}" stroke-width="1.2"/>
+${[[116.4,96],[115.6,106],[118.2,122],[120.6,136]].map(b=>`<circle cx="${b[0]}" cy="${b[1]}" r="1.15" fill="${K.shirtO}"/>`).join('')}
+<path d="M116 80Q122 96 119 112Q132 130 122 152" stroke="${K.rim}" stroke-width="1.6"/>
+<path d="M88 78C94 100 92 124 86 140" stroke="#c28a4e" stroke-width="5"/><path d="M88 78C94 100 92 124 86 140" stroke="#e0b078" stroke-width="1.4" opacity=".7"/>
+<path d="M82 146H123L122.5 154L83 155Z" fill="#1b1c24" stroke="#0b0b10" stroke-width="1"/><rect x="112" y="147" width="8" height="7" rx="1.6" fill="#d7d7dd" stroke="#6f7078" stroke-width=".9"/>
+<path d="M92 60L93 80H110L111 62Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/><path d="M92 62L93 72Q102 79 111 70L111 62Z" fill="${K.skinD}" opacity=".7"/>
+<path d="M90 74L97 83L106 77L99 70Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/><path d="M103 79L114 82L108 94L100 85Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/>
 ${withCam?'<path class="strap" d="" stroke="#b98a55" stroke-width="3"/>':''}
 ${HEADSVG}
 ${withCam?CAMSVG:''}
-${arm('arN')}
+${arm('arN',false)}
 </g></g></svg>`;
 }
 
