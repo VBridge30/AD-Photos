@@ -39,33 +39,41 @@ const stepU=t=>{const f=Math.floor(t);return f+smooth(.4,1,t-f)};
 const rng=seed=>{let a=seed;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
 const f1=v=>v.toFixed(1);
 
-/* ---------- the uncle ---------- */
-const K={skin:'#e0a77d',skinD:'#c08560',skinO:'#8a553d',skinL:'#f2c39c',hair:'#23212a',hairL:'#4b4a5a',grey:'#b5b5bd',shirt:'#fbf8f0',shirtD:'#d9d2c0',shirtO:'#9d947f',pant:'#2b2e3d',pantD:'#1d1f2b',pantL:'#4c5270',pantO:'#12131b',shoe:'#34261f',shoeL:'#7a5a48',shoeO:'#15100d',pack:'#3f918b',packD:'#2a6864',packL:'#6cc0b8',packO:'#1b4542',trim:'#e6b565',tr:'#e0654d',trD:'#b44a37',trL:'#f08a73',trO:'#7d2f23',rim:'rgba(255,238,205,.75)'};
+/* ---------- the uncle: storybook traveller ---------- */
+const K={skin:'#f6d6b6',skinD:'#e6b896',skinO:'#9a6248',skinL:'#fde9d4',hair:'#4a4650',hairL:'#6e6a76',grey:'#cfcfd6',
+  shirt:'#a6d3e8',shirtD:'#78aac8',shirtO:'#3f6f8c',shirtL:'#d3ecf7',
+  pant:'#8f8c40',pantF:'#76732f',pantD:'#6c692a',pantO:'#47451a',pantL:'#adaa5a',cuff:'#f0e4c6',
+  boot:'#8d5c35',bootD:'#63401f',bootO:'#3a2312',bootL:'#b98254',
+  pack:'#6d8ea6',packD:'#4f6d84',packL:'#93b3c8',packO:'#2c4256',leather:'#9c6137',leatherD:'#6e4121',buckle:'#dcdce2',
+  hat:'#e8d8aa',hatD:'#c9b784',hatO:'#79592d',band:'#a46c3c',
+  trim:'#e6b565',tr:'#e0654d',trD:'#b44a37',trL:'#f08a73',trO:'#7d2f23',rim:'rgba(255,244,214,.8)'};
 const tb=(d,w,f,o)=>`<path d="${d}" stroke="${o}" stroke-width="${w+3}"/><path d="${d}" stroke="${f}" stroke-width="${w}"/>`;
-const leg=(cls,far)=>{const p=far?K.pantD:K.pant;
-  return`<g class="${cls}"><g class="kn"><path d="M89 196H107C106.5 214 105.5 228 104.5 237H92C91 228 90 214 89 196Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M89 196L92 237H96C94 225 93 212 93 196Z" fill="${K.pantD}" opacity=".55"/>`}<path d="M89 237H104.5C112 238 120 241 124 246C125 248.5 123.5 249.5 121 249.5H90C87.5 249.5 87 247 88 245Z" fill="${K.shoe}" stroke="${K.shoeO}" stroke-width="1.6"/><path d="M97 241.5Q109 240.5 119.5 245.5" stroke="${K.shoeL}" stroke-width="1.5" opacity=".85"/><path d="M89 247.6H122" stroke="${K.shoeO}" stroke-width="2"/></g><path d="M87.5 148C85.5 168 87 186 89 199H108C110.5 186 111 168 108.5 148Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M87.5 148C85.5 168 87 186 89 199H94C92 184 91 166 93 148Z" fill="${K.pantD}" opacity=".5"/><path d="M107 152C108.5 168 108 184 107 197" stroke="${K.rim}" stroke-width="1.4" opacity=".55"/>`}<path d="M98 158V194" stroke="${K.pantL}" stroke-width="1.2" opacity=".5"/></g>`;
+const leg=(cls,far)=>{const p=far?K.pantF:K.pant;
+  return`<g class="${cls}"><g class="kn"><path d="M89 196H107C106.5 212 105.8 222 105 232H91.6C90.6 222 89.6 212 89 196Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M89 196L91.6 232H96C94 220 93 210 93 196Z" fill="${K.pantD}" opacity=".5"/>`}<path d="M89.6 224.5Q98 227.4 106.2 224.5L105.4 232.4Q98 235 91 232.4Z" fill="${K.cuff}" stroke="${K.pantO}" stroke-width="1.5"/><path d="M91 232H104.5C105 237.6 107 240.4 110 241.8C117.5 242.8 124 245.2 125 248C125.4 249.4 124 249.8 122 249.8H90C87.4 249.8 87 248 87.8 246.4C89.4 242.8 90.5 238 91 232Z" fill="${K.boot}" stroke="${K.bootO}" stroke-width="1.7"/><path d="M96 237H103M95.4 240.2H105" stroke="${K.cuff}" stroke-width="1.4"/><path d="M110.5 243C116 243.8 121 245.4 123.6 247" stroke="${K.bootL}" stroke-width="1.6" opacity=".9"/><path d="M88.6 247.8H124.4" stroke="${K.cuff}" stroke-width="2.4"/></g><path d="M87.5 148C85.5 168 87 186 89 199H108C110.5 186 111 168 108.5 148Z" fill="${p}" stroke="${K.pantO}" stroke-width="1.8"/>${far?'':`<path d="M87.5 148C85.5 168 87 186 89 199H94C92 184 91 166 93 148Z" fill="${K.pantD}" opacity=".45"/><path d="M107 152C108.5 168 108 184 107 197" stroke="${K.pantL}" stroke-width="1.6" opacity=".7"/>`}</g>`;
 };
 const arm=(cls,far)=>{const s=far?K.shirtD:K.shirt,sk=far?K.skinD:K.skin;
-  return`<g class="${cls}"><g class="up">${tb('M98 86V121',11,sk,K.skinO)}<g class="fo">${tb('M98 120V153',10,sk,K.skinO)}${far?'':`<path d="M95 126V146" stroke="${K.skinL}" stroke-width="1.6" opacity=".55"/>`}<rect x="93" y="139" width="10" height="8" rx="2.4" fill="#2c2f3a" stroke="#d8d1bd" stroke-width="2"/><circle cx="98" cy="157" r="6" fill="${sk}" stroke="${K.skinO}" stroke-width="1.5"/><ellipse cx="102.8" cy="153" rx="2.3" ry="4.3" transform="rotate(-24 102.8 153)" fill="${sk}" stroke="${K.skinO}" stroke-width="1.2"/></g><path d="M89 82C87 90 88 99 90 106H106C108 99 109 90 107 82Z" fill="${s}" stroke="${K.shirtO}" stroke-width="1.7"/><path d="M90.5 104.5H105.5" stroke="${K.shirtO}" stroke-width="2.2"/></g></g>`;
+  return`<g class="${cls}"><g class="up">${tb('M98 86V121',11,sk,K.skinO)}<g class="fo">${tb('M98 120V153',10,sk,K.skinO)}${far?'':`<path d="M95 126V146" stroke="${K.skinL}" stroke-width="1.6" opacity=".6"/>`}<circle cx="98" cy="157" r="6.4" fill="${sk}" stroke="${K.skinO}" stroke-width="1.5"/><ellipse cx="103" cy="153" rx="2.4" ry="4.4" transform="rotate(-24 103 153)" fill="${sk}" stroke="${K.skinO}" stroke-width="1.2"/></g><path d="M87.5 85C87.5 76 108.5 76 108.5 85C109.5 93 108.5 100 106.5 107Q98 110.5 89.5 107C87.5 100 86.5 93 87.5 85Z" fill="${s}" stroke="${K.shirtO}" stroke-width="1.7"/><path d="M89.5 105.6Q98 109 106.5 105.6" stroke="${K.shirtO}" stroke-width="1.6"/></g></g>`;
 };
-const HEADSVG=`<g class="head">
-<path d="M82 40C80 20 92 12 104 14C114 16 119 25 119 33C122 38 126 43 124 46C122 48 119 48 119 50C120 54 119 58 116 61C112 70 100 72 92 68C84 62 82 52 82 40Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.7"/>
-<path d="M84 52C86 62 94 69 104 69C110 69 114 66 116 61C110 66 98 66 92 58Z" fill="${K.skinD}" opacity=".5"/>
-<path d="M92 58C98 68 110 68 116 61L113 56C108 62 98 62 94 54Z" fill="${K.hair}" opacity=".14"/>
-<ellipse cx="89" cy="46" rx="4" ry="6.5" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.3"/><path d="M88 43Q91 46 88 50" stroke="${K.skinO}" stroke-width="1" fill="none"/>
-<ellipse cx="109" cy="48.5" rx="6" ry="3.4" fill="#e0806f" opacity=".28"/>
-<path d="M79 46C72 22 90 5 109 10C121 13 124 24 121 31C112 22 100 20 93 28C89 33 88 42 87 52C83 51 80 49 79 46Z" fill="${K.hair}"/>
-<path d="M84 28C92 14 106 12 116 18M82 36C84 24 96 16 110 17" stroke="${K.hairL}" stroke-width="1.3" fill="none"/>
-<path d="M88 30C92 24 100 21 108 22C101 23 95 27 92 33Z" fill="${K.grey}"/><path d="M86 41C86 36 88 32 91 30L93 36C90 37 88 39 87 43Z" fill="${K.grey}"/>
-<path d="M107.5 35.5Q112.5 31.5 118.5 35Q113.5 39.2 107.5 35.5Z" fill="#fff"/>
-<ellipse cx="113" cy="35.4" rx="2.6" ry="3.1" fill="#3a2418"/><circle cx="113.4" cy="35.4" r="1.2" fill="#0e0a0c"/><circle cx="114.2" cy="34.4" r=".9" fill="#fff"/>
-<path d="M107 35.8Q112.5 31 119 34.6" stroke="#1c1620" stroke-width="1.7" fill="none"/>
-<path d="M104.5 28.5Q111.5 24.5 119.5 28.2" stroke="${K.hair}" stroke-width="2.6" fill="none"/>
-<rect x="102.5" y="29.5" width="18" height="13.5" rx="5" fill="#cfe6f3" fill-opacity=".2" stroke="#3a4152" stroke-width="1.7"/><path d="M102.5 34L88 36" stroke="#3a4152" stroke-width="1.5"/><path d="M106 32.5L111 31.3M105 36L109 34.6" stroke="#fff" stroke-width="1.2" opacity=".75"/>
-<path d="M120.5 37C125.5 42 125.5 46 121 47.5C119.5 47.5 119 46.5 119.5 45" stroke="${K.skinO}" stroke-width="1.5" fill="none"/>
-<path d="M107.5 52C112 47.5 120.5 47.5 124.5 51.5C122 56 114 57 107 53.5Z" fill="#1d1a22"/><path d="M111 51Q116 49.5 121 51" stroke="${K.hairL}" stroke-width="1" fill="none" opacity=".8"/>
-<path d="M112.5 60Q118 64.5 122.5 59" stroke="#7b3d33" stroke-width="1.8" fill="none"/><path d="M123.5 54C125 56.5 124.5 59 123 60" stroke="${K.skinO}" stroke-width="1.1" fill="none"/>
-</g>`;
+const HEADSVG=`<g class="head"><g transform="translate(100 68) scale(1.3) translate(-100 -68)">
+<ellipse cx="79.5" cy="46" rx="4.4" ry="7" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.2"/><path d="M78.6 43Q81.4 46 78.8 50" stroke="${K.skinO}" stroke-width="1" fill="none"/>
+<path d="M78 42C76 22 89 11 103 11C118 11 127 24 127 39C127 47 124.5 54 120 61C115 68 107 71 99 70C88 68 79 57 78 42Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/>
+<path d="M80 50C82 62 90 69 100 70C108 70.5 114 67 118 62C110 66 98 65 90 56Z" fill="${K.skinD}" opacity=".45"/>
+<ellipse cx="98" cy="52" rx="6.6" ry="4.2" fill="#f29a86" opacity=".4"/><ellipse cx="122.6" cy="52.4" rx="3.6" ry="3" fill="#f29a86" opacity=".32"/>
+<ellipse cx="101" cy="38.4" rx="4.7" ry="5.1" fill="#fff" stroke="#4a3326" stroke-width="1.1"/><circle cx="101.8" cy="38.9" r="3.1" fill="#6a3f24"/><circle cx="102" cy="39" r="1.6" fill="#160d0a"/><circle cx="103.2" cy="37.4" r="1.15" fill="#fff"/><circle cx="100.4" cy="40.6" r=".6" fill="#fff"/>
+<ellipse cx="118.6" cy="38.6" rx="4" ry="4.7" fill="#fff" stroke="#4a3326" stroke-width="1.1"/><circle cx="119.4" cy="39" r="2.7" fill="#6a3f24"/><circle cx="119.6" cy="39.1" r="1.4" fill="#160d0a"/><circle cx="120.6" cy="37.8" r="1" fill="#fff"/><circle cx="118" cy="40.6" r=".5" fill="#fff"/>
+<path d="M94 29.6Q101 26.4 108.4 29.8M112.6 30Q118.6 27 125 30" stroke="${K.hairL}" stroke-width="2.1" fill="none"/>
+<circle cx="101" cy="38.4" r="7.6" fill="#dcebf5" fill-opacity=".14" stroke="#b08a4e" stroke-width="1.15"/><circle cx="118.6" cy="38.6" r="6.6" fill="#dcebf5" fill-opacity=".14" stroke="#b08a4e" stroke-width="1.15"/><path d="M108.6 37.4Q109.6 36.2 112 37.4M93.4 37L80.6 38.6" stroke="#b08a4e" stroke-width="1.15" fill="none"/><path d="M96 34.2L99.6 33" stroke="#fff" stroke-width="1.2" opacity=".8"/>
+<path d="M114.6 44.6C114.2 47.6 115.2 50 117.6 50.4C119.4 50.6 120.6 49.6 120.4 48" stroke="${K.skinO}" stroke-width="1.3" fill="none"/><path d="M116.6 50.6Q117.6 51.4 118.8 50.8" stroke="${K.skinO}" stroke-width="1" fill="none"/><ellipse cx="115.6" cy="46.4" rx="1.4" ry="2.4" fill="#fff" opacity=".35"/>
+<path d="M108 58.4Q115 64 123 57.8" stroke="#b05a4e" stroke-width="1.9" fill="none"/><path d="M104.4 55C103.4 57.6 104.2 60 106.2 61" stroke="${K.skinO}" stroke-width="1" fill="none"/>
+<path d="M78 29C76.4 35 76.6 41 78.6 46.4L82.6 41C83.4 36 85 32 88 29Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/><path d="M78.8 47C76 52 77.6 58.6 83 60.6L85 55C83.4 53.6 82.4 50.6 82.8 47Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/>
+<path d="M80 33C81 37 81 40 80.6 43M81.4 51C82.6 54 83.2 56 84 57.4" stroke="${K.hairL}" stroke-width=".9" fill="none"/>
+<path d="M85 30L84 27C95 31 112 31 124 27L123 30C112 34 96 34 85 30Z" fill="${K.skinD}" opacity=".5"/>
+<path d="M86 19C86 5 97 -1 106 -1C116 -1 126 6 125 19Z" fill="${K.hat}" stroke="${K.hatO}" stroke-width="1.6"/>
+<path d="M86 19C86 8 91 2 97 0C92 6 91 13 92 19Z" fill="${K.hatD}" opacity=".7"/>
+<path d="M86 14.2C98 17.6 114 17.6 125.4 14.2L125.2 19.6C114 23 98 23 86 19.6Z" fill="${K.band}" stroke="${K.hatO}" stroke-width="1.3"/>
+<ellipse cx="105" cy="20.5" rx="35" ry="7.2" transform="rotate(-4 105 20.5)" fill="${K.hat}" stroke="${K.hatO}" stroke-width="1.6"/>
+<path d="M76 21.4C86 27 124 27 134 20.4" stroke="${K.hatD}" stroke-width="2" fill="none" opacity=".7"/><path d="M83 17.6C94 14.4 117 14.4 127 17.8" stroke="#fff" stroke-width="1.3" fill="none" opacity=".55"/>
+</g></g>`;
 const CAMSVG=`<g class="cam">
 <rect x="-18" y="-10" width="36" height="21" rx="3.5" fill="#222226" stroke="#0b0b0d" stroke-width="1.4"/>
 <path d="M-18 -7V-12Q-18 -14 -16 -14H16Q18 -14 18 -12V-5H-18Z" fill="#d8d8d2" stroke="#8d8d88" stroke-width="1.2"/>
@@ -81,12 +89,12 @@ const CAMSVG=`<g class="cam">
 </g>`;
 
 function uncle(withCam){
-  const pk=`<g class="pack"><rect x="57" y="76" width="31" height="66" rx="13" fill="${K.pack}" stroke="${K.packO}" stroke-width="1.8"/><path d="M57 100Q72 108 88 100V92Q72 99 57 92Z" fill="${K.packD}"/><path d="M62 84C60 100 60 122 64 136" stroke="${K.packL}" stroke-width="2.2" opacity=".5"/><rect x="62" y="108" width="21" height="24" rx="7" fill="${K.packD}" stroke="${K.packO}" stroke-width="1.4"/><rect x="68.5" y="104" width="8" height="6" rx="1.5" fill="${K.trim}" stroke="${K.packO}" stroke-width="1"/><path d="M62 78Q72 66 82 78" fill="none" stroke="${K.packO}" stroke-width="3"/><path d="M60 138Q72 143 85 138" stroke="${K.packO}" stroke-width=".9" stroke-dasharray="2 2"/><rect x="50" y="108" width="9" height="22" rx="4" fill="#8fb8c9" stroke="#46687a" stroke-width="1.3"/></g>`;
+  const pk=`<g class="pack"><rect x="44" y="68" width="42" height="78" rx="15" fill="${K.pack}" stroke="${K.packO}" stroke-width="1.8"/><path d="M44 96Q65 107 86 96V88Q65 98 44 88Z" fill="${K.packD}"/><path d="M50 78C47 100 47 124 52 140" stroke="${K.packL}" stroke-width="2.6" opacity=".6"/><rect x="50" y="108" width="29" height="30" rx="9" fill="${K.packD}" stroke="${K.packO}" stroke-width="1.5"/><path d="M50 118Q64.5 124 79 118" stroke="${K.packO}" stroke-width="1.2"/><path d="M44 93H86" stroke="${K.leather}" stroke-width="5.5"/><rect x="61.5" y="89.2" width="9" height="7.6" rx="1.8" fill="${K.buckle}" stroke="${K.packO}" stroke-width="1"/><rect x="61" y="118" width="7.5" height="9" rx="1.6" fill="${K.leather}" stroke="${K.leatherD}" stroke-width="1"/><circle cx="64.8" cy="127" r="1.6" fill="${K.buckle}"/><path d="M52 71Q65 58 78 71" fill="none" stroke="${K.leatherD}" stroke-width="3.4"/></g>`;
   const tro=`<g class="trol"><path d="M41 168L84 153" stroke="#8d8d92" stroke-width="3.4"/>
 <g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${K.trO}" stroke-width="1.8"/><path d="M-12 174C-14 196 -14 220 -11 234" stroke="${K.trL}" stroke-width="2.4" opacity=".6"/><path d="M-6 176V232M7 176V232M20 176V232" stroke="${K.trD}" stroke-width="3"/><rect x="-12" y="172" width="8" height="10" rx="2" fill="${K.trim}" stroke="${K.trO}" stroke-width="1"/></g>
 <g class="wh"><circle cx="24" cy="242" r="6" fill="#2b2b30" stroke="#111" stroke-width="1.2"/><path class="sp" d="M24 237V247M19 242H29" stroke="#8a8a92" stroke-width="1.6"/></g></g>`;
-  return `<svg class="man" viewBox="-30 0 220 256" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
-<ellipse cx="98" cy="249" rx="54" ry="5.5" fill="rgba(0,0,0,.26)" stroke="none"/>
+  return `<svg class="man" viewBox="-30 -26 220 282" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="98" cy="249" rx="54" ry="5.5" fill="rgba(60,40,20,.26)" stroke="none"/>
 ${withCam?'':tro}
 <g class="bob">
 ${leg('lgF',true)}${leg('lgN',false)}
@@ -94,16 +102,16 @@ ${leg('lgF',true)}${leg('lgN',false)}
 ${arm('arF',true)}
 ${pk}
 <path d="M80 80Q98 70 116 80Q122 96 119 112Q132 130 122 152L82 154Q74 120 80 80Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.8"/>
-<path d="M80 80Q86 82 90 90Q84 120 88 154L82 154Q74 120 80 80Z" fill="${K.shirtD}"/>
-<path d="M90 134Q108 142 123 146L122 152L84 154Z" fill="${K.shirtD}" opacity=".6"/>
-<path d="M84 120Q91 125 98 123M86 102Q92 106 97 104" stroke="${K.shirtO}" stroke-width=".9" opacity=".5"/>
+<path d="M80 80Q86 82 90 90Q84 120 88 154L82 154Q74 120 80 80Z" fill="${K.shirtD}" opacity=".7"/>
+<path d="M90 134Q108 142 123 146L122 152L84 154Z" fill="${K.shirtD}" opacity=".5"/>
+<path d="M84 120Q91 125 98 123M86 102Q92 106 97 104" stroke="${K.shirtO}" stroke-width=".9" opacity=".45"/>
 <path d="M112 84C117 98 117 108 114 114C124 130 121 142 120.5 150" stroke="${K.shirtO}" stroke-width="1.2"/>
-${[[116.4,96],[115.6,106],[118.2,122],[120.6,136]].map(b=>`<circle cx="${b[0]}" cy="${b[1]}" r="1.15" fill="${K.shirtO}"/>`).join('')}
+${[[116.4,96],[115.6,106],[118.2,122],[120.6,136]].map(b=>`<circle cx="${b[0]}" cy="${b[1]}" r="1.5" fill="${K.shirtL}" stroke="${K.shirtO}" stroke-width=".8"/>`).join('')}
 <path d="M116 80Q122 96 119 112Q132 130 122 152" stroke="${K.rim}" stroke-width="1.6"/>
-<path d="M88 78C94 100 92 124 86 140" stroke="#c28a4e" stroke-width="5"/><path d="M88 78C94 100 92 124 86 140" stroke="#e0b078" stroke-width="1.4" opacity=".7"/>
-<path d="M82 146H123L122.5 154L83 155Z" fill="#1b1c24" stroke="#0b0b10" stroke-width="1"/><rect x="112" y="147" width="8" height="7" rx="1.6" fill="#d7d7dd" stroke="#6f7078" stroke-width=".9"/>
-<path d="M92 60L93 80H110L111 62Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/><path d="M92 62L93 72Q102 79 111 70L111 62Z" fill="${K.skinD}" opacity=".7"/>
-<path d="M90 74L97 83L106 77L99 70Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/><path d="M103 79L114 82L108 94L100 85Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/>
+<path d="M87 78C93 100 91 122 84 140" stroke="${K.leather}" stroke-width="5"/><path d="M87 78C93 100 91 122 84 140" stroke="${K.leatherD}" stroke-width="1" stroke-dasharray="3 3"/><rect x="85" y="118" width="7" height="8" rx="1.5" fill="${K.buckle}" stroke="${K.leatherD}" stroke-width="1"/>
+<path d="M82 146H123L122.5 154L83 155Z" fill="${K.leatherD}" stroke="${K.bootO}" stroke-width="1"/><rect x="112" y="147" width="8" height="7" rx="1.6" fill="${K.buckle}" stroke="#77777f" stroke-width=".9"/>
+<path d="M90 62L91 80H113L113.5 62Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/><path d="M90 64L91 73Q102 80 113 71L113.5 64Z" fill="${K.skinD}" opacity=".7"/>
+<path d="M88 75L96 85L106 78L98 68Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/><path d="M103 79L115 82L109 95L100 86Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/>
 ${withCam?'<path class="strap" d="" stroke="#b98a55" stroke-width="3"/>':''}
 ${HEADSVG}
 ${withCam?CAMSVG:''}
@@ -158,8 +166,7 @@ const CL=[[.05,.12,1.1,.06],[.32,.2,.8,.09],[.55,.08,1.3,.05],[.78,.26,.7,.1],[.
 /* ---------- build ---------- */
 const scenes=[];
 const ROT=[-2.2,1.6,-1.2,2.4,-1.8];
-const FACE=`<g><circle r="9.5" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.2"/><path d="M-9 -2C-9 -10 -3 -11 3 -10C8 -9 9.5 -5 9 -2C4 -6 -4 -6 -9 -2Z" fill="${K.hair}"/><rect x="-1" y="-3" width="9" height="7" rx="2.6" fill="#cfe6f3" fill-opacity=".3" stroke="#b9bcc6" stroke-width="1"/><circle cx="3" cy="0" r="1.1" fill="#1d1b22"/><path d="M1.5 5C4 3.5 8 3.6 9 5.3C7 7 3.5 7 1 6Z" fill="#26232a"/><path d="M2 8.5Q5 10.5 8 8.3" stroke="#7b3d33" stroke-width="1" fill="none"/></g>`;
-const PLANE=(uid)=>`<svg class="plane" viewBox="0 0 440 180" focusable="false"><defs><linearGradient id="pf${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf6e4"/><stop offset="1" stop-color="#e2d3b0"/></linearGradient><clipPath id="pw${uid}"><circle cx="210" cy="80" r="11"/></clipPath></defs>
+const FACE=`<g><circle r="9.5" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1"/><ellipse cx="-4.6" cy="3.2" rx="2.4" ry="1.6" fill="#f29a86" opacity=".45"/><ellipse cx="5.6" cy="3.4" rx="1.8" ry="1.4" fill="#f29a86" opacity=".35"/><path d="M-9.4 -2.5C-10.4 0 -10 3 -8.6 4.6L-7.6 0.6Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width=".5"/><circle cx="-3.3" cy="-.4" r="2.2" fill="#fff"/><circle cx="-3" cy="-.2" r="1.3" fill="#6a3f24"/><circle cx="-2.6" cy="-.6" r=".5" fill="#fff"/><circle cx="3.4" cy="-.3" r="1.9" fill="#fff"/><circle cx="3.7" cy="-.1" r="1.15" fill="#6a3f24"/><circle cx="4" cy="-.5" r=".45" fill="#fff"/><circle cx="-3.3" cy="-.4" r="3.4" fill="none" stroke="#b08a4e" stroke-width=".7"/><circle cx="3.4" cy="-.3" r="3" fill="none" stroke="#b08a4e" stroke-width=".7"/><path d="M0 -.6H.4M-6.7 -.6L-9 -.2" stroke="#b08a4e" stroke-width=".6" fill="none"/><path d="M-2.8 5.2Q.8 7.4 4.4 4.9" stroke="#b05a4e" stroke-width=".9" fill="none"/><path d="M-7.2 -4.6C-7.4 -10.4 -3.4 -13 .2 -13C4.2 -13 7.6 -10.4 7.2 -4.6Z" fill="${K.hat}" stroke="${K.hatO}" stroke-width=".8"/><path d="M-7.3 -6.2Q0 -4.2 7.3 -6.2L7.2 -4.6Q0 -2.6 -7.2 -4.6Z" fill="${K.band}"/><ellipse cx="0" cy="-4.4" rx="11.6" ry="2.5" fill="${K.hat}" stroke="${K.hatO}" stroke-width=".8"/></g>`;const PLANE=(uid)=>`<svg class="plane" viewBox="0 0 440 180" focusable="false"><defs><linearGradient id="pf${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf6e4"/><stop offset="1" stop-color="#e2d3b0"/></linearGradient><clipPath id="pw${uid}"><circle cx="210" cy="80" r="11"/></clipPath></defs>
 <g stroke-linejoin="round" stroke-linecap="round">
 <path d="M52 78L30 20Q38 14 66 18L100 66Z" fill="#d8604a" stroke="#9c3f2e" stroke-width="2"/>
 <path d="M44 84L10 86Q6 90 12 94L72 94Z" fill="#e8775f" stroke="#9c3f2e" stroke-width="2"/>
@@ -241,7 +248,7 @@ function walkScene(el,dir,cam){
   function layout(){
     skyLayout(stage,sc);const L=sc.L,H=sc.H;
     n=L<560?3:L<900?4:5;
-    const mh=Math.min(H*.46,L*.6,430);wm=mh*220/256;s=wm/220;
+    const mh=Math.min(H*.52,L*.66,480);wm=mh*220/282;s=wm/220;
     mw.style.width=wm+'px';mw.style.height=mh+'px';stage.style.setProperty('--mh',mh+'px');
     pw=Math.min(L/(n+1.2),H*.25);
     const dmin=Math.max(pw*.62,L*.1),dmax=L-wm*.37;
