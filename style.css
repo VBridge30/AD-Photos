@@ -271,3 +271,47 @@ body.album-open .to-top{display:none}
 .nojs{padding:4rem var(--gutter);text-align:center;color:var(--mute)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 button:focus:not(:focus-visible){outline:none}
+
+/* Travel scenes: a traveller links one chapter to the next (see travel.js) */
+.scene{--sc-bg:var(--bg);--sh:calc(100vh - var(--navh,58px));--gb:17%;position:relative;height:calc(var(--sh) + var(--run,85vh));background:var(--sc-bg);border-top:1px solid var(--line)}
+@supports (height:100dvh){.scene{--sh:calc(100dvh - var(--navh,58px))}}
+.sc-stage{position:sticky;top:var(--navh,58px);height:var(--sh);min-height:420px;overflow:hidden;background:var(--sc-bg)}
+.scene svg{display:block;overflow:visible}
+.scene .ink{stroke:var(--ink)}.scene .mute{stroke:var(--mute)}.scene .bgs{stroke:var(--sc-bg)}
+.scene .fillbg{fill:var(--sc-bg)}.scene .fink{fill:var(--ink);stroke:none}
+.scene .sg{font:500 14px var(--serif);fill:var(--ink);stroke:none}
+.sc-cap{position:absolute;left:var(--gutter);right:var(--gutter);bottom:2.2%;text-align:center;z-index:3}
+.sc-cap h3{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,3.4vw,2.3rem);line-height:1.1;margin:.1em 0 .1em}
+.sc-cap p{font-family:var(--serif);font-style:italic;color:var(--mute);font-size:clamp(.95rem,1.6vw,1.1rem);line-height:1.3}
+.ph{opacity:0;transform:translateY(-26px) rotate(calc(var(--r) * 3));transform-origin:50% 0;transition:opacity .5s,transform .9s cubic-bezier(.2,.9,.3,1.25);background:#f3efe6;padding:5px;box-shadow:0 8px 24px rgba(0,0,0,.28);pointer-events:none}
+.ph.on{opacity:1;transform:rotate(var(--r))}
+.ph .pi{width:100%;height:100%;transform-origin:50% 0}
+.ph.on .pi{animation:sway 6s ease-in-out .9s infinite alternate}
+@keyframes sway{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph.x{display:none}
+
+/* walking scenes */
+.walk .string{position:absolute;left:2%;right:2%;top:4%;border-top:1.5px solid var(--mute)}
+.walk .string::before,.walk .string::after{content:"";position:absolute;top:-7px;width:2px;height:15px;background:var(--mute)}
+.walk .string::before{left:0}.walk .string::after{right:0}
+.walk .ph{position:absolute;top:4%}
+.walk .ph::before{content:"";position:absolute;left:50%;top:-9px;width:8px;height:16px;margin-left:-4px;border-radius:2px;background:var(--accent);z-index:2}
+.gline{position:absolute;left:0;right:0;bottom:var(--gb);border-top:1px solid var(--line)}
+.trail{position:absolute;left:0;bottom:var(--gb);width:0;border-top:1.5px dashed var(--mute)}
+.dl .trail{left:auto;right:0}
+.mwrap{position:absolute;left:0;bottom:calc(var(--gb) - var(--mh,300px) * .031);will-change:transform}
+.mwrap svg{width:100%;height:100%}
+
+/* flight and train scenes: window seat, scenery outside, photographs below */
+.winst .sc-main{position:absolute;left:var(--gutter);right:var(--gutter);top:3%;height:52%;display:flex;justify-content:center;align-items:center;gap:2%}
+.seatman{flex:0 0 auto;height:100%;width:auto;aspect-ratio:240/300}
+.win{position:relative;flex:1 1 0;min-width:0;max-width:560px;height:auto;max-height:100%;aspect-ratio:400/320;overflow:hidden;border:5px solid var(--ink);box-shadow:0 0 0 7px var(--sc-bg),0 0 0 9px var(--mute);background:var(--sc-bg)}
+.sc-flight .win{border-radius:38% / 34%}
+.sc-train .win{border-radius:14px}
+.win .view{position:absolute;inset:0;width:100%;height:100%}
+.alt{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);padding:.2rem .8rem;border-radius:999px;background:var(--sc-bg);border:1px solid var(--line);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.winst .row{position:absolute;left:var(--gutter);right:var(--gutter);top:60%;height:24%;display:flex;justify-content:center;gap:clamp(8px,1.6vw,22px)}
+.row .ph{position:relative;height:100%;aspect-ratio:4/5}
+@media (max-width:600px){.winst .sc-main{height:46%}.winst .row{top:54%;height:26%}.alt{font-size:.5rem;letter-spacing:.1em}}
+@media (prefers-reduced-motion:reduce){.scene{height:auto}.sc-stage{position:relative}.ph.on .pi{animation:none}}

@@ -62,6 +62,7 @@ function setFilter(k,scroll){
   filters.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
   document.querySelectorAll('.chapter').forEach(s=>s.classList.toggle('hide',k!=='all'&&s.dataset.cat!==k));
   $('#featured')?.classList.toggle('hide',k!=='all');
+  document.querySelectorAll('.scene').forEach(s=>s.classList.toggle('hide',k!=='all'));
   if(scroll)$('#gallery').scrollIntoView();
 }
 filters.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFilter(b.dataset.k,true)});
