@@ -55,19 +55,19 @@ const arm=(cls,far)=>{const s=far?K.shirtD:K.shirt,sk=far?K.skinD:K.skin;
   return`<g class="${cls}"><g class="up">${tb('M98 86V121',11,sk,K.skinO)}<g class="fo">${tb('M98 120V153',10,sk,K.skinO)}${far?'':`<path d="M95 126V146" stroke="${K.skinL}" stroke-width="1.6" opacity=".6"/>`}<circle cx="98" cy="157" r="6.4" fill="${sk}" stroke="${K.skinO}" stroke-width="1.5"/><ellipse cx="103" cy="153" rx="2.4" ry="4.4" transform="rotate(-24 103 153)" fill="${sk}" stroke="${K.skinO}" stroke-width="1.2"/></g><path d="M87.5 85C87.5 76 108.5 76 108.5 85C109.5 93 108.5 100 106.5 107Q98 110.5 89.5 107C87.5 100 86.5 93 87.5 85Z" fill="${s}" stroke="${K.shirtO}" stroke-width="1.7"/><path d="M89.5 105.6Q98 109 106.5 105.6" stroke="${K.shirtO}" stroke-width="1.6"/></g></g>`;
 };
 const HEADSVG=`<g class="head"><g transform="translate(100 68) scale(1.3) translate(-100 -68)">
-<ellipse cx="79.5" cy="46" rx="4.4" ry="7" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.2"/><path d="M78.6 43Q81.4 46 78.8 50" stroke="${K.skinO}" stroke-width="1" fill="none"/>
-<path d="M78 42C76 22 89 11 103 11C118 11 127 24 127 39C127 47 124.5 54 120 61C115 68 107 71 99 70C88 68 79 57 78 42Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/>
-<path d="M80 50C82 62 90 69 100 70C108 70.5 114 67 118 62C110 66 98 65 90 56Z" fill="${K.skinD}" opacity=".45"/>
-<ellipse cx="98" cy="52" rx="6.6" ry="4.2" fill="#f29a86" opacity=".4"/><ellipse cx="122.6" cy="52.4" rx="3.6" ry="3" fill="#f29a86" opacity=".32"/>
-<ellipse cx="101" cy="38.4" rx="4.7" ry="5.1" fill="#fff" stroke="#4a3326" stroke-width="1.1"/><circle cx="101.8" cy="38.9" r="3.1" fill="#6a3f24"/><circle cx="102" cy="39" r="1.6" fill="#160d0a"/><circle cx="103.2" cy="37.4" r="1.15" fill="#fff"/><circle cx="100.4" cy="40.6" r=".6" fill="#fff"/>
-<ellipse cx="118.6" cy="38.6" rx="4" ry="4.7" fill="#fff" stroke="#4a3326" stroke-width="1.1"/><circle cx="119.4" cy="39" r="2.7" fill="#6a3f24"/><circle cx="119.6" cy="39.1" r="1.4" fill="#160d0a"/><circle cx="120.6" cy="37.8" r="1" fill="#fff"/><circle cx="118" cy="40.6" r=".5" fill="#fff"/>
-<path d="M94 29.6Q101 26.4 108.4 29.8M112.6 30Q118.6 27 125 30" stroke="${K.hairL}" stroke-width="2.1" fill="none"/>
-<circle cx="101" cy="38.4" r="7.6" fill="#dcebf5" fill-opacity=".14" stroke="#b08a4e" stroke-width="1.15"/><circle cx="118.6" cy="38.6" r="6.6" fill="#dcebf5" fill-opacity=".14" stroke="#b08a4e" stroke-width="1.15"/><path d="M108.6 37.4Q109.6 36.2 112 37.4M93.4 37L80.6 38.6" stroke="#b08a4e" stroke-width="1.15" fill="none"/><path d="M96 34.2L99.6 33" stroke="#fff" stroke-width="1.2" opacity=".8"/>
-<path d="M114.6 44.6C114.2 47.6 115.2 50 117.6 50.4C119.4 50.6 120.6 49.6 120.4 48" stroke="${K.skinO}" stroke-width="1.3" fill="none"/><path d="M116.6 50.6Q117.6 51.4 118.8 50.8" stroke="${K.skinO}" stroke-width="1" fill="none"/><ellipse cx="115.6" cy="46.4" rx="1.4" ry="2.4" fill="#fff" opacity=".35"/>
-<path d="M108 58.4Q115 64 123 57.8" stroke="#b05a4e" stroke-width="1.9" fill="none"/><path d="M104.4 55C103.4 57.6 104.2 60 106.2 61" stroke="${K.skinO}" stroke-width="1" fill="none"/>
-<path d="M78 29C76.4 35 76.6 41 78.6 46.4L82.6 41C83.4 36 85 32 88 29Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/><path d="M78.8 47C76 52 77.6 58.6 83 60.6L85 55C83.4 53.6 82.4 50.6 82.8 47Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/>
-<path d="M80 33C81 37 81 40 80.6 43M81.4 51C82.6 54 83.2 56 84 57.4" stroke="${K.hairL}" stroke-width=".9" fill="none"/>
-<path d="M85 30L84 27C95 31 112 31 124 27L123 30C112 34 96 34 85 30Z" fill="${K.skinD}" opacity=".5"/>
+<ellipse cx="77.5" cy="49" rx="4.8" ry="7.2" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.3"/><path d="M76.4 45.4Q80 49 76.6 53.6" stroke="${K.skinO}" stroke-width="1.1" fill="none"/>
+<path d="M76 44C74 24 88 12 104 12C121 12 131 26 130 42C129 56 121 68 106 71C90 72 77 62 76 44Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.6"/>
+<path d="M78 52C80 64 90 71 104 71C114 71 122 66 127 57C118 66 104 67 92 60Z" fill="${K.skinD}" opacity=".4"/>
+<ellipse cx="92.5" cy="57" rx="7.2" ry="4.4" fill="#f29a86" opacity=".5"/><ellipse cx="124.5" cy="57" rx="5" ry="3.8" fill="#f29a86" opacity=".4"/>
+<ellipse cx="99" cy="43" rx="6.4" ry="7.2" fill="#fff" stroke="#3b271c" stroke-width="1.5"/><ellipse cx="100" cy="43.8" rx="4.5" ry="5" fill="#6b3f22"/><ellipse cx="100.2" cy="44" rx="2.4" ry="2.9" fill="#150b08"/><circle cx="102.1" cy="41.3" r="1.8" fill="#fff"/><circle cx="98.2" cy="46.4" r=".9" fill="#fff"/>
+<ellipse cx="120" cy="43" rx="5.4" ry="6.8" fill="#fff" stroke="#3b271c" stroke-width="1.5"/><ellipse cx="121" cy="43.8" rx="3.9" ry="4.8" fill="#6b3f22"/><ellipse cx="121.2" cy="44" rx="2.1" ry="2.7" fill="#150b08"/><circle cx="122.8" cy="41.5" r="1.6" fill="#fff"/><circle cx="119.3" cy="46.2" r=".8" fill="#fff"/>
+<path d="M92 37Q99 33 105.6 37.4M114 37.4Q120 33.4 126 38" stroke="#3b271c" stroke-width="1.8" fill="none"/>
+<path d="M90 31Q98 26 107 31M113 31Q120.5 26.6 129 31.6" stroke="#5a5560" stroke-width="2.8" fill="none"/>
+<ellipse cx="99" cy="43" rx="10" ry="10.4" fill="#dcebf5" fill-opacity=".12" stroke="#ad8b52" stroke-width="1"/><ellipse cx="120" cy="43" rx="8.8" ry="9.8" fill="#dcebf5" fill-opacity=".12" stroke="#ad8b52" stroke-width="1"/><path d="M109 40.4Q110 38.6 111.2 40.4M89 42L80.6 45" stroke="#ad8b52" stroke-width="1.1" fill="none"/><path d="M92 38.4L95.4 35.6" stroke="#fff" stroke-width="1.4" opacity=".8"/>
+<path d="M111 55.4C111.2 58.4 117.4 58.6 117.8 55.4" stroke="${K.skinO}" stroke-width="1.5" fill="none"/><ellipse cx="113.2" cy="53.8" rx="1.7" ry="1.2" fill="#fff" opacity=".55"/><path d="M113.4 49C112.8 51.4 112.6 53 113 54" stroke="${K.skinO}" stroke-width="1" fill="none" opacity=".6"/>
+<path d="M102 63.2Q112 70.6 123.4 62.6" stroke="#b05a4e" stroke-width="2.2" fill="none"/><path d="M100.8 61.2Q99.8 63.2 101.4 65.4M125.2 60.6Q126.4 62.6 125.2 64.8" stroke="${K.skinO}" stroke-width="1.2" fill="none"/>
+<path d="M76.4 31C73.4 38 74 46 76.6 52L81.4 45C82 40 84 35 88 31Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/><path d="M77.4 56C75 62 78 68 84 69L85.6 62C83.6 61 82.6 58.6 82.8 56Z" fill="${K.grey}" stroke="${K.hairL}" stroke-width="1"/><path d="M77.6 36C78 40 78 44 77.8 47M79.6 60C80.6 63 81.6 65 82.6 66.4" stroke="${K.hairL}" stroke-width=".9" fill="none"/>
+<path d="M86 31L85 28C96 32.4 114 32.4 126 28L125 31.4C114 35.4 97 35.4 86 31Z" fill="${K.skinD}" opacity=".5"/>
 <path d="M86 19C86 5 97 -1 106 -1C116 -1 126 6 125 19Z" fill="${K.hat}" stroke="${K.hatO}" stroke-width="1.6"/>
 <path d="M86 19C86 8 91 2 97 0C92 6 91 13 92 19Z" fill="${K.hatD}" opacity=".7"/>
 <path d="M86 14.2C98 17.6 114 17.6 125.4 14.2L125.2 19.6C114 23 98 23 86 19.6Z" fill="${K.band}" stroke="${K.hatO}" stroke-width="1.3"/>
@@ -251,8 +251,8 @@ function walkScene(el,dir,cam){
     const mh=Math.min(H*.52,L*.66,480);wm=mh*220/282;s=wm/220;
     mw.style.width=wm+'px';mw.style.height=mh+'px';stage.style.setProperty('--mh',mh+'px');
     pw=Math.min(L/(n+1.2),H*.25);
-    const dmin=Math.max(pw*.62,L*.1),dmax=L-wm*.37;
     const x0=-wm*.8,x1=L-wm*1.02,hp0=x0+wm*.55,hp1=x1+wm*.55;
+    const dmin=Math.max(pw*.62,L*.1),dmax=hp1;
     D=[];mk=[];zs=[];
     figs.forEach((f,i)=>{
       f.classList.toggle('x',i>=n);if(i>=n)return;
@@ -311,7 +311,7 @@ function walkScene(el,dir,cam){
     trail.style.width=clamp(x+wm*.34,0,L)+'px';
     const hp=x+wm*.55;
     if(cam){const sp=ss*(1+n*PW);figs.forEach((fg,i)=>fg.classList.toggle('on',i<n&&sp>=zs[i]+.4*PW))}
-    else figs.forEach((fg,i)=>fg.classList.toggle('on',i<n&&hp>=D[i]));
+    else figs.forEach((fg,i)=>fg.classList.toggle('on',i<n&&f>=mk[i]-.0005));
     skyUpdate(stage,sc,clamp(p));
   }
   return Object.assign(sc,{layout,update});
