@@ -304,7 +304,7 @@ button:focus:not(:focus-visible){outline:none}
 .walk .ph::before{content:"";position:absolute;left:50%;top:-9px;width:8px;height:16px;margin-left:-4px;border-radius:2px;background:#e6b565;z-index:2}
 .trail{position:absolute;left:0;bottom:calc(var(--gb) - 6px);width:0;border-top:2px dashed rgba(255,255,255,.4)}
 .dl .trail{left:auto;right:0}
-.mwrap{position:absolute;left:0;bottom:calc(var(--gb) - var(--mh,300px) * .029);will-change:transform;filter:drop-shadow(0 6px 5px rgba(0,0,0,.28))}
+.mwrap{position:absolute;left:0;bottom:calc(var(--gb) - var(--mh,300px) * .031);will-change:transform;filter:drop-shadow(0 6px 5px rgba(0,0,0,.28))}
 .mwrap svg{display:block;width:100%;height:100%;overflow:visible}
 
 /* flight and train: full-bleed painted sky, scenery behind, photographs in front */
