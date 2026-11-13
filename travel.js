@@ -1,7 +1,8 @@
-/* Travel scenes: a minimalist traveller (backpack, trolley bag) links one chapter to the next.
-   Each scene is scroll-driven. Scroll to make him walk, or to make the plane / train go step by step.
-   Photographs from the next chapter appear as he passes, then the chapter itself follows.
-   To change which scene sits before which chapter, edit PLAN. Kinds: walkR, walkL, flight, train. */
+/* Travel scenes: a kind Indian uncle (painted, Ghibli-style) links one chapter to the next.
+   Every scene is scroll-driven: scroll to make him walk, or to make the plane / train move.
+   Photographs of the next chapter appear along the way, then the chapter itself follows.
+   Edit PLAN to change which scene sits before which chapter.
+   Kinds: walkR, walkL, camR (walks right and clicks photos with a Fujifilm camera), flight, train. */
 (function(){
 'use strict';
 if(typeof GALLERY==='undefined'||typeof CHAPTERS==='undefined')return;
@@ -9,193 +10,347 @@ const main=document.getElementById('gallery');
 if(!main)return;
 const reduce=matchMedia('(prefers-reduced-motion:reduce)');
 
-const PLAN={monochrome:'walkR',light:'flight',unforced:'walkL',macro:'walkR',story:'walkL',street:'train',architecture:'walkR',abstract:'train',landscape:'flight'};
+const PLAN={monochrome:'walkR',light:'flight',unforced:'walkL',macro:'camR',story:'walkL',street:'train',architecture:'walkR',abstract:'train',landscape:'flight'};
+const MOOD={monochrome:'dawn',light:'gold',unforced:'day',macro:'mint',story:'dusk',street:'day',architecture:'gold',abstract:'dawn',landscape:'gold'};
 const TEXT={
   monochrome:'He packs light. Colour stays in the bag.',
-  light:'Window seat. Morning light below.',
+  light:'Window seat, wings level, morning light below.',
   unforced:'No itinerary, no grid, no centre.',
-  macro:'He kneels, and the small worlds open.',
+  macro:'Camera up. He stops for every small world.',
   story:'Every bag carries a story.',
   street:'The train stops, and the street begins.',
   architecture:'Past the old gates, to stone and glass.',
   abstract:'The map dissolves into line and colour.',
   landscape:'Cloud, then ground, then the long light.'
 };
+/* sky top, sky middle, horizon, far hills, middle hills, near hills, ground top, ground bottom, cloud, sun */
+const PAL={
+  dawn:{sky:['#26345f','#b4707f','#f6b98b'],far:'#7b6a93',mid:'#5a5380',near:'#3a3a62',gr:['#566b4c','#33473a'],cl:'#ffe3d0',sun:'#ffd9a0'},
+  day:{sky:['#3f7cc0','#88bfe6','#f4ead0'],far:'#8db0c4',mid:'#5f9096',near:'#3e6e68',gr:['#5d8a4f','#35603f'],cl:'#ffffff',sun:'#fff3c4'},
+  gold:{sky:['#34396b','#d9805c','#f9cd7f'],far:'#8a617a',mid:'#68466a',near:'#463354',gr:['#5a6a45','#38472f'],cl:'#ffd8b0',sun:'#ffe2a0'},
+  dusk:{sky:['#1d2a4b','#3f6a8a','#eab98c'],far:'#4e6b87',mid:'#385570',near:'#26405a',gr:['#3f5b4b','#27402f'],cl:'#cfe0ee',sun:'#ffd9b0'},
+  mint:{sky:['#2c6e8a','#8ed0c9','#f2f0c8'],far:'#6fa7a6',mid:'#4a8586',near:'#33696a',gr:['#5f8a58','#3a6446'],cl:'#ffffff',sun:'#fff6c8'}
+};
 const pad=n=>String(n).padStart(2,'0');
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const smooth=(a,b,x)=>{x=clamp((x-a)/(b-a));return x*x*(3-2*x)};
-/* holds on a step, then drops to the next one */
+const lerp=(a,b,t)=>a+(b-a)*t;
 const stepU=t=>{const f=Math.floor(t);return f+smooth(.4,1,t-f)};
+const rng=seed=>{let a=seed;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
+const f1=v=>v.toFixed(1);
 
-/* ---------- drawing ---------- */
-const tube=(d,w,c)=>`<path class="${c||'ink'}" d="${d}" stroke-width="${w}"/><path class="bgs" d="${d}" stroke-width="${w-4.4}"/>`;
-const leg=c=>`${tube('M60 108V148',10,c)}<g class="kn">${tube('M60 148V186',9,c)}<path class="${c}" d="M60 187.5H73" stroke-width="6"/></g>`;
-const HEAD=(x,y)=>`<g transform="translate(${x} ${y})">
-<path class="ink" d="M56.5 42V50M65 43V50"/>
-<ellipse class="ink fillbg" cx="61" cy="29" rx="11.5" ry="14"/>
-<path class="ink" d="M50 25C50 14 58 10.5 66 12.5C71 14 73 18 72.5 22"/>
-<path class="ink" d="M52 20C58 13 66 13 71 18" stroke-width="1.5"/>
-<path class="ink" d="M50.2 28C48.8 33 50 37 52.5 39"/>
-<path class="ink" d="M51.5 29.5C48.5 29 48 34 51 35.5" stroke-width="1.6"/>
-<circle class="ink" cx="67" cy="28.5" r="4.4" stroke-width="1.6"/>
-<path class="ink" d="M62.6 28L51.5 29" stroke-width="1.4"/>
-<circle class="fink" cx="67.4" cy="28.5" r="1.2"/>
-<path class="ink" d="M63.5 22.5Q67 20.5 71 22" stroke-width="1.6"/>
-<path class="ink" d="M72.2 28.5Q75.8 32.5 72.6 34.5" stroke-width="1.6"/>
-<path class="ink" d="M65.5 38Q69.5 41.5 73.5 37.5" stroke-width="1.7"/>
-<path class="ink" d="M52.5 35C54 44.5 62 45.5 70 42.5" stroke-width="3" stroke-dasharray=".1 3.4"/>
+/* ---------- the uncle ---------- */
+const K={skin:'#dba27a',skinD:'#bd8260',skinO:'#8f5a42',hair:'#2a2830',grey:'#9a9aa2',shirt:'#f7f3ea',shirtD:'#dcd5c4',shirtO:'#a89f8b',pant:'#2f3242',pantF:'#262833',pantO:'#171822',shoe:'#5a3b2a',shoeO:'#2e1d14',pack:'#3f918b',packD:'#2c6b67',packO:'#1e4a47',trim:'#e6b565',tr:'#e0654d',trD:'#b44a37',trO:'#7d2f23'};
+const tb=(d,w,f,o)=>`<path d="${d}" stroke="${o}" stroke-width="${w+3}"/><path d="${d}" stroke="${f}" stroke-width="${w}"/>`;
+const leg=(cls,f)=>`<g class="${cls}">${tb('M98 150V198',19,f,K.pantO)}<g class="kn">${tb('M98 198V236',15,f,K.pantO)}<path d="M89 237H104C113 237 123 243 123 248H89Z" fill="${K.shoe}" stroke="${K.shoeO}" stroke-width="1.6"/></g></g>`;
+const arm=cls=>`<g class="${cls}"><g class="up">${tb('M98 86V120',11,K.skin,K.skinO)}${tb('M98 86V104',16,K.shirt,K.shirtO)}<g class="fo">${tb('M98 120V154',10,K.skin,K.skinO)}<rect x="93.5" y="141" width="9" height="7" rx="2.2" fill="#efe7d3" stroke="#9c927b" stroke-width="1"/><circle cx="98" cy="157" r="6" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.5"/></g></g></g>`;
+const HEADSVG=`<g class="head">
+<path d="M92 62L93 80H110L111 62Z" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.5"/>
+<path d="M82 40C80 20 92 12 104 14C114 16 119 25 119 33C122 38 126 43 124 46C122 48 119 48 119 50C120 54 119 58 116 61C112 70 100 72 92 68C84 62 82 52 82 40Z" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.7"/>
+<path d="M80 44C75 20 92 7 108 11C118 13 121 23 119 29C110 22 98 22 92 30C88 36 88 46 86 56C82 54 80 50 80 44Z" fill="${K.hair}"/>
+<path d="M88 28C92 22 100 20 108 22C100 22 94 26 91 32Z" fill="${K.grey}"/>
+<ellipse cx="89" cy="46" rx="4" ry="6.5" fill="${K.skinD}" stroke="${K.skinO}" stroke-width="1.3"/>
+<ellipse cx="109" cy="48" rx="6" ry="3.6" fill="#e0806f" opacity=".3"/>
+<rect x="103" y="30" width="16" height="12" rx="4.5" fill="#cfe6f3" fill-opacity=".28" stroke="#b9bcc6" stroke-width="1.7"/>
+<path d="M103 34L88 36" stroke="#b9bcc6" stroke-width="1.5"/>
+<circle cx="112" cy="36" r="1.9" fill="#1d1b22"/>
+<path d="M105 27.5Q111 25 118 27" stroke="${K.hair}" stroke-width="2" fill="none"/>
+<path d="M110 51C114 47.5 121 47.5 123 51C120 54 113 55 107 52.5Z" fill="#26232a"/>
+<path d="M111 58.5Q115.5 62 119.5 58" stroke="#7b3d33" stroke-width="1.7" fill="none"/>
 </g>`;
-const TORSO=(x,y)=>`<g transform="translate(${x} ${y})"><path class="ink fillbg" d="M49 56Q50 47 60 46Q70 47 72 56L73 82L71 112H49L50 82Z"/><path class="ink" d="M55 48L60.5 60L66 48"/><path class="ink" d="M60.5 60V111"/></g>`;
+const CAMSVG=`<g class="cam">
+<rect x="-18" y="-10" width="36" height="21" rx="3.5" fill="#222226" stroke="#0b0b0d" stroke-width="1.4"/>
+<path d="M-18 -7V-12Q-18 -14 -16 -14H16Q18 -14 18 -12V-5H-18Z" fill="#d8d8d2" stroke="#8d8d88" stroke-width="1.2"/>
+<rect x="-16" y="-18" width="10" height="5" rx="1.3" fill="#2d2d32" stroke="#0b0b0d" stroke-width="1"/>
+<rect x="3" y="-18" width="7" height="4" rx="1" fill="#bcbcb5" stroke="#85857f" stroke-width=".8"/>
+<rect x="-9" y="-17" width="6" height="3.5" rx="1" fill="#bcbcb5" stroke="#85857f" stroke-width=".8"/>
+<rect x="-14" y="2" width="9" height="7" rx="1.5" fill="#34343a"/>
+<rect x="18" y="-8" width="11" height="16" rx="2" fill="#2c2c31" stroke="#0b0b0d" stroke-width="1.3"/>
+<rect x="27" y="-9.5" width="4.5" height="19" rx="1.6" fill="#cfcfca" stroke="#85857f" stroke-width="1"/>
+<circle cx="-12" cy="-4" r="1.4" fill="#e8553b"/>
+<g class="fl" opacity="0"><path d="M34 0L44 -3L38 0L44 3Z M34 0L40 -10L36 -1Z M34 0L40 10L36 1Z" fill="#fff6c8"/><circle cx="35" cy="0" r="5" fill="#fff"/></g>
+</g>`;
 
-const WALKER=`<svg class="man" viewBox="-48 0 190 196" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
-<g class="trol"><path class="ink" d="M47 100L14 106"/>
-<g transform="rotate(10 14 178)"><rect class="ink fillbg" x="-30" y="104" width="44" height="74" rx="7"/><path class="ink" d="M-21 116V166M-8 116V166M5 116V166"/><rect class="ink" x="-28" y="108" width="7" height="10" rx="1.5"/></g>
-<g class="wh"><circle class="ink fillbg" cx="9" cy="184" r="6"/><path class="ink sp" d="M9 178.5V189.5M3.5 184H14.5"/></g></g>
+function uncle(withCam){
+  const pk=`<g class="pack"><rect x="57" y="76" width="31" height="66" rx="13" fill="${K.pack}" stroke="${K.packO}" stroke-width="1.8"/><path d="M57 100Q72 108 88 100V92Q72 99 57 92Z" fill="${K.packD}"/><rect x="62" y="108" width="21" height="24" rx="7" fill="${K.packD}" stroke="${K.packO}" stroke-width="1.4"/><path d="M66 100v6M79 100v6" stroke="${K.trim}" stroke-width="3"/><path d="M62 78Q72 66 82 78" fill="none" stroke="${K.packO}" stroke-width="3"/><rect x="50" y="108" width="9" height="22" rx="4" fill="#8fb8c9" stroke="#46687a" stroke-width="1.3"/></g>`;
+  const tro=`<g class="trol"><path d="M41 168L84 153" stroke="#8d8d92" stroke-width="3.4"/>
+<g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${K.trO}" stroke-width="1.8"/><path d="M-6 176V232M7 176V232M20 176V232" stroke="${K.trD}" stroke-width="3"/><rect x="-12" y="172" width="8" height="10" rx="2" fill="${K.trim}" stroke="${K.trO}" stroke-width="1"/></g>
+<g class="wh"><circle cx="24" cy="242" r="6" fill="#2b2b30" stroke="#111" stroke-width="1.2"/><path class="sp" d="M24 237V247M19 242H29" stroke="#8a8a92" stroke-width="1.6"/></g></g>`;
+  return `<svg class="man" viewBox="-30 0 220 256" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
+${withCam?'':tro}
 <g class="bob">
-<g class="lgF">${leg('mute')}</g>
-<g class="lgN">${leg('ink')}</g>
-<g class="arF">${tube('M60 56V80',6.5,'mute')}<g class="fa">${tube('M60 80V102',6,'mute')}</g></g>
-<g class="pack"><rect class="ink fillbg" x="29" y="45" width="26" height="58" rx="11"/><path class="ink" d="M29 63Q42 70 55 63"/><rect class="ink" x="32" y="76" width="20" height="21" rx="6"/><path class="ink" d="M37 68v5M47 68v5M35 49Q42 41 49 49"/></g>
-${TORSO(0,0)}
-<path class="ink" d="M57 48C60 66 58 86 51 97" stroke-width="3.2"/>
-${HEAD(0,0)}
-<g transform="rotate(12 60 56)">${tube('M60 56V80',6.5)}<g transform="rotate(10 60 80)">${tube('M60 80V102',6)}<circle class="ink fillbg" cx="60" cy="103.5" r="3.4"/></g></g>
+${leg('lgF',K.pantF)}${leg('lgN',K.pant)}
+<ellipse cx="98" cy="150" rx="21" ry="12" fill="${K.pant}"/>
+${arm('arF')}
+${pk}
+<path d="M80 80Q98 70 116 80Q122 96 119 112Q132 130 122 152L82 154Q74 120 80 80Z" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.8"/>
+<path d="M80 80Q86 82 90 90Q84 120 88 154L82 154Q74 120 80 80Z" fill="${K.shirtD}"/>
+<path d="M96 77L104 88L111 79" fill="${K.shirt}" stroke="${K.shirtO}" stroke-width="1.5"/>
+<path d="M82 147H123L122.5 155L83 156Z" fill="#1e1f28"/><rect x="113" y="148" width="6" height="6" rx="1.2" fill="#c9c9cf" stroke="#77777f" stroke-width=".8"/>
+${withCam?'<path class="strap" d="" stroke="#b98a55" stroke-width="3"/>':''}
+${HEADSVG}
+${withCam?CAMSVG:''}
+${arm('arN')}
 </g></g></svg>`;
-
-const SEAT=`<svg class="seatman" viewBox="0 0 240 300" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
-<path class="ink fillbg" d="M70 300V122Q70 62 118 62Q158 62 158 102V300Z"/>
-<path class="ink" d="M92 62Q92 40 118 40"/>
-${tube('M126 204H224',11)}${tube('M224 204V300',10)}
-${TORSO(100,70)}
-${HEAD(100,70)}
-${tube('M161 134L158 176L188 190',6.5)}
-<circle class="ink fillbg" cx="190" cy="191" r="3.6"/>
-<path class="ink fillbg" d="M150 206H222Q230 206 230 213V222H150Z"/>
-</g></svg>`;
-
-const CLOUD='M0 22C-12 22-14 6-3 3C0-9 20-11 25-1C34-6 46 2 42 12C52 13 52 22 42 22Z';
-const FLIGHT=`<g class="clouds" fill="none" stroke-linejoin="round" stroke-width="1.6">${[0,1,2,3].map(()=>`<path class="ink fillbg" d="${CLOUD}"/>`).join('')}</g>
-<g class="gr" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
-<path class="ink fillbg" d="M-20 146Q60 132 130 142T260 138T420 144V560H-20Z"/>
-<path class="mute" d="M-20 176Q100 164 200 174T420 170M-20 208Q100 194 200 206T420 202M-20 250Q100 232 200 246T420 240" stroke-width="1.2"/>
-<path class="ink fillbg" d="M191 143L209 143L252 340L148 340Z"/>
-<path class="mute" d="M200 152V338" stroke-dasharray="7 11"/><path class="mute" d="M166 300H234M158 330H242" stroke-width="1.4"/>
-<path class="ink" d="M70 168a4 4 0 1 0 .1 0M96 190a5 5 0 1 0 .1 0M318 176a4 4 0 1 0 .1 0M336 200a5 5 0 1 0 .1 0"/>
-<path class="ink" d="M286 168h16v-9l8-7 8 7v9z"/>
-</g>
-<g fill="none" stroke-linejoin="round" stroke-width="2"><path class="ink fillbg" d="M-20 330V262L215 236Q238 233 232 243L110 330Z"/>
-<g class="flap"><path class="ink fillbg" d="M112 326L228 246L232 256L146 326Z"/></g></g>`;
-
-const TRAIN_S=5;
-function trainLayers(){
-  const S=TRAIN_S,W=400*(S+3);
-  const hill=(base,a,b,x0)=>{let d='M0 '+(base+a*Math.sin(0)+b);for(let x=0;x<=W;x+=14)d+=`L${x} ${(base+a*Math.sin((x+x0)/70)+b*Math.sin((x+x0)/27)).toFixed(1)}`;return d+`V300H0Z`};
-  let poles='',wire='M0 150',signs='',fence='';
-  for(let x=0;x<=W;x+=100){poles+=`M${x} 140V246M${x-13} 152H${x+13}`;if(x)wire+=`Q${x-50} 172 ${x} 150`}
-  for(let k=1;k<=S;k++){const x=400*k+200;signs+=`<path class="ink" d="M${x} 246V196"/><rect class="ink fillbg" x="${x-40}" y="168" width="80" height="30" rx="3"/><text class="sg" x="${x}" y="188" text-anchor="middle">Stop ${k}</text>`}
-  for(let x=0;x<=400+S*640+40;x+=40)fence+=`M${x} 262V236`;
-  return `<circle class="ink" cx="312" cy="62" r="20" fill="none" stroke-width="1.6"/>
-<g class="tf" fill="none" stroke-linejoin="round" stroke-width="1.6"><path class="mute fillbg" d="${hill(186,16,9,0)}"/></g>
-<g class="tm" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.8"><path class="ink fillbg" d="${hill(222,6,4,300)}" stroke-width="1.4"/><path class="ink" d="${poles}"/><path class="mute" d="${wire}" stroke-width="1.2"/>${signs}</g>
-<g class="tn" fill="none" stroke-linecap="round" stroke-width="2"><path class="ink" d="M0 262H${400+S*640+40}M0 244H${400+S*640+40}"/><path class="ink" d="${fence}"/></g>`;
 }
+
+/* two-bone arm: the shoulder is fixed, the hand goes to (tx,ty) */
+const SH=[98,86],L1=34,L2=34;
+function ik(tx,ty){
+  const dx=tx-SH[0],dy=ty-SH[1],d=clamp(Math.hypot(dx,dy),8,L1+L2-.5),phi=Math.atan2(dy,dx);
+  const A=Math.acos(clamp((L1*L1+d*d-L2*L2)/(2*L1*d),-1,1));
+  let best=null;
+  [phi-A,phi+A].forEach(a=>{const ex=SH[0]+L1*Math.cos(a),ey=SH[1]+L1*Math.sin(a);if(!best||ey>best.ey)best={a,ex,ey}});
+  const hx=SH[0]+dx*d/Math.hypot(dx,dy||1e-6),hy=SH[1]+dy*d/Math.hypot(dx||1e-6,dy);
+  const t1=Math.atan2(-(best.ex-SH[0]),best.ey-SH[1]);
+  const t2=Math.atan2(-(tx-best.ex),ty-best.ey);
+  return[t1*57.2958,(t2-t1)*57.2958];
+}
+const rot=(a,x,y)=>`rotate(${f1(a)} ${x} ${y})`;
+
+/* ---------- scenery ---------- */
+let UID=0;
+function hill(seed,base,amp,w=2400,h=300){
+  const r=rng(seed),a=r()*6,b=r()*6,c=r()*6,ys=[];
+  let d=`M0 ${h}`;
+  for(let x=0;x<=w;x+=20){const y=base+amp*(Math.sin(x/260+a)*.55+Math.sin(x/110+b)*.3+Math.sin(x/47+c)*.15);ys.push(y);d+=`L${x} ${y.toFixed(1)}`}
+  return{d:d+`L${w} ${h}Z`,ys};
+}
+function pines(seed,ys,fill){
+  const r=rng(seed);let d='';
+  for(let i=2;i<ys.length-2;i+=2+Math.floor(r()*3)){const x=i*20,y=ys[i]+4,s=14+r()*16;d+=`M${x} ${y-s*2.1}L${x+s*.55} ${y-s*.7}L${x+s*.3} ${y-s*.7}L${x+s*.8} ${y}L${x-s*.8} ${y}L${x-s*.3} ${y-s*.7}L${x-s*.55} ${y-s*.7}Z`}
+  return`<path d="${d}" fill="${fill}"/>`;
+}
+function layer(id,sp,seed,base,amp,fill,vh,bottom,trees){
+  const h=hill(seed,base,amp);
+  return`<svg class="ly" data-sp="${sp}" viewBox="0 0 2400 300" preserveAspectRatio="none" style="height:${vh};bottom:${bottom}"><defs><linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${fill}"/><stop offset="1" stop-color="${fill}" stop-opacity=".78"/></linearGradient></defs><path d="${h.d}" fill="url(#g${id})"/>${trees?pines(seed+9,h.ys,trees):''}</svg>`;
+}
+const CLD=(fill)=>`<svg viewBox="0 0 240 90" aria-hidden="true"><g fill="${fill}"><circle cx="62" cy="58" r="28"/><circle cx="104" cy="44" r="38"/><circle cx="150" cy="52" r="32"/><circle cx="188" cy="62" r="24"/><rect x="40" y="58" width="170" height="26" rx="13"/></g><ellipse cx="124" cy="80" rx="88" ry="8" fill="#5a6a90" opacity=".14"/></svg>`;
+function sky(p,id,opts){
+  const o=opts||{};
+  let h=`<div class="sun" style="--sun:${p.sun}"></div>`;
+  h+=`<div class="clouds">${[0,1,2,3,4].map(i=>`<div class="cld" data-i="${i}">${CLD(p.cl)}</div>`).join('')}</div>`;
+  const bottom=o.hz?`calc(100% - ${o.hz})`:'var(--gb)';
+  h+=layer(id+'a',.1,11+id.length,150,70,p.far,o.hz?'30%':'44%',bottom);
+  h+=layer(id+'b',.24,23+id.length,160,60,p.mid,o.hz?'24%':'36%',bottom,p.near);
+  if(!o.hz)h+=layer(id+'c',.46,37+id.length,190,40,p.near,'24%',bottom,'rgba(0,0,0,.25)');
+  return h;
+}
+const CL=[[.05,.12,1.1,.06],[.32,.2,.8,.09],[.55,.08,1.3,.05],[.78,.26,.7,.1],[.95,.14,1]];
 
 /* ---------- build ---------- */
 const scenes=[];
 const ROT=[-2.2,1.6,-1.2,2.4,-1.8];
+const FACE=`<g><circle r="9.5" fill="${K.skin}" stroke="${K.skinO}" stroke-width="1.2"/><path d="M-9 -2C-9 -10 -3 -11 3 -10C8 -9 9.5 -5 9 -2C4 -6 -4 -6 -9 -2Z" fill="${K.hair}"/><rect x="-1" y="-3" width="9" height="7" rx="2.6" fill="#cfe6f3" fill-opacity=".3" stroke="#b9bcc6" stroke-width="1"/><circle cx="3" cy="0" r="1.1" fill="#1d1b22"/><path d="M1.5 5C4 3.5 8 3.6 9 5.3C7 7 3.5 7 1 6Z" fill="#26232a"/><path d="M2 8.5Q5 10.5 8 8.3" stroke="#7b3d33" stroke-width="1" fill="none"/></g>`;
+const PLANE=(uid)=>`<svg class="plane" viewBox="0 0 440 180" focusable="false"><defs><linearGradient id="pf${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf6e4"/><stop offset="1" stop-color="#e2d3b0"/></linearGradient><clipPath id="pw${uid}"><circle cx="210" cy="80" r="11"/></clipPath></defs>
+<g stroke-linejoin="round" stroke-linecap="round">
+<path d="M52 78L30 20Q38 14 66 18L100 66Z" fill="#d8604a" stroke="#9c3f2e" stroke-width="2"/>
+<path d="M44 84L10 86Q6 90 12 94L72 94Z" fill="#e8775f" stroke="#9c3f2e" stroke-width="2"/>
+<path class="wing" d="M246 108L150 152L170 157L304 114Z" fill="#2f7773" stroke="#1d4d4a" stroke-width="2"/>
+<path d="M36 82C36 56 84 46 170 44L330 46C382 50 410 68 410 88C410 108 382 124 330 126L170 126C84 124 36 108 36 82Z" fill="url(#pf${uid})" stroke="#8a7b5c" stroke-width="2.2"/>
+<path d="M40 93C62 101 92 103 170 104L330 105C375 104 400 97 407 91L408 99C395 112 372 120 330 121L170 122C90 120 60 112 42 101Z" fill="#3f8f8a"/>
+<path d="M340 62C362 62 380 70 386 82L342 84Z" fill="#bfe3f2" stroke="#8a7b5c" stroke-width="2"/>
+${[130,170,250,290].map(x=>`<circle cx="${x}" cy="80" r="11" fill="#cfeaf5" stroke="#8a7b5c" stroke-width="2"/>`).join('')}
+<circle cx="210" cy="80" r="11" fill="#cfeaf5"/><g clip-path="url(#pw${uid})"><g transform="translate(210 82) scale(1.05)"><path d="M-14 14C-10 6 10 6 14 14Z" fill="${K.shirt}"/>${FACE}</g></g><circle cx="210" cy="80" r="11" fill="none" stroke="#8a7b5c" stroke-width="2"/>
+<g class="gear"><path d="M200 126L197 152M356 126L354 150" stroke="#55555c" stroke-width="5"/><circle cx="196" cy="158" r="14" fill="#2b2b30" stroke="#111" stroke-width="2"/><circle cx="196" cy="158" r="5" fill="#8a8a92"/><circle cx="354" cy="159" r="12" fill="#2b2b30" stroke="#111" stroke-width="2"/><circle cx="354" cy="159" r="4.5" fill="#8a8a92"/></g>
+<ellipse cx="414" cy="88" rx="7" ry="10" fill="#d8604a" stroke="#9c3f2e" stroke-width="2"/>
+<ellipse class="disc" cx="419" cy="88" rx="6" ry="46" fill="#fff" opacity=".22"/>
+<path class="blade" d="M419 42V134" stroke="#3a3a42" stroke-width="4"/>
+</g></svg>`;
+const TRAIN=(uid)=>{
+  const win=(x,face)=>`<rect x="${x}" y="40" width="34" height="30" rx="6" fill="#cfeaf5" stroke="#243b57" stroke-width="2"/>${face?`<g clip-path="url(#tw${uid})"><g transform="translate(${x+17} 58) scale(1.35)"><path d="M-14 14C-10 6 10 6 14 14Z" fill="${K.shirt}"/>${FACE}</g></g><rect x="${x+20}" y="60" width="16" height="11" rx="2" fill="#222226" stroke="#0b0b0d" stroke-width="1"/><rect x="${x+20}" y="60" width="16" height="4" fill="#d8d8d2"/><circle cx="${x+34}" cy="66" r="3" fill="#2c2c31" stroke="#cfcfca" stroke-width="1.2"/>`:''}`;
+  const coach=(x,faceAt)=>`<rect x="${x}" y="22" width="190" height="78" rx="10" fill="#3a6f9e" stroke="#1c3552" stroke-width="2.2"/><rect x="${x}" y="64" width="190" height="14" fill="#f2e6c4"/><rect x="${x}" y="22" width="190" height="9" rx="4" fill="#2c557c"/>${[0,1,2,3].map(i=>win(x+14+i*44,faceAt===i)).join('')}<rect x="${x}" y="100" width="190" height="8" fill="#2a2d3a"/>`;
+  return`<svg class="trainsvg" viewBox="0 0 700 150" focusable="false"><defs><clipPath id="tw${uid}"><rect x="268" y="40" width="34" height="30" rx="6"/></clipPath></defs><g stroke-linejoin="round" stroke-linecap="round">
+${coach(10,-1)}${coach(210,1)}
+<path d="M404 100V40H440V24H470V64H500L530 64V100Z" fill="#c9503e" stroke="#7a2c20" stroke-width="2.2"/><rect x="404" y="40" width="64" height="26" rx="4" fill="#cfeaf5" stroke="#7a2c20" stroke-width="2"/><rect x="470" y="46" width="112" height="54" rx="26" fill="#e46a50" stroke="#7a2c20" stroke-width="2.2"/><rect x="560" y="34" width="22" height="20" rx="3" fill="#2a2d3a"/><path d="M582 74H604L616 100H582Z" fill="#2a2d3a"/>
+<rect x="404" y="100" width="212" height="8" fill="#2a2d3a"/>
+<g class="puff"><circle cx="571" cy="22" r="8" fill="#fff" opacity=".85"/><circle cx="582" cy="8" r="11" fill="#fff" opacity=".6"/></g>
+${[46,100,250,304,436,494,552].map((x,i)=>`<g class="tw" data-i="${i}"><circle cx="${x}" cy="118" r="${i>3?14:11}" fill="#2a2d3a" stroke="#111" stroke-width="2"/><path class="tsp" data-cx="${x}" d="M${x-(i>3?10:8)} 118H${x+(i>3?10:8)}M${x} ${118-(i>3?10:8)}V${118+(i>3?10:8)}" stroke="#9a9aa4" stroke-width="2"/></g>`).join('')}
+</g></svg>`;
+};
+
 CHAPTERS.forEach((c,i)=>{
   const kind=PLAN[c.k],host=document.getElementById(c.k);
   if(!kind||!host||!GALLERY[c.k])return;
-  const list=GALLERY[c.k].slice(0,5);
+  const list=GALLERY[c.k].slice(0,5),pal=PAL[MOOD[c.k]||'day'],uid=++UID;
   const el=document.createElement('div');
   el.className='scene sc-'+kind;el.setAttribute('aria-hidden','true');el.dataset.cat=c.k;
   const figs=list.map((p,j)=>`<figure class="ph" style="--r:${ROT[j]}deg"><div class="pi"><img src="thumbs/${p.id}.jpg" alt="" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" draggable="false"></div></figure>`).join('');
   const cap=`<div class="sc-cap"><span class="eyebrow">Next stop · ${pad(i+1)}</span><h3>${c.t}</h3><p>${TEXT[c.k]||''}</p></div>`;
-  if(kind==='walkR'||kind==='walkL'){
-    el.innerHTML=`<div class="sc-stage walk ${kind==='walkL'?'dl':'dr'}"><div class="string"></div>${figs}<div class="gline"></div><div class="trail"></div><div class="mwrap">${WALKER}</div>${cap}</div>`;
+  const sty=`--s1:${pal.sky[0]};--s2:${pal.sky[1]};--s3:${pal.sky[2]};--g1:${pal.gr[0]};--g2:${pal.gr[1]}`;
+  let sc;
+  if(kind==='flight'||kind==='train'){
+    const inner=kind==='flight'
+      ?`<div class="rw"></div>${PLANE(uid)}<svg class="fx" aria-hidden="true">${Array.from({length:16},()=>'<circle r="0" fill="#fff"/>').join('')}</svg><svg class="birds" viewBox="0 0 90 30" aria-hidden="true">${[[8,8],[34,16],[58,6]].map(([x,y],k)=>`<path class="bd" style="animation-delay:${k*.3}s" d="M${x} ${y}q4 -5 8 0q4 -5 8 0" fill="none" stroke="rgba(30,30,50,.55)" stroke-width="1.4" stroke-linecap="round"/>`).join('')}</svg>`
+      :`<div class="trk"></div><div class="stns">${[1,2,3,4,5].map(k=>`<div class="stn"><b>Stop ${k}</b><i></i></div>`).join('')}</div>${TRAIN(uid)}`;
+    el.innerHTML=`<div class="sc-stage winst" style="${sty}">${sky(pal,'s'+uid,{hz:'57%'})}<div class="fgh"></div>${inner}<div class="row">${figs}</div>${cap}<div class="alt"></div></div>`;
+    sc=winScene(el,kind,pal,uid);
   }else{
-    const view=kind==='flight'?FLIGHT:trainLayers();
-    el.innerHTML=`<div class="sc-stage winst"><div class="sc-main">${SEAT}<div class="win"><svg class="view" viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" focusable="false">${view}</svg><span class="alt"></span></div></div><div class="row">${figs}</div>${cap}</div>`;
+    const cam=kind==='camR',dir=kind==='walkL'?-1:1;
+    el.innerHTML=`<div class="sc-stage walk ${dir<0?'dl':'dr'}" style="${sty}">${sky(pal,'s'+uid)}<div class="gnd"></div><div class="string"></div>${figs}<div class="trail"></div><div class="mwrap">${uncle(cam)}</div>${cap}</div>`;
+    sc=walkScene(el,dir,cam);
   }
   main.insertBefore(el,host);
-  scenes.push(kind==='flight'||kind==='train'?winScene(el,kind):walkScene(el,kind==='walkL'?-1:1));
+  scenes.push(sc);
 });
 
-/* ---------- walking scene ---------- */
-function walkScene(el,dir){
+/* ---------- shared: sky layers ---------- */
+function skyUpdate(stage,sc,p){
+  const L=sc.L;
+  stage.querySelectorAll('.ly').forEach(l=>{l.style.transform=`translate3d(${(-p*parseFloat(l.dataset.sp)*L).toFixed(1)}px,0,0)`});
+  stage.querySelectorAll('.cld').forEach((c,i)=>{
+    const d=CL[i],w=parseFloat(c.dataset.w)||200,span=L+w*2;
+    const x=((((d[0]*span-p*d[3]*L*2)%span)+span)%span)-w;
+    c.style.transform=`translate3d(${x.toFixed(1)}px,0,0) scale(${d[2]})`;
+  });
+}
+function skyLayout(stage,sc){
+  const L=sc.L=stage.clientWidth,H=sc.H=stage.clientHeight;
+  stage.style.setProperty('--lw',(L*2.2)+'px');
+  stage.querySelectorAll('.cld').forEach((c,i)=>{const w=Math.min(300,Math.max(150,L*.18));c.dataset.w=w;c.style.width=w+'px';c.style.top=(CL[i][1]*100)+'%'});
+}
+
+/* ---------- walking scenes (with optional Fujifilm camera) ---------- */
+function walkScene(el,dir,cam){
   const stage=el.querySelector('.sc-stage'),mw=el.querySelector('.mwrap'),svg=mw.querySelector('svg');
   const trail=el.querySelector('.trail'),figs=[...el.querySelectorAll('.ph')];
   const q=s=>svg.querySelector(s);
-  const r={lgN:q('.lgN'),knN:q('.lgN .kn'),lgF:q('.lgF'),knF:q('.lgF .kn'),arF:q('.arF'),faF:q('.arF .fa'),bob:q('.bob'),sp:q('.sp')};
+  const r={lgN:q('.lgN'),knN:q('.lgN .kn'),lgF:q('.lgF'),knF:q('.lgF .kn'),bob:q('.bob'),sp:q('.sp'),cam:q('.cam'),fl:q('.fl'),strap:q('.strap'),head:q('.head'),
+    nu:q('.arN .up'),nf:q('.arN .fo'),fu:q('.arF .up'),ff:q('.arF .fo')};
   if(dir<0)svg.style.transform='scaleX(-1)';
-  let L=0,H=0,n=5,pw=100,wm=300,s=1.5,D=[];
+  const sc={el,stage,L:0,H:0};
+  let wm=300,s=1.4,n=5,pw=100,D=[],mk=[],zs=[];
+  const PW=cam?.14:0;
   function layout(){
-    L=stage.clientWidth;H=stage.clientHeight;
+    skyLayout(stage,sc);const L=sc.L,H=sc.H;
     n=L<560?3:L<900?4:5;
-    const mh=Math.min(H*.42,L*.52,400);wm=mh*190/196;s=wm/190;
+    const mh=Math.min(H*.46,L*.6,430);wm=mh*220/256;s=wm/220;
     mw.style.width=wm+'px';mw.style.height=mh+'px';stage.style.setProperty('--mh',mh+'px');
-    pw=Math.min(L/(n+1.2),H*.256);
-    const dmin=Math.max(pw*.62,L*.1),dmax=L-wm*.43;
-    D=[];
+    pw=Math.min(L/(n+1.2),H*.25);
+    const dmin=Math.max(pw*.62,L*.1),dmax=L-wm*.37;
+    const x0=-wm*.8,x1=L-wm*1.02,hp0=x0+wm*.55,hp1=x1+wm*.55;
+    D=[];mk=[];zs=[];
     figs.forEach((f,i)=>{
-      f.classList.toggle('x',i>=n);
-      if(i>=n)return;
-      const d=dmin+(dmax-dmin)*(n>1?i/(n-1):0);D[i]=d;
-      f.style.width=pw+'px';f.style.height=pw*1.25+'px';
-      f.style.left=((dir>0?d:L-d)-pw/2)+'px';
+      f.classList.toggle('x',i>=n);if(i>=n)return;
+      const d=dmin+(dmax-dmin)*(n>1?i/(n-1):0);D[i]=d;mk[i]=clamp((d-hp0)/(hp1-hp0));zs[i]=mk[i]+i*PW;
+      f.style.width=pw+'px';f.style.height=pw*1.25+'px';f.style.left=((dir>0?d:L-d)-pw/2)+'px';
     });
+    sc.x0=x0;sc.x1=x1;
+  }
+  /* path position f (0..1) for scroll fraction ss, with a pause at every photo when he shoots */
+  function warp(ss){
+    const T=1+n*PW,sp=ss*T;
+    let pos=0,cur=0;
+    for(let i=0;i<n;i++){
+      const seg=mk[i]-pos;
+      if(sp<cur+seg)return pos+(sp-cur);
+      cur+=seg;pos=mk[i];
+      if(sp<cur+PW)return pos;
+      cur+=PW;
+    }
+    return clamp(pos+(sp-cur));
   }
   function update(p){
-    if(!L)layout();
-    const e=reduce.matches?1:clamp(p/.85);
-    const x0=-wm*.75,x1=L-wm,x=x0+(x1-x0)*e,dist=x-x0;
-    mw.style.transform=`translate3d(${dir>0?x:L-x-wm}px,0,0)`;
-    const ph=Math.PI*2*dist/(96*s),A=18,sn=Math.sin(ph),cs=Math.cos(ph),ex=v=>v.toFixed(1);
-    r.lgN.setAttribute('transform',`rotate(${ex(-A*sn)} 60 108)`);
-    r.knN.setAttribute('transform',`rotate(${ex(4+36*Math.max(0,cs))} 60 148)`);
-    r.lgF.setAttribute('transform',`rotate(${ex(A*sn)} 60 108)`);
-    r.knF.setAttribute('transform',`rotate(${ex(4+36*Math.max(0,-cs))} 60 148)`);
-    r.arF.setAttribute('transform',`rotate(${ex(-22*sn)} 60 56)`);
-    r.faF.setAttribute('transform',`rotate(${ex(-(10+14*Math.max(0,sn)))} 60 80)`);
-    r.bob.setAttribute('transform',`translate(0 ${(78*(1-Math.cos(A*sn*Math.PI/180))).toFixed(2)})`);
-    r.sp.setAttribute('transform',`rotate(${ex(dist/s/6*57.3)} 9 184)`);
-    trail.style.width=clamp(x+wm*.3,0,L)+'px';
-    const hp=x+wm*.57;
-    figs.forEach((f,i)=>f.classList.toggle('on',i<n&&hp>=D[i]));
+    if(!sc.L)layout();
+    const L=sc.L,ss=reduce.matches?1:clamp(p/.86);
+    const f=warp(ss),dd=.002,fa=warp(clamp(ss-dd)),fb=warp(clamp(ss+dd));
+    const amt=smooth(0,.5,Math.abs(fb-fa)/(2*dd)/(1+n*PW));
+    const x=sc.x0+(sc.x1-sc.x0)*f,dist=x-sc.x0;
+    mw.style.transform=`translate3d(${f1(dir>0?x:L-x-wm)}px,0,0)`;
+    const A=20*Math.PI/180*amt,cyc=4*98*Math.sin(20*Math.PI/180);
+    const ph=Math.PI*2*(dist/s)/cyc,sn=Math.sin(ph),cs=Math.cos(ph);
+    r.lgN.setAttribute('transform',rot(-20*amt*sn,98,150));
+    r.knN.setAttribute('transform',rot(amt*(4+38*Math.max(0,cs)),98,198));
+    r.lgF.setAttribute('transform',rot(20*amt*sn,98,150));
+    r.knF.setAttribute('transform',rot(amt*(4+38*Math.max(0,-cs)),98,198));
+    r.bob.setAttribute('transform',`translate(0 ${f1(98*(1-Math.cos(A*sn)))})`);
+    r.head&&r.head.setAttribute('transform',`translate(0 ${f1(-1.2*Math.abs(cs)*amt)})`);
+    if(r.sp)r.sp.setAttribute('transform',rot(dist/s/6*57.3,24,242));
+    let k=0,fl=0;
+    if(cam){
+      const sp=ss*(1+n*PW);
+      zs.forEach(z=>{const t=(sp-z)/PW;if(t>=0&&t<=1){k=Math.max(k,smooth(0,.25,t)*(1-smooth(.72,1,t)));if(t>.28&&t<.62)fl=Math.max(fl,Math.sin((t-.28)/.34*Math.PI))}});
+      const cx=lerp(124,128,k),cy=lerp(104,43,k);
+      r.cam.setAttribute('transform',`translate(${f1(cx)} ${f1(cy)})`);
+      r.fl.setAttribute('opacity',f1(fl));
+      const a=ik(cx+5,cy+11),b=ik(cx+16,cy+12);
+      r.nu.setAttribute('transform',rot(a[0],98,86));r.nf.setAttribute('transform',rot(a[1],98,120));
+      r.fu.setAttribute('transform',rot(b[0],98,86));r.ff.setAttribute('transform',rot(b[1],98,120));
+      r.strap.setAttribute('d',`M${f1(cx-17)} ${f1(cy-8)}Q${f1(cx-34)} ${f1(cy-6)} 92 72`);
+      r.head.setAttribute('transform',`translate(0 ${f1(-1.2*Math.abs(cs)*amt)}) rotate(${f1(-6*k)} 100 60)`);
+      sc.k=k;
+    }else{
+      const a=ik(82,150);
+      r.nu.setAttribute('transform',rot(a[0],98,86));r.nf.setAttribute('transform',rot(a[1],98,120));
+      r.fu.setAttribute('transform',rot(-24*amt*sn,98,86));r.ff.setAttribute('transform',rot(-(8+16*amt*Math.max(0,sn)),98,120));
+    }
+    trail.style.width=clamp(x+wm*.34,0,L)+'px';
+    const hp=x+wm*.55;
+    if(cam){const sp=ss*(1+n*PW);figs.forEach((fg,i)=>fg.classList.toggle('on',i<n&&sp>=zs[i]+.4*PW))}
+    else figs.forEach((fg,i)=>fg.classList.toggle('on',i<n&&hp>=D[i]));
+    skyUpdate(stage,sc,clamp(p));
   }
-  return{el,stage,layout,update};
+  return Object.assign(sc,{layout,update});
 }
 
-/* ---------- window scene: flight or train, step by step ---------- */
-function winScene(el,kind){
-  const stage=el.querySelector('.sc-stage'),figs=[...el.querySelectorAll('.ph')],alt=el.querySelector('.alt'),view=el.querySelector('.view');
+/* ---------- flight and train, step by step ---------- */
+function winScene(el,kind,pal,uid){
+  const stage=el.querySelector('.sc-stage'),figs=[...el.querySelectorAll('.ph')],alt=el.querySelector('.alt');
   const flight=kind==='flight';
-  const cl=flight?[...view.querySelectorAll('.clouds path')]:[],gr=view.querySelector('.gr'),flap=view.querySelector('.flap');
-  const tf=view.querySelector('.tf'),tm=view.querySelector('.tm'),tn=view.querySelector('.tn');
-  const CX=[30,240,130,312],CY=[250,190,300,140],CS=[-330,-300,-390,-250],CK=[1.4,1,1.8,.9];
+  const sc={el,stage,L:0,H:0};
   let n=5;
+  const rw=el.querySelector('.rw'),plane=el.querySelector('.plane'),fx=el.querySelector('.fx'),gear=el.querySelector('.gear'),blade=el.querySelector('.blade'),disc=el.querySelector('.disc'),birds=el.querySelector('.birds');
+  const tr=el.querySelector('.trainsvg'),stns=[...el.querySelectorAll('.stn')],trk=el.querySelector('.trk');
+  let Wp=400,Hp=160,Wt=700,Ht=150;
   function layout(){
-    const L=stage.clientWidth;n=L<560?3:L<900?4:5;
+    skyLayout(stage,sc);const L=sc.L,H=sc.H;n=L<560?3:L<900?4:5;
     figs.forEach((f,i)=>f.classList.toggle('x',i>=n));
+    if(flight){Wp=Math.min(L*.46,H*.62,620);Hp=Wp*180/440;plane.style.width=Wp+'px';plane.style.height=Hp+'px';
+      fx.setAttribute('viewBox',`0 0 ${L} ${H}`);birds.style.width=Math.min(220,L*.18)+'px';
+      rw.style.height=Math.max(8,H*.02)+'px';rw.style.width=(L*.95)+'px';}
+    else{Wt=Math.min(L*.72,H*1.25,820);Ht=Wt*150/700;tr.style.width=Wt+'px';tr.style.height=Ht+'px';}
+  }
+  function planeAt(pp){
+    const L=sc.L,H=sc.H,t=pp*n,u=stepU(t),q=u/n;
+    const y0=H*.07,yg=H*.57-Hp*(172/180)+Hp*.02;
+    const xs=-Wp*.45,xe=L*.6-Wp/2;
+    const dU=(stepU(t+.02)-stepU(Math.max(0,t-.02)))/.04;
+    return{x:lerp(xs,xe,pp)+0,y:lerp(y0,yg,q)+4*Math.sin(pp*38)*(1-q*.8),q,u,ang:clamp(dU,0,3)*3.2-(q>.97?4:0)};
   }
   function update(p){
-    if(!stage.clientWidth)return;
-    const t=reduce.matches?n:clamp(p/.88)*n,u=stepU(t),qq=u/n;
+    if(!sc.L)layout();
+    const L=sc.L,H=sc.H,pp=reduce.matches?1:clamp(p/.88),t=pp*n,u=stepU(t);
+    skyUpdate(stage,sc,pp);
     if(flight){
-      cl.forEach((c,i)=>c.setAttribute('transform',`translate(${(CX[i]+qq*24).toFixed(1)} ${(CY[i]+qq*CS[i]).toFixed(1)}) scale(${CK[i]})`));
-      gr.setAttribute('transform',`translate(0 ${((1-qq)*205).toFixed(1)})`);
-      flap.setAttribute('transform',`rotate(${(qq*26).toFixed(1)} 232 250)`);
-      const ft=Math.round(30000*(1-qq)/100)*100;
-      alt.textContent=ft?`Altitude ${ft.toLocaleString('en-US')} ft`:'Landed';
+      const a=planeAt(pp);
+      plane.style.transform=`translate3d(${f1(a.x)}px,${f1(a.y)}px,0) rotate(${f1(a.ang)}deg)`;
+      const gk=smooth(.52,.68,a.q);
+      gear.setAttribute('transform',`translate(0 ${f1(-40*(1-gk))})`);gear.setAttribute('opacity',f1(gk));
+      const bl=Math.cos(pp*900);blade.setAttribute('transform',`translate(419 88) scale(1 ${f1(bl)}) translate(-419 -88)`);
+      rw.style.transform=`translate3d(${f1(lerp(L*1.02,L*.14,smooth(.05,1,pp)))}px,0,0)`;
+      const cs=fx.children;
+      for(let k=0;k<cs.length;k++){
+        const b=planeAt(Math.max(0,pp-(k+1)*.011));
+        cs[k].setAttribute('cx',f1(b.x+Wp*.06));cs[k].setAttribute('cy',f1(b.y+Hp*.5));
+        cs[k].setAttribute('r',f1(3+k*1.7));cs[k].setAttribute('opacity',f1(.5*(1-k/cs.length)*(1-smooth(.85,1,a.q))));
+      }
+      birds.style.transform=`translate3d(${f1(L*.7-pp*L*.25)}px,${f1(H*.14+Math.sin(pp*6)*10)}px,0)`;
+      alt.textContent=u>=n-.001?'Landed':`Altitude ${(Math.round(30000*(1-u/n)/100)*100).toLocaleString('en-US')} ft`;
     }else{
-      tf.setAttribute('transform',`translate(${(-u*100).toFixed(1)} 0)`);
-      tm.setAttribute('transform',`translate(${(-u*400).toFixed(1)} 0)`);
-      tn.setAttribute('transform',`translate(${(-u*640).toFixed(1)} 0)`);
-      alt.textContent=u>=n-.001?'Arrived':(Math.abs(u-Math.round(u))<.02&&u>.5?`Stop ${Math.round(u)} of ${n}`:'Moving');
+      const D=L*.8,yTr=H*.57-Ht*(124/150)+Ht*.03;
+      tr.style.transform=`translate3d(${f1(L*.5-Wt*.5)}px,${f1(yTr)}px,0)`;
+      trk.style.top=(H*.57+Ht*.035)+'px';
+      trk.style.backgroundPositionX=f1(-u*D)+'px';
+      const wa=u*D/12*57.3;
+      tr.querySelectorAll('.tsp').forEach(e=>e.setAttribute('transform',rot(wa,e.dataset.cx,118)));
+      tr.querySelector('.puff').style.transform=`translateY(${f1(-Math.abs(Math.sin(u*12))*4)}px)`;
+      stns.forEach((s,k)=>{const x=L*.5+(k+1-u)*D;s.style.transform=`translate3d(${f1(x-30)}px,0,0)`;s.style.top=(H*.57-62)+'px'});
+      const near=Math.abs(u-Math.round(u))<.03&&u>.5;
+      alt.textContent=u>=n-.001?'Arrived':near?`Stop ${Math.round(u)} of ${n}`:'On the way';
     }
     figs.forEach((f,i)=>f.classList.toggle('on',i<n&&t>=i+.7));
   }
-  return{el,stage,layout,update};
+  return Object.assign(sc,{layout,update});
 }
 
 /* ---------- scroll driver ---------- */
