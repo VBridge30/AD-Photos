@@ -1,11 +1,12 @@
+/* street photographs are shown inside the Architecture chapter */
+GALLERY.architecture=GALLERY.architecture.concat(GALLERY.street);delete GALLERY.street;
 const CHAPTERS=[
  {k:'monochrome',t:'Monochrome',d:'Colour removed, so light, shape and shadow can speak.'},
  {k:'light',t:'Light and Shadow',d:'Where the light falls, and what it leaves behind: rays through mist, a shadow on a wall, a silhouette against the glow.'},
  {k:'unforced',t:'The Art of Not Forcing Frames',l:'Unforced Frames',d:'No grid, no thirds, no centring. The subject sits where it fell: pushed to an edge, cropped, half-hidden. The frame follows the moment, not the rules.',g:'c2'},
  {k:'macro',t:'Macro',d:'A closer look at petals, dewdrops and the small worlds in between.'},
  {k:'story',t:'Story',d:'Quiet moments that suggest more than they show.'},
- {k:'street',t:'Street',d:'People, fog and everyday journeys, caught as they pass.'},
- {k:'architecture',t:'Architecture',d:'Stone, iron and glass: buildings seen for their lines, light and age.'},
+ {k:'architecture',t:'Street and Architecture',l:'Street & Architecture',d:'Buildings and the people who pass them: stone, iron, glass, fog and everyday journeys.'},
  {k:'abstract',t:'Abstract',d:'Where the subject dissolves into line, colour and feeling.'},
  {k:'landscape',t:'Landscape',d:'Mist, water, snow and the long light of the day.',g:'c2'}
 ];
@@ -48,7 +49,7 @@ CHAPTERS.forEach((c,i)=>{
 });
 
 /* featured: six favourites, one look at the range */
-const FEATURED=[['landscape','Egret at Dusk'],['macro','Zinnia'],['architecture','The Clock at St Pancras'],['street','Fog and Wires'],['monochrome','Last Light, Still Water'],['landscape','Above the Clouds']];
+const FEATURED=[['landscape','Egret at Dusk'],['macro','Zinnia'],['architecture','The Clock at St Pancras'],['architecture','Fog and Wires'],['monochrome','Last Light, Still Water'],['landscape','Above the Clouds']];
 const fs=document.createElement('section');fs.className='featured';fs.id='featured';
 fs.innerHTML='<div class="chapter-head"><div><h2>Selected Works</h2><p>Six photographs to begin with.</p></div></div>';
 const fg=document.createElement('div');fg.className='fgrid';
