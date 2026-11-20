@@ -39,32 +39,18 @@ const stepU=t=>{const f=Math.floor(t);return f+smooth(.4,1,t-f)};
 const rng=seed=>{let a=seed;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
 const f1=v=>v.toFixed(1);
 
-/* ---------- the uncle: pen-and-wash sketch ---------- */
-const K={ink:'#2a2730',inkL:'#5b5762',skin:'#f8e0ca',skinD:'#edc8aa',skinO:'#2a2730',
-  hair:'#3a3740',hairL:'#6e6a76',grey:'#d8d8dd',
-  paper:'#fcf8ef',paperD:'#ebe4d3',shirt:'#fcf8ef',shirtO:'#2a2730',
-  pant:'#dedad1',pantD:'#c6c2b8',pack:'#d3e4e2',packD:'#b4cfcc',tr:'#f3d0c5',trD:'#e3ada0',trim:'#e6b565'};
-const tb=(d,w,f,o)=>`<path d="${d}" stroke="${o}" stroke-width="${w+3.4}"/><path d="${d}" stroke="${f}" stroke-width="${w}"/>`;
-const leg=(cls,far)=>{const p=far?K.pantD:K.pant;
-  return`<g class="${cls}"><g class="kn"><path d="M89.4 196H106.6C106 212 105.4 224 104.6 236H92C91 224 90 212 89.4 196Z" fill="${p}" stroke="${K.ink}" stroke-width="2"/><path d="M92 238H104.4C111 239 119 242 123 246.4C124 248.4 122.6 249.4 120.4 249.4H90C87.6 249.4 87 247.6 88 245.8C89.6 243 91 240.6 92 238Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="2"/><path d="M88.2 247H122" stroke="${K.ink}" stroke-width="2.4"/><path d="M96 240.4l3 2.2M99.6 239.8l3 2.2" stroke="${K.ink}" stroke-width="1.3"/>${far?'':`<path d="M91 206l5-3M91 216l5-3" stroke="${K.inkL}" stroke-width="1"/>`}</g><path d="M87.6 148C85.6 168 87 186 89 199H108C110.4 186 111 168 108.6 148Z" fill="${p}" stroke="${K.ink}" stroke-width="2"/>${far?'':`<path d="M98 158V192" stroke="${K.inkL}" stroke-width="1.1"/><path d="M89 160l6-3M88.4 172l6-3M89 184l6-3" stroke="${K.inkL}" stroke-width="1"/>`}</g>`;
-};
-const HAND=(sk)=>`<path d="M92.8 152C91.8 158 92.4 163.6 95 166C97 167.6 100.6 167.6 102.6 166C105 163.6 105.4 158 104 152Z" fill="${sk}" stroke="${K.ink}" stroke-width="1.8"/><path d="M95.4 161V166M98.4 161.6V167M101.2 161V166" stroke="${K.ink}" stroke-width="1.2"/><path d="M103.8 153.4C107.4 154.4 109 157.6 107.2 160.6C106.2 161.8 104.6 161 104.2 159.2" fill="${sk}" stroke="${K.ink}" stroke-width="1.6"/>`;
-const arm=(cls,far)=>{const sk=far?K.skinD:K.skin;
-  return`<g class="${cls}"><g class="up">${tb('M98 86V121',10.4,sk,K.ink)}<g class="fo">${tb('M98 120V153',9.4,sk,K.ink)}<path d="M94.6 130V146" stroke="${K.inkL}" stroke-width="1"/>${HAND(sk)}</g><path d="M88 85C88 77 108 77 108 85C109 93 108 100 106 106Q98 109.4 90 106C88 100 87 93 88 85Z" fill="${far?K.paperD:K.paper}" stroke="${K.ink}" stroke-width="1.9"/><path d="M90.6 105.4Q98 108.8 105.4 105.4" stroke="${K.ink}" stroke-width="1.5"/></g></g>`;
-};
+/* ---------- the uncle: simple 2D line sketch ---------- */
+const K={ink:'#2a2730',inkL:'#5b5762',skin:'#f3d3b5',shirt:'#fffdf6',paper:'#fffdf6',grey:'#e4e4e8',pack:'#e3eeee',tr:'#f6dcd3',W:2.4};
+const leg=(cls)=>`<g class="${cls}"><g class="kn"><path d="M90 196H106L105 237H92Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="${K.W}"/><path d="M91 238H105C112 239 119 243 123 247H89C88 244 90 241 91 238Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="${K.W}"/></g><path d="M88 148H108L107 199H89Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="${K.W}"/></g>`;
+const HAND=`<circle cx="98" cy="158" r="5.5" fill="${K.paper}" stroke="${K.ink}" stroke-width="${K.W}"/>`;
+const arm=(cls)=>`<g class="${cls}"><g class="up"><path d="M98 86V121" stroke="${K.ink}" stroke-width="12.4"/><path d="M98 86V121" stroke="${K.paper}" stroke-width="8"/><g class="fo"><path d="M98 120V153" stroke="${K.ink}" stroke-width="11.4"/><path d="M98 120V153" stroke="${K.paper}" stroke-width="7"/>${HAND}</g></g></g>`;
 const HEADSVG=`<g class="head"><g transform="translate(100 68) scale(1.12) translate(-100 -68)">
-<ellipse cx="77.4" cy="48" rx="4.4" ry="7" fill="${K.skinD}" stroke="${K.ink}" stroke-width="1.6"/><path d="M76.6 44.4Q80 48 76.8 52.6" stroke="${K.ink}" stroke-width="1.1" fill="none"/>
-<path d="M77 42C76 22 89 11 104 11C120 11 130 24 129 41C128 54 122 66 110 72C104 75 97 75 91 71C82 64 77 54 77 42Z" fill="${K.skin}" stroke="${K.ink}" stroke-width="2"/>
-<path d="M82 56C84 64 90 71 98 73" stroke="${K.skinD}" stroke-width="4" fill="none" opacity=".7"/>
-<path d="M91 54l3.4-2.4M94 56.4l3.4-2.4M97 58.4l3.4-2.4M122 54l-3.2-2M123 58.2l-3.2-2" stroke="${K.inkL}" stroke-width=".9" opacity=".8"/>
-<path d="M90.6 43.4Q97 38 103.6 43.4Q97.2 48.4 90.6 43.4Z" fill="#fff" stroke="${K.ink}" stroke-width="1.5"/><circle cx="97.4" cy="43.4" r="2.9" fill="#3b2a22"/><circle cx="97.6" cy="43.4" r="1.3" fill="${K.ink}"/><circle cx="98.6" cy="42.2" r=".9" fill="#fff"/>
-<path d="M112.8 43.4Q118 39 124 43.4Q118.4 47.8 112.8 43.4Z" fill="#fff" stroke="${K.ink}" stroke-width="1.5"/><circle cx="118.6" cy="43.4" r="2.5" fill="#3b2a22"/><circle cx="118.8" cy="43.4" r="1.1" fill="${K.ink}"/><circle cx="119.6" cy="42.4" r=".8" fill="#fff"/>
-<path d="M89 36.4Q96.6 32 104.4 36.2M111.6 36.4Q119 32.6 126.4 36.8" stroke="${K.inkL}" stroke-width="2.3" fill="none"/>
-<rect x="87.6" y="35.6" width="19.4" height="15" rx="6.6" fill="#dcebf5" fill-opacity=".2" stroke="${K.ink}" stroke-width="1.3"/><rect x="109.6" y="36" width="17" height="14.2" rx="6" fill="#dcebf5" fill-opacity=".2" stroke="${K.ink}" stroke-width="1.3"/><path d="M107 41.4H109.6M87.6 41L79.6 43.4" stroke="${K.ink}" stroke-width="1.3" fill="none"/>
-<path d="M110.6 46C111.2 51 112.6 54.6 115 56.6C116.6 57.6 118.4 57 119 55.4" stroke="${K.ink}" stroke-width="1.5" fill="none"/><path d="M112.6 58.2Q114 59.2 115.8 58.6" stroke="${K.ink}" stroke-width="1" fill="none"/>
-<path d="M102.4 65.4Q111 71.2 121 64.8" stroke="${K.ink}" stroke-width="1.9" fill="none"/><path d="M100.4 61.8C99.8 63.8 100.6 66 102.4 67.2M122.8 61C124 63.2 123.6 65.6 122 67.2" stroke="${K.inkL}" stroke-width="1.1" fill="none"/>
-<path d="M76 40C72 20 88 6 106 7C124 8 134 22 129 36C126 28 120 22 110 21C100 20.5 92 26 90 36C89 42 88 47 85 53C81 50 77 46 76 40Z" fill="${K.grey}" stroke="${K.ink}" stroke-width="1.8"/>
-<path d="M92 14C100 9 112 9 120 14M88 22C98 15 112 14 124 20M86 31C90 24 98 19 108 18M80 34C80 38 80.4 42 82 46" stroke="${K.inkL}" stroke-width="1.1" fill="none"/>
+<path d="M92 71C80 66 73 54 74 40C75 20 88 9 104 9C120 9 130 20 130 34L131 42C131 46 133 49 136 53C137 55 135 57 132 57L131 61C132.5 63 131.5 65 130 67C130 71 127 74 122 75C112 76 100 75 92 71Z" fill="${K.skin}" stroke="${K.ink}" stroke-width="${K.W}"/>
+<path d="M74 42C71 20 88 6 106 7C122 8 130 18 130 32C122 24 112 22 102 24C94 26 90 32 89 42C84 46 78 46 74 42Z" fill="${K.grey}" stroke="${K.ink}" stroke-width="${K.W}"/>
+<ellipse cx="92" cy="48" rx="4" ry="6.5" fill="${K.skin}" stroke="${K.ink}" stroke-width="2"/>
+<circle cx="120" cy="42" r="7.6" stroke="${K.ink}" stroke-width="1.7"/><path d="M112.4 41L94 44" stroke="${K.ink}" stroke-width="1.7"/>
+<circle cx="122.4" cy="42.4" r="1.9" fill="${K.ink}" stroke="none"/>
+<path d="M130 62Q125 67 120 63.6" stroke="${K.ink}" stroke-width="2"/>
 </g></g>`;
 const CAMSVG=`<g class="cam">
 <rect x="-18" y="-10" width="36" height="21" rx="3.5" fill="#222226" stroke="#0b0b0d" stroke-width="1.4"/>
@@ -81,31 +67,25 @@ const CAMSVG=`<g class="cam">
 </g>`;
 
 function uncle(withCam){
-  const pk=`<g class="pack"><rect x="48" y="70" width="38" height="74" rx="14" fill="${K.pack}" stroke="${K.ink}" stroke-width="2"/><path d="M48 96Q67 106 86 96" stroke="${K.ink}" stroke-width="1.8" fill="none"/><rect x="53" y="108" width="27" height="28" rx="8" fill="${K.packD}" stroke="${K.ink}" stroke-width="1.7"/><path d="M62 100v6M72 100v6M52 74Q67 62 82 74" stroke="${K.ink}" stroke-width="1.8" fill="none"/><path d="M52 80l6-3M51 90l6-3M52 142l6-3" stroke="${K.inkL}" stroke-width="1"/></g>`;
-  const tro=`<g class="trol"><path d="M41 168L84 153" stroke="${K.ink}" stroke-width="2.4"/>
-<g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${K.ink}" stroke-width="2"/><path d="M-6 176V232M7 176V232M20 176V232" stroke="${K.ink}" stroke-width="1.6"/><rect x="-12" y="172" width="8" height="10" rx="2" fill="${K.paper}" stroke="${K.ink}" stroke-width="1.4"/><path d="M-12 190l6-3M-12 204l6-3M22 190l6-3" stroke="${K.inkL}" stroke-width="1"/></g>
-<g class="wh"><circle cx="24" cy="242" r="6" fill="${K.paper}" stroke="${K.ink}" stroke-width="1.8"/><path class="sp" d="M24 237V247M19 242H29" stroke="${K.ink}" stroke-width="1.5"/></g></g>`;
+  const W=K.W,ink=K.ink;
+  const pk=`<g class="pack"><rect x="48" y="70" width="38" height="74" rx="14" fill="${K.pack}" stroke="${ink}" stroke-width="${W}"/><rect x="54" y="108" width="26" height="26" rx="8" fill="none" stroke="${ink}" stroke-width="1.8"/></g>`;
+  const tro=`<g class="trol"><path d="M41 168L84 153" stroke="${ink}" stroke-width="2.4"/>
+<g transform="rotate(9 30 240)"><rect x="-16" y="168" width="46" height="72" rx="9" fill="${K.tr}" stroke="${ink}" stroke-width="${W}"/><path d="M-4 178V230M14 178V230" stroke="${ink}" stroke-width="1.8"/></g>
+<g class="wh"><circle cx="24" cy="242" r="6" fill="${K.paper}" stroke="${ink}" stroke-width="1.8"/><path class="sp" d="M24 237V247M19 242H29" stroke="${ink}" stroke-width="1.5"/></g></g>`;
   return `<svg class="man" viewBox="-30 -6 220 262" focusable="false"><g fill="none" stroke-linecap="round" stroke-linejoin="round">
-<ellipse cx="98" cy="249" rx="54" ry="5.5" fill="rgba(40,30,20,.22)" stroke="none"/>
+<path d="M46 249H150" stroke="${ink}" stroke-width="1.6" opacity=".35"/>
 ${withCam?'':tro}
 <g class="bob">
-${leg('lgF',true)}${leg('lgN',false)}
-<ellipse cx="98" cy="150" rx="21" ry="12" fill="${K.pant}"/>
-${arm('arF',true)}
+${leg('lgF')}${leg('lgN')}
+${arm('arF')}
 ${pk}
-<path d="M80 80Q98 70 116 80Q122 96 119 112Q132 130 122 152L82 154Q74 120 80 80Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="2"/>
-<path d="M84 96l6-4M84 104l7-5M85 112l6-4M86 120l6-4M86 128l5-3" stroke="${K.inkL}" stroke-width="1"/>
-<path d="M92 140Q108 147 120 146M96 146Q108 151 119 150" stroke="${K.inkL}" stroke-width="1"/>
-<path d="M112 84C117 98 117 108 114 114C124 130 121 142 120.5 150" stroke="${K.ink}" stroke-width="1.3"/>
-${[[116.4,96],[115.6,106],[118.2,122],[120.6,136]].map(b=>`<circle cx="${b[0]}" cy="${b[1]}" r="1.3" fill="${K.paper}" stroke="${K.ink}" stroke-width="1"/>`).join('')}
-<path d="M86 80C91 100 90 122 84 138" stroke="${K.ink}" stroke-width="3.2"/>
-<path d="M82 146H123L122.5 154L83 155Z" fill="${K.ink}"/><rect x="112" y="147" width="8" height="7" rx="1.6" fill="${K.paper}" stroke="${K.ink}" stroke-width="1"/>
-<path d="M90 64L91 80H113L113.5 64Z" fill="${K.skin}" stroke="${K.ink}" stroke-width="1.8"/><path d="M92 68l5 3M92 73l6 3" stroke="${K.inkL}" stroke-width="1"/>
-<path d="M88 75L96 85L106 78L98 68Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="1.7"/><path d="M103 79L115 82L109 95L100 86Z" fill="${K.paper}" stroke="${K.ink}" stroke-width="1.7"/>
-${withCam?`<path class="strap" d="" stroke="${K.ink}" stroke-width="2.6"/>`:''}
+<path d="M80 80Q98 70 116 80Q122 96 119 112Q132 130 122 152L82 154Q74 120 80 80Z" fill="${K.paper}" stroke="${ink}" stroke-width="${W}"/>
+<path d="M82 146H123" stroke="${ink}" stroke-width="2.4"/>
+<path d="M90 64L91 80H113L113.5 64Z" fill="${K.paper}" stroke="${ink}" stroke-width="${W}"/>
+${withCam?`<path class="strap" d="" stroke="${ink}" stroke-width="2.6"/>`:''}
 ${HEADSVG}
 ${withCam?CAMSVG:''}
-${arm('arN',false)}
+${arm('arN')}
 </g></g></svg>`;
 }
 
@@ -156,7 +136,7 @@ const CL=[[.05,.12,1.1,.06],[.32,.2,.8,.09],[.55,.08,1.3,.05],[.78,.26,.7,.1],[.
 /* ---------- build ---------- */
 const scenes=[];
 const ROT=[-2.2,1.6,-1.2,2.4,-1.8];
-const FACE=`<g><circle r="9.5" fill="${K.skin}" stroke="${K.ink}" stroke-width="1.1"/><path d="M-9.3 -1C-10 -6 -5 -10 .4 -9.8C6 -9.6 10 -6 9.2 -1C6 -4.6 1 -6.4 -3 -5.6C-6.6 -4.8 -8.4 -3 -9.3 -1Z" fill="${K.grey}" stroke="${K.ink}" stroke-width=".8"/><path d="M-6.4 .2Q-3.4 -2 -.6 .2Q-3.4 2.2 -6.4 .2ZM1.6 .2Q4.2 -1.8 7 .2Q4.2 2 1.6 .2Z" fill="#fff" stroke="${K.ink}" stroke-width=".6"/><circle cx="-3.4" cy=".2" r="1.1" fill="#3b2a22"/><circle cx="4.3" cy=".2" r=".95" fill="#3b2a22"/><rect x="-7.6" y="-2.4" width="8.2" height="5.8" rx="2.4" fill="none" stroke="${K.ink}" stroke-width=".7"/><rect x="1.2" y="-2.4" width="7.4" height="5.8" rx="2.2" fill="none" stroke="${K.ink}" stroke-width=".7"/><path d="M-3.4 -3.6Q-.6 -4.6 2 -3.6M.6 -.6H1.2" stroke="${K.inkL}" stroke-width=".7" fill="none"/><path d="M-2.6 5.6Q1 7.6 4.8 5.4" stroke="${K.ink}" stroke-width=".9" fill="none"/></g>`;
+const FACE=`<g><circle r="9.5" fill="${K.skin}" stroke="${K.ink}" stroke-width="1.1"/><path d="M-9.3 -1C-10 -6 -5 -10 .4 -9.8C6 -9.6 10 -6 9.2 -1C6 -4.6 1 -6.4 -3 -5.6C-6.6 -4.8 -8.4 -3 -9.3 -1Z" fill="${K.grey}" stroke="${K.ink}" stroke-width=".8"/><circle cx="-3.6" cy=".4" r="3.2" fill="none" stroke="${K.ink}" stroke-width=".7"/><circle cx="4.4" cy=".4" r="3.2" fill="none" stroke="${K.ink}" stroke-width=".7"/><circle cx="-3.6" cy=".4" r=".9" fill="${K.ink}"/><circle cx="4.4" cy=".4" r=".9" fill="${K.ink}"/><path d="M-2.6 5.6Q1 7.6 4.8 5.4" stroke="${K.ink}" stroke-width=".9" fill="none"/></g>`;
 const PLANE=(uid)=>`<svg class="plane" viewBox="0 0 440 180" focusable="false"><defs><linearGradient id="pf${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf6e4"/><stop offset="1" stop-color="#e2d3b0"/></linearGradient><clipPath id="pw${uid}"><circle cx="210" cy="80" r="11"/></clipPath></defs>
 <g stroke-linejoin="round" stroke-linecap="round">
 <path d="M52 78L30 20Q38 14 66 18L100 66Z" fill="#d8604a" stroke="#9c3f2e" stroke-width="2"/>
