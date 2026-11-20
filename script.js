@@ -229,7 +229,7 @@ $('#theme').addEventListener('click',()=>{
       idx=best;slides.forEach((s,i)=>s.classList.toggle('active',i===best));
       title.textContent=list[best].title;cnt.textContent=pad(best+1)+' / '+pad(list.length);
     };
-    const go=i=>{i=Math.max(0,Math.min(slides.length-1,i));slides[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};
+    const go=i=>{i=Math.max(0,Math.min(slides.length-1,i));const sl=slides[i];track.scrollTo({left:sl.offsetLeft-(track.clientWidth-sl.offsetWidth)/2,behavior:'smooth'})};   // scroll the track only, never the page
     let raf=0;track.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(mark)},{passive:true});
     wrap.querySelector('.sl-prev').onclick=()=>go(idx-1);
     wrap.querySelector('.sl-next').onclick=()=>go(idx+1);
@@ -512,4 +512,14 @@ $('.brand').addEventListener('click',e=>{
     grp.forEach(b=>b.classList.add('dim'));
     setTimeout(()=>grp.forEach(b=>b.classList.remove('dim')),1500);
   },1100);
+})();
+
+/* opening sequence: shown once per visit, click or key to skip */
+(function(){
+  const el=document.getElementById('intro'),root=document.documentElement;
+  if(!el||!root.classList.contains('intro-on'))return;
+  const done=()=>{root.classList.remove('intro-on');try{sessionStorage.setItem('introSeen','1')}catch(e){}};
+  const t=setTimeout(done,4700);
+  const skip=()=>{clearTimeout(t);el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(done,320)};
+  el.addEventListener('click',skip);addEventListener('keydown',skip,{once:true});
 })();

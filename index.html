@@ -15,11 +15,23 @@
 <link rel="preload" as="image" href="photos/hero.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Inter:wght@300;400;500;800&display=swap" rel="stylesheet">
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="style.css?v=20261121h">
+<script>try{if(!sessionStorage.getItem("introSeen")&&!matchMedia("(prefers-reduced-motion:reduce)").matches)document.documentElement.classList.add("intro-on")}catch(e){}</script>
+<link rel="stylesheet" href="style.css?v=20261121j">
 </head>
 <body>
+<div id="intro" aria-hidden="true">
+  <div class="in-line"></div>
+  <svg class="in-svg" viewBox="0 0 1000 380" role="presentation">
+    <g class="in-t" text-anchor="middle" font-family="Inter,'Helvetica Neue',Arial,sans-serif" font-weight="800">
+      <text x="500" y="190" font-size="190" letter-spacing="10">AASHISH</text>
+      <text x="500" y="330" font-size="118" letter-spacing="8">DESHPANDE</text>
+    </g>
+  </svg>
+  <p class="in-sub">PHOTOGRAPHS</p>
+  <div class="in-bar"></div>
+</div>
 <a class="skip" href="#gallery">Skip to the photographs</a>
 
 <header class="hero">
@@ -73,7 +85,7 @@
   <button class="lb-next" aria-label="Next">›</button>
 </div>
 
-<script src="data.js?v=20261121h"></script>
-<script src="script.js?v=20261121h"></script>
+<script src="data.js?v=20261121j"></script>
+<script src="script.js?v=20261121j"></script>
 </body>
 </html>
