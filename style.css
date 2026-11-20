@@ -230,8 +230,7 @@ body.album-open .to-top{display:none}
 .leaf{position:absolute;inset:0;transition:opacity .5s ease}
 .leaf.flipped{opacity:0;pointer-events:none}
 .fr,.bk{position:absolute;inset:0;overflow:hidden;background:#111}
-.bk{display:none;background:#efe9dc repeating-linear-gradient(0deg,transparent 0 31px,rgba(0,0,0,.05) 31px 32px);display:flex;align-items:flex-end;justify-content:flex-end;padding:3vh 3vw}
-.bk span{font-family:var(--serif);font-size:clamp(5rem,22vh,12rem);line-height:.8;color:rgba(0,0,0,.09)}
+.bk{display:none}
 .shade{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
 .leaf.rev .shade{animation:rev 1.1s ease-out forwards}
 @keyframes rev{0%{opacity:.7}100%{opacity:0}}
@@ -275,58 +274,3 @@ body.album-open .to-top{display:none}
 .nojs{padding:4rem var(--gutter);text-align:center;color:var(--mute)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 button:focus:not(:focus-visible){outline:none}
-
-/* Travel scenes: a painted uncle links one chapter to the next (see travel.js) */
-.scene{--sh:calc(100vh - var(--navh,58px));--gb:17%;position:relative;height:calc(var(--sh) + var(--run,85vh));background:#101418}
-@supports (height:100dvh){.scene{--sh:calc(100dvh - var(--navh,58px))}}
-.sc-camR{--run:125vh}
-.sc-stage{position:sticky;top:var(--navh,58px);height:var(--sh);min-height:420px;overflow:hidden;background:linear-gradient(180deg,var(--s1),var(--s2) 58%,var(--s3));color:#fff}
-.sun{position:absolute;right:14%;top:12%;width:min(46vw,460px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--sun) 0,color-mix(in srgb,var(--sun) 55%,transparent) 22%,transparent 68%);opacity:.85;pointer-events:none}
-.ly{position:absolute;left:0;width:var(--lw,240%);display:block;will-change:transform;pointer-events:none}
-.clouds{position:absolute;inset:0;pointer-events:none}
-.cld{position:absolute;left:0;top:0;will-change:transform;opacity:.92}
-.cld svg{display:block;width:100%;height:auto}
-.sc-cap{position:absolute;left:var(--gutter);right:var(--gutter);bottom:2.2%;text-align:center;z-index:5;text-shadow:0 2px 14px rgba(0,0,0,.55)}
-.sc-cap .eyebrow{color:#ffe2a8}
-.sc-cap h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.5rem,3.4vw,2.3rem);line-height:1.1;margin:.1em 0 .1em;color:#fff}
-.sc-cap p{font-family:var(--serif);font-style:italic;color:#f1e8d8;font-size:clamp(.95rem,1.6vw,1.1rem);line-height:1.3}
-.ph{opacity:0;transform:translateY(-26px) rotate(calc(var(--r) * 3));transform-origin:50% 0;transition:opacity .5s,transform .9s cubic-bezier(.2,.9,.3,1.25);background:#f7f1e3;padding:5px;box-shadow:0 8px 24px rgba(0,0,0,.35);pointer-events:none}
-.ph.on{opacity:1;transform:rotate(var(--r))}
-.ph .pi{width:100%;height:100%;transform-origin:50% 0}
-.ph.on .pi{animation:sway 6s ease-in-out .9s infinite alternate}
-@keyframes sway{from{transform:rotate(-.9deg)}to{transform:rotate(.9deg)}}
-.ph img{width:100%;height:100%;object-fit:cover;display:block}
-.ph.x{display:none}
-
-/* walking scenes */
-.gnd{position:absolute;left:0;right:0;bottom:0;height:var(--gb);background:linear-gradient(180deg,var(--g1),var(--g2));box-shadow:0 -3px 0 rgba(255,255,255,.12)}
-.walk .string{position:absolute;left:2%;right:2%;top:4%;border-top:1.5px solid rgba(255,255,255,.7)}
-.walk .string::before,.walk .string::after{content:"";position:absolute;top:-7px;width:2px;height:15px;background:rgba(255,255,255,.7)}
-.walk .string::before{left:0}.walk .string::after{right:0}
-.walk .ph{position:absolute;top:4%}
-.walk .ph::before{content:"";position:absolute;left:50%;top:-9px;width:8px;height:16px;margin-left:-4px;border-radius:2px;background:#e6b565;z-index:2}
-.trail{position:absolute;left:0;bottom:calc(var(--gb) - 6px);width:0;border-top:2px dashed rgba(255,255,255,.4)}
-.dl .trail{left:auto;right:0}
-.mwrap{position:absolute;left:0;bottom:calc(var(--gb) - var(--mh,300px) * .031);will-change:transform;filter:drop-shadow(0 6px 5px rgba(0,0,0,.28))}
-.mwrap svg{display:block;width:100%;height:100%;overflow:visible}
-
-/* flight and train: full-bleed painted sky, scenery behind, photographs in front */
-.fgh{position:absolute;left:0;right:0;top:57%;bottom:0;background:linear-gradient(180deg,var(--g1),var(--g2));box-shadow:0 -3px 0 rgba(255,255,255,.12)}
-.winst .row{position:absolute;left:var(--gutter);right:var(--gutter);top:61%;height:24%;display:flex;justify-content:center;gap:clamp(8px,1.6vw,22px);z-index:4}
-.row .ph{position:relative;height:100%;aspect-ratio:4/5}
-.alt{position:absolute;right:var(--gutter);top:3%;padding:.25rem .8rem;border-radius:999px;background:rgba(10,14,24,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#fff;z-index:6;white-space:nowrap}
-.plane{position:absolute;left:0;top:0;z-index:3;will-change:transform;transform-origin:50% 50%;filter:drop-shadow(0 12px 10px rgba(0,0,0,.25))}
-.fx{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
-.rw{position:absolute;left:0;top:calc(57% - 4px);background:repeating-linear-gradient(90deg,#f1e6c8 0 28px,transparent 28px 56px) center/auto 2px no-repeat,#4c4a55;border-radius:2px;z-index:1}
-.birds{position:absolute;left:0;top:0;z-index:2}
-.bd{animation:flap .7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
-@keyframes flap{to{transform:scaleY(.4)}}
-.trainsvg{position:absolute;left:0;top:0;z-index:3;overflow:visible;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25))}
-.trk{position:absolute;left:0;right:0;height:6px;z-index:2;background:repeating-linear-gradient(90deg,#3a2c26 0 8px,transparent 8px 26px) 0 100%/auto 3px no-repeat,linear-gradient(#cfc7b5,#cfc7b5) 0 0/100% 2px no-repeat}
-.stns{position:absolute;inset:0;z-index:2;pointer-events:none}
-.stn{position:absolute;left:0;top:0;width:60px;text-align:center;will-change:transform}
-.stn b{display:block;padding:.15rem .3rem;border-radius:4px;background:#f7f1e3;color:#1f2a3a;font:500 .72rem var(--sans);letter-spacing:.06em;border:2px solid #243b57;white-space:nowrap}
-.stn i{display:block;width:3px;height:44px;margin:0 auto;background:#243b57}
-@media (max-width:600px){.winst .row{top:60%;height:25%}.alt{font-size:.5rem;letter-spacing:.1em}.sun{right:4%}}
-@media (prefers-reduced-motion:reduce){.scene{height:auto}.sc-stage{position:relative}.ph.on .pi,.bd{animation:none}}
-.sc-stage.walk .mwrap{display:none}
