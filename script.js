@@ -468,19 +468,22 @@ $('.brand').addEventListener('click',e=>{
 /* footer banner: "AASHISH.IN" drawn with 0 and 1 characters, a few picked out in colour */
 (function(){
   const el=$('#xo');if(!el)return;
-  const C=130,R=17,CW=12,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
+  const C=160,R=20,CW=10,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
+  const TXT='AASHISH.IN',FONT='800 %spx Inter,"Helvetica Neue",Arial,sans-serif';
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const g=cv.getContext('2d');g.fillStyle='#fff';g.textBaseline='alphabetic';
-  let fs=H*1.1;g.font='900 '+fs+'px Inter,Arial,Helvetica,sans-serif';
-  const m=g.measureText('AASHISH.IN');fs*=Math.min(1,W*.98/m.width);
-  g.font='900 '+fs+'px Inter,Arial,Helvetica,sans-serif';
-  const w=g.measureText('AASHISH.IN').width;
-  const sy=(H*.86)/(.72*fs);g.setTransform(1,0,0,sy,0,0);   // stretch the letters taller so they fill the rows
-  g.strokeStyle='#fff';g.lineWidth=fs*.07;g.lineJoin='round';g.strokeText('AASHISH.IN',(W-w)/2,H*.94/sy);
-  g.fillText('AASHISH.IN',(W-w)/2,H*.94/sy);g.setTransform(1,0,0,1,0,0);
+  // size the lettering to fit the width, with a clear gap between letters
+  let fs=100;g.font=FONT.replace('%s',fs);
+  const gapK=.16,widths=[...TXT].map(ch=>g.measureText(ch).width);
+  const total=widths.reduce((a,b)=>a+b,0)+gapK*fs*(TXT.length-1);
+  fs*=W*.96/total;g.font=FONT.replace('%s',fs);
+  const gap=gapK*fs,ws=[...TXT].map(ch=>g.measureText(ch).width),tot=ws.reduce((a,b)=>a+b,0)+gap*(TXT.length-1);
+  const sy=(H*.9)/(.72*fs);g.setTransform(1,0,0,sy,0,0);   // stretch the letters taller so they fill the rows
+  let x=(W-tot)/2;const edges=[];
+  [...TXT].forEach((ch,k)=>{g.fillText(ch,x,H*.95/sy);x+=ws[k];edges.push(x+gap/2);x+=gap});
+  g.setTransform(1,0,0,1,0,0);
   const px=g.getImageData(0,0,W,H).data;
-  const TXT='AASHISH.IN',x0=(W-w)/2,edges=[...TXT].map((_,k)=>x0+g.measureText(TXT.slice(0,k+1)).width);
-  const letterOf=c=>{const x=c*CW+CW/2;const k=edges.findIndex(e=>x<e);return k<0?TXT.length-1:k};
+  const letterOf=c=>{const xx=c*CW+CW/2;const k=edges.findIndex(e=>xx<e);return k<0?TXT.length-1:k};
   const lets=[];
   let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   let out='';
