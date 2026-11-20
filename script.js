@@ -1,8 +1,9 @@
 /* street photographs are shown inside the Architecture chapter */
 GALLERY.architecture=GALLERY.architecture.concat(GALLERY.street);delete GALLERY.street;
+/* Light and Shadow is the second segment of the Monochrome chapter */
+const MONO_N=GALLERY.monochrome.length;GALLERY.monochrome=GALLERY.monochrome.concat(GALLERY.light);delete GALLERY.light;
 const CHAPTERS=[
- {k:'monochrome',t:'Monochrome',d:'Colour removed, so light, shape and shadow can speak.'},
- {k:'light',t:'Light and Shadow',d:'Where the light falls, and what it leaves behind: rays through mist, a shadow on a wall, a silhouette against the glow.'},
+ {k:'monochrome',t:'Monochrome, Light and Shadow',l:'Monochrome & Light',d:'Colour removed, so light, shape and shadow can speak.'},
  {k:'unforced',t:'The Art of Not Forcing Frames',l:'Unforced Frames',d:'No grid, no thirds, no centring. The subject sits where it fell: pushed to an edge, cropped, half-hidden. The frame follows the moment, not the rules.',g:'c2'},
  {k:'macro',t:'Macro',d:'A closer look at petals, dewdrops and the small worlds in between.'},
  {k:'story',t:'Story',d:'Quiet moments that suggest more than they show.'},
@@ -40,9 +41,14 @@ CHAPTERS.forEach((c,i)=>{
     });
     s.appendChild(w);
   }else{
-    const g=document.createElement('div');g.className='grid '+(c.g==='c2'?'c2':'');
-    list.forEach(p=>g.appendChild(tile(p,c.k)));
-    s.appendChild(g);
+    const seg=(title,items)=>{
+      if(c.k==='monochrome'){const h=document.createElement('h3');h.className='seg-head';h.textContent=title;s.appendChild(h)}
+      const g=document.createElement('div');g.className='grid '+(c.g==='c2'?'c2':'');
+      items.forEach(p=>g.appendChild(tile(p,c.k)));
+      s.appendChild(g);
+    };
+    if(c.k==='monochrome'){seg('Monochrome',list.slice(0,MONO_N));seg('Light and Shadow',list.slice(MONO_N))}
+    else seg('',list);
   }
   main.appendChild(s);
   const b=document.createElement('button');b.dataset.k=c.k;b.textContent=c.l||c.t;filters.appendChild(b);
@@ -304,7 +310,7 @@ $('#theme').addEventListener('click',()=>{
       const was=s.classList.contains('flipped'),now=i<cur;
       if(was!==now&&animate){
         s.style.zIndex=N+5;
-        setTimeout(z,1000);
+        setTimeout(z,500);
       }
       s.classList.toggle('flipped',now);
     });
@@ -404,7 +410,7 @@ $('.brand').addEventListener('click',e=>{
   sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setView(b.dataset.v)});
 
   let cur=0,busy=false;
-  const MS=1100;
+  const MS=600;
   // decide, per photo, whether it fills the screen or sits flush to one side over a blurred copy
   function layout(){
     const r=box.getBoundingClientRect();if(!r.width)return;

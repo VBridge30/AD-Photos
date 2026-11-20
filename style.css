@@ -274,3 +274,7 @@ body.album-open .to-top{display:none}
 .nojs{padding:4rem var(--gutter);text-align:center;color:var(--mute)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 button:focus:not(:focus-visible){outline:none}
+
+.seg-head{max-width:1400px;margin:clamp(28px,5vw,56px) auto clamp(14px,2vw,24px);font-family:var(--serif);font-weight:300;font-size:clamp(1.4rem,3vw,2rem);color:var(--mute)}
+.seg-head:first-of-type{margin-top:0}
+.chapter[data-view="slider"] .seg-head{display:none}
