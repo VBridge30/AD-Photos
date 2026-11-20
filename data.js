@@ -422,91 +422,73 @@ window.GALLERY={
  "story": [
   {
    "id": "story-01",
-   "title": "Chai Time",
+   "title": "The day starts slowly, one cup at a time.",
    "w": 1023,
    "h": 1364
   },
   {
    "id": "story-02",
-   "title": "The Dining Room",
+   "title": "A room that waits for conversation.",
    "w": 1440,
    "h": 1920
   },
   {
    "id": "story-03",
-   "title": "Table, Laid",
+   "title": "Everything in its place, before the guests arrive.",
    "w": 1440,
    "h": 1920
   },
   {
    "id": "story-04",
-   "title": "Evening at the Ground",
-   "w": 1024,
-   "h": 768
+   "title": "A long walk in silence, and the light keeps you company.",
+   "w": 1440,
+   "h": 1920
   },
   {
    "id": "story-05",
-   "title": "Lantern Light",
+   "title": "Where the lamps are warm, the evening lasts longer.",
    "w": 1440,
    "h": 1921
   },
   {
    "id": "story-06",
-   "title": "The Closed Door",
+   "title": "Not every door needs to open to be interesting.",
    "w": 1441,
    "h": 1921
   },
   {
    "id": "story-07",
-   "title": "The Lounge",
+   "title": "Soft curves and soft light, made for lingering.",
    "w": 1440,
    "h": 1921
   },
   {
    "id": "story-08",
-   "title": "Peeking Through",
+   "title": "Curiosity has the biggest eyes.",
    "w": 1170,
    "h": 1147
   },
   {
    "id": "story-09",
-   "title": "Mother and Child",
+   "title": "A small hand held close, a world watched together.",
    "w": 1052,
    "h": 1444
   },
   {
    "id": "story-10",
-   "title": "Stairs and Shrine",
+   "title": "A tiny shrine, and the stairs climbing into the light.",
    "w": 1440,
    "h": 1920
   },
   {
    "id": "story-11",
-   "title": "A Quiet Wait",
+   "title": "Sunlight on an empty wall, and the hush of waiting.",
    "w": 1024,
    "h": 768
   },
   {
-   "id": "story-12",
-   "title": "The Effigy Through the Gap",
-   "w": 1536,
-   "h": 2048
-  },
-  {
-   "id": "story-13",
-   "title": "Behind the Bars",
-   "w": 1600,
-   "h": 1200
-  },
-  {
-   "id": "story-14",
-   "title": "Bars and Floodlights",
-   "w": 2048,
-   "h": 1536
-  },
-  {
    "id": "story-15",
-   "title": "Gloves, Hung to Dry",
+   "title": "Even rubber gloves look cheerful in the sun.",
    "w": 1440,
    "h": 1921
   }

@@ -464,3 +464,49 @@ $('.brand').addEventListener('click',e=>{
   filters.addEventListener('click',()=>setTimeout(layout,60));
   setView('cal');z();render();layout();
 })();
+
+/* footer banner: "AASHISH.IN" drawn with 0 and 1 characters, a few picked out in colour */
+(function(){
+  const el=$('#xo');if(!el)return;
+  const C=130,R=17,CW=12,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const g=cv.getContext('2d');g.fillStyle='#fff';g.textBaseline='alphabetic';
+  let fs=H*1.1;g.font='900 '+fs+'px Inter,Arial,Helvetica,sans-serif';
+  const m=g.measureText('AASHISH.IN');fs*=Math.min(1,W*.98/m.width);
+  g.font='900 '+fs+'px Inter,Arial,Helvetica,sans-serif';
+  const w=g.measureText('AASHISH.IN').width;
+  const sy=(H*.86)/(.72*fs);g.setTransform(1,0,0,sy,0,0);   // stretch the letters taller so they fill the rows
+  g.strokeStyle='#fff';g.lineWidth=fs*.07;g.lineJoin='round';g.strokeText('AASHISH.IN',(W-w)/2,H*.94/sy);
+  g.fillText('AASHISH.IN',(W-w)/2,H*.94/sy);g.setTransform(1,0,0,1,0,0);
+  const px=g.getImageData(0,0,W,H).data;
+  const TXT='AASHISH.IN',x0=(W-w)/2,edges=[...TXT].map((_,k)=>x0+g.measureText(TXT.slice(0,k+1)).width);
+  const letterOf=c=>{const x=c*CW+CW/2;const k=edges.findIndex(e=>x<e);return k<0?TXT.length-1:k};
+  const lets=[];
+  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  let out='';
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      let on=0;
+      for(let y=0;y<CH;y+=4)for(let x=0;x<CW;x+=4)on+=px[((r*CH+y)*W+c*CW+x)*4+3]>128?1:0;
+      if(on>=3){
+        const ch=rnd()<.5?'1':'0';
+        const L=letterOf(c);lets.push(L);
+        if(rnd()<.05)out+='<b style="color:hsl('+Math.floor(rnd()*360)+' 70% 62%)">'+ch+'</b>';
+        else out+='<b>'+ch+'</b>';
+      }else out+=' ';
+    }
+    out+='\n';
+  }
+  el.innerHTML='<pre aria-hidden="true">'+out.replace(/\s+$/,'')+'</pre>';
+  // slow blink, letter by letter: A, then the next A, then S, H, I, S, H, ., I, N, and round again
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const cells=[...el.querySelectorAll('b')],groups=[...TXT].map((_,k)=>cells.filter((_,n)=>lets[n]===k));
+  let k=0;
+  setInterval(()=>{
+    if(document.hidden)return;
+    const grp=groups[k%(TXT.length+2)];k++;   // two quiet beats between rounds
+    if(!grp)return;
+    grp.forEach(b=>b.classList.add('dim'));
+    setTimeout(()=>grp.forEach(b=>b.classList.remove('dim')),1500);
+  },1100);
+})();

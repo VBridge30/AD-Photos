@@ -278,3 +278,8 @@ button:focus:not(:focus-visible){outline:none}
 .seg-head{max-width:1400px;margin:clamp(28px,5vw,56px) auto clamp(14px,2vw,24px);font-family:var(--serif);font-weight:300;font-size:clamp(1.4rem,3vw,2rem);color:var(--mute)}
 .seg-head:first-of-type{margin-top:0}
 .chapter[data-view="slider"] .seg-head{display:none}
+
+.xo{background:#0a0a0a;padding:clamp(28px,6vw,72px) var(--gutter);overflow:hidden}
+.xo pre{margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:min(calc((100vw - 2*var(--gutter))/78),18px);line-height:1;color:#8a8a8a;letter-spacing:0;white-space:pre;max-width:1400px;text-align:left;-webkit-user-select:none;user-select:none}
+.xo pre b{font-weight:400;transition:opacity 1.4s ease-in-out}
+.xo pre b.dim{opacity:.12}
