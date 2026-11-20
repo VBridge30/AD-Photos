@@ -249,18 +249,18 @@ function walkScene(el,dir,cam){
     if(!sc.L)layout();
     const L=sc.L,ss=reduce.matches?1:clamp(p/.86);
     const f=warp(ss),dd=.002,fa=warp(clamp(ss-dd)),fb=warp(clamp(ss+dd));
-    const amt=smooth(0,.5,Math.abs(fb-fa)/(2*dd)/(1+n*PW));
+    const amt=0; /* walk cycle removed: traveller keeps a still pose */
     const x=sc.x0+(sc.x1-sc.x0)*f,dist=x-sc.x0;
     mw.style.transform=`translate3d(${f1(dir>0?x:L-x-wm)}px,0,0)`;
     const A=20*Math.PI/180*amt,cyc=4*98*Math.sin(20*Math.PI/180);
-    const ph=Math.PI*2*(dist/s)/cyc,sn=Math.sin(ph),cs=Math.cos(ph);
+    const ph=0,sn=0,cs=1;
     r.lgN.setAttribute('transform',rot(-20*amt*sn,98,150));
     r.knN.setAttribute('transform',rot(amt*(4+38*Math.max(0,cs)),98,198));
     r.lgF.setAttribute('transform',rot(20*amt*sn,98,150));
     r.knF.setAttribute('transform',rot(amt*(4+38*Math.max(0,-cs)),98,198));
     r.bob.setAttribute('transform',`translate(0 ${f1(98*(1-Math.cos(A*sn)))})`);
     r.head&&r.head.setAttribute('transform',`translate(0 ${f1(-1.2*Math.abs(cs)*amt)})`);
-    if(r.sp)r.sp.setAttribute('transform',rot(dist/s/6*57.3,24,242));
+    
     let k=0,fl=0;
     if(cam){
       const sp=ss*(1+n*PW);

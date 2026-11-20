@@ -329,3 +329,4 @@ button:focus:not(:focus-visible){outline:none}
 .stn i{display:block;width:3px;height:44px;margin:0 auto;background:#243b57}
 @media (max-width:600px){.winst .row{top:60%;height:25%}.alt{font-size:.5rem;letter-spacing:.1em}.sun{right:4%}}
 @media (prefers-reduced-motion:reduce){.scene{height:auto}.sc-stage{position:relative}.ph.on .pi,.bd{animation:none}}
+.sc-stage.walk .mwrap{display:none}
