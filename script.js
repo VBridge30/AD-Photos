@@ -215,7 +215,7 @@ $('#theme').addEventListener('click',()=>{
 
 /* Sway-style slider: each chapter can switch between the grid and a swipeable slider */
 (function(){
-  const SLIDER_FIRST=['landscape','architecture'];
+  const SLIDER_FIRST=['architecture'];
   document.querySelectorAll('.chapter').forEach(ch=>{
     const k=ch.dataset.cat,list=GALLERY[k];if(!list||k==='unforced')return;
     // slider markup
