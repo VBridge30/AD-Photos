@@ -356,12 +356,9 @@ html[data-theme="light"] .hl-rooms button.on{color:#1c1b19}
 }
 
 /* phone: browse by chapter buttons, one chapter at a time */
-.phone-chaps{display:none}
-nav .filters button[data-k="sel"]{display:none}
+nav .filters button[data-k="all"]{display:none}
 .hide{display:none!important}
-@media (max-width:600px){
-  nav .filters button[data-k="all"]{display:none}
-  nav .filters button[data-k="sel"]{display:block}
+@media (min-width:0){
   .phone-chaps{display:flex;flex-direction:column;margin:28px auto 0;padding:0 var(--gutter);max-width:520px}
   .phone-chaps.hide{display:none}
   .phone-chaps p{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}

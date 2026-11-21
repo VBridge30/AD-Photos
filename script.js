@@ -14,7 +14,7 @@ const CHAPTERS=[
 const $=(s,r=document)=>r.querySelector(s);
 const main=$('#gallery'),filters=$('#filters');
 const pad=n=>String(n).padStart(2,'0');
-let active='all';
+let active='sel';
 
 function tile(p,cat,extra=''){
   const b=document.createElement('button');
@@ -64,26 +64,23 @@ fs.appendChild(fg);
 $('#about').after(fs);
 const all=document.createElement('button');all.dataset.k='all';all.textContent='All';filters.prepend(all);
 
-/* phone: "Selected Works" first; chapters are opened one at a time from the menu, never stacked */
-const phone=matchMedia('(max-width:600px)');
+/* "Selected Works" first; chapters are opened one at a time from the nav or the list, never stacked */
 const sel=document.createElement('button');sel.dataset.k='sel';sel.textContent='Selected Works';filters.prepend(sel);
 const pc=document.createElement('div');pc.className='phone-chaps';pc.innerHTML='<p>Open a chapter</p>';
 CHAPTERS.forEach(c=>{const b=document.createElement('button');b.type='button';b.dataset.k=c.k;b.textContent=c.l||c.t;pc.appendChild(b)});
 fs.appendChild(pc);
 pc.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFilter(b.dataset.k,true)});
 function setFilter(k,scroll){
-  if(phone.matches&&k==='all')k='sel';
-  if(!phone.matches&&k==='sel')k='all';
+  if(k==='all')k='sel';
   active=k;
   filters.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
-  document.querySelectorAll('.chapter').forEach(s=>s.classList.toggle('hide',k!=='all'&&s.dataset.cat!==k));
-  $('#featured')?.classList.toggle('hide',k!=='all'&&k!=='sel');
+  document.querySelectorAll('.chapter').forEach(s=>s.classList.toggle('hide',s.dataset.cat!==k));
+  $('#featured')?.classList.toggle('hide',k!=='sel');
   pc.classList.toggle('hide',k!=='sel');
   if(scroll)(k==='sel'?$('#featured'):$('#gallery')).scrollIntoView();
 }
 filters.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFilter(b.dataset.k,true)});
-setFilter(phone.matches?'sel':'all');
-phone.addEventListener('change',()=>setFilter(phone.matches?'sel':'all'));
+setFilter('sel');
 // highlight current chapter while scrolling in "All" view
 const io=new IntersectionObserver(es=>{
   if(active!=='all'||scrollY<innerHeight*.6)return;
@@ -369,10 +366,10 @@ $('#theme').addEventListener('click',()=>{
   },{passive:true});
 })();
 
-/* brand link: back to the home view (all chapters, top of page) */
+/* brand link: back to the home view (selected works, top of page) */
 $('.brand').addEventListener('click',e=>{
   e.preventDefault();
-  if(typeof setFilter==='function'&&active!=='all')setFilter('all');
+  if(typeof setFilter==='function'&&active!=='sel')setFilter('sel');
   scrollTo({top:0,behavior:'smooth'});
 });
 
