@@ -469,7 +469,7 @@ $('.brand').addEventListener('click',e=>{
 (function(){
   const el=$('#xo');if(!el)return;
   const build=()=>{
-  const C=200,R=14,CW=8,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
+  const C=250,R=17,CW=6,CH=10,W=C*CW,H=R*CH;
   const TXT='aashish.in',FONT='700 %spx Orbitron,Inter,Arial,sans-serif';
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const g=cv.getContext('2d');g.fillStyle='#fff';g.textBaseline='alphabetic';
@@ -492,8 +492,8 @@ $('.brand').addEventListener('click',e=>{
   for(let r=0;r<R;r++){
     for(let c=0;c<C;c++){
       let on=0;
-      for(let y=0;y<CH;y+=4)for(let x=0;x<CW;x+=4)on+=px[((r*CH+y)*W+c*CW+x)*4+3]>128?1:0;
-      if(on>=3){
+      for(let y=0;y<CH;y+=2)for(let x=0;x<CW;x+=2)on+=px[((r*CH+y)*W+c*CW+x)*4+3]>128?1:0;
+      if(on>=6){
         const ch=rnd()<.5?'1':'0';
         const L=letterOf(c);lets.push(L);
         if(rnd()<.05)out+='<b style="color:hsl('+Math.floor(rnd()*360)+' 70% 62%)">'+ch+'</b>';
