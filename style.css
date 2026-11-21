@@ -299,6 +299,9 @@ html.intro-on body{overflow:hidden}
 .in-hint{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));margin:0;text-align:center;font:500 clamp(11px,1.8vw,14px)/1 Inter,Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#7cc4ff;opacity:0;animation:inHint .8s ease 3.7s forwards,inPulse 2s ease-in-out 4.5s infinite}
 @keyframes inHint{to{opacity:.85}}
 @keyframes inPulse{50%{opacity:.3}}
+.in-bar{position:relative;overflow:hidden}
+.in-bar::after{content:"";position:absolute;top:-1px;bottom:-1px;left:0;width:26%;background:linear-gradient(90deg,transparent,#fff 50%,transparent);filter:blur(1px);transform:translateX(-120%);animation:inShine 3.4s ease-in-out 3.9s infinite}
+@keyframes inShine{0%{transform:translateX(-120%)}70%,100%{transform:translateX(480%)}}
 @keyframes inSub{to{opacity:1;transform:none;filter:none}}
 @keyframes inBar{to{width:min(70vw,560px)}}
 @keyframes inLine{0%{width:0;opacity:0}30%{opacity:1}60%{width:46px}100%{width:46px;opacity:0}}
