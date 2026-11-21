@@ -149,7 +149,7 @@ $('#theme').addEventListener('click',()=>{
   addEventListener('keydown',hide);
 })();
 
-/* background music: plays music.mp3 if you add one next to index.html, otherwise a generated fingerpicked guitar */
+/* background music: plays music.mp3 if you add one next to index.html, otherwise a generated 40 Hz focus sound */
 (function(){
   const btn=$('#music');let on=false,file=null,ctx=null,master=null,timers=[],running=false,kick=null;
   const probe=new Audio();probe.src='music.mp3';probe.loop=true;probe.volume=0;
@@ -158,42 +158,33 @@ $('#theme').addEventListener('click',()=>{
   probe.addEventListener('error',()=>hasFile=false,{once:true});
   const hz=m=>440*Math.pow(2,(m-69)/12);
   function ambient(){
+    // 40 Hz focus sound: a soft pad pulsing 40 times a second (isochronic), plus a 200 / 240 Hz pair
+    // that gives a 40 Hz binaural beat on headphones. Slow swell on top, so it never feels mechanical.
     ctx=new (window.AudioContext||window.webkitAudioContext)();
     master=ctx.createGain();master.gain.value=0;
-    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;
-    // simple generated reverb
-    const len=ctx.sampleRate*3.5,ir=ctx.createBuffer(2,len,ctx.sampleRate);
-    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}
-    const rev=ctx.createConvolver();rev.buffer=ir;
-    const wet=ctx.createGain();wet.gain.value=.55;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
+    const len=ctx.sampleRate*3,ir=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}
+    const rev=ctx.createConvolver();rev.buffer=ir;const wet=ctx.createGain();wet.gain.value=.35;
     lp.connect(master);lp.connect(rev);rev.connect(wet);wet.connect(master);master.connect(ctx.destination);
-    // fingerpicked acoustic guitar: Am - F - C - G, eighth-note picking pattern
-    const prog=[[45,57,60,64,69,64,60,57],[41,53,57,60,65,60,57,53],[48,55,60,64,67,64,60,55],[43,55,59,62,67,62,59,55]];
-    const pick=[0,2,3,4,3,2,4,3]; // order of picking within a bar
-    function pluck(m,vel){
-      const t=ctx.currentTime+.03,f=hz(m);
-      const flt=ctx.createBiquadFilter();flt.type='lowpass';flt.Q.value=1.2;
-      flt.frequency.setValueAtTime(3800,t);flt.frequency.exponentialRampToValueAtTime(600,t+.9);
-      const g=ctx.createGain();
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel*.2,t+.006);g.gain.exponentialRampToValueAtTime(.0004,t+2.4);
-      [['triangle',1,1],['sawtooth',1.002,.35],['sine',2,.25]].forEach(([ty,k,a])=>{
-        const o=ctx.createOscillator(),og=ctx.createGain();
-        o.type=ty;o.frequency.value=f*k;og.gain.value=a;
-        o.connect(og);og.connect(flt);o.start(t);o.stop(t+2.5);
-      });
-      flt.connect(g);g.connect(lp);
-    }
-    let bar=0,step=0;
-    kick=()=>{if(!running)tick()};
-    function tick(){
-      if(!on){running=false;return}
-      running=true;
-      const c=prog[bar%prog.length];
-      pluck(c[step===0?0:pick[step]],step===0?.95:.5+Math.random()*.3);
-      step=(step+1)%8;if(step===0)bar++;
-      timers.push(setTimeout(tick,430+Math.random()*30));
-    }
-    kick();
+    // pad: A minor-ish drone, amplitude pulsed at 40 Hz (depth 40%)
+    const pulse=ctx.createGain();pulse.gain.value=.6;
+    const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=40;lg.gain.value=.4;lfo.connect(lg);lg.connect(pulse.gain);lfo.start();
+    const swell=ctx.createGain();swell.gain.value=.8;
+    const sl=ctx.createOscillator(),sg=ctx.createGain();sl.frequency.value=.07;sg.gain.value=.2;sl.connect(sg);sg.connect(swell.gain);sl.start();
+    [110,164.8,220,277.2,329.6].forEach((f,i)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();o.type=i<2?'sine':'triangle';o.frequency.value=f;g.gain.value=[.30,.22,.16,.08,.06][i];
+      o.connect(g);g.connect(pulse);o.start();
+      const d=ctx.createOscillator(),dg=ctx.createGain();d.type='sine';d.frequency.value=f*1.004;dg.gain.value=g.gain.value*.6;d.connect(dg);dg.connect(pulse);d.start();
+    });
+    pulse.connect(swell);swell.connect(lp);
+    // binaural pair: 200 Hz left, 240 Hz right (needs headphones to hear the 40 Hz beat)
+    [[200,-1],[240,1]].forEach(([f,p])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain(),pan=ctx.createStereoPanner?ctx.createStereoPanner():null;
+      o.type='sine';o.frequency.value=f;g.gain.value=.07;o.connect(g);
+      if(pan){pan.pan.value=p;g.connect(pan);pan.connect(master)}else g.connect(master);
+      o.start();
+    });
   }
   function fade(to,sec,done){
     if(file){const s=file.volume,t0=performance.now();(function f(){const k=Math.min(1,(performance.now()-t0)/(sec*1000));file.volume=s+(to-s)*k;k<1?requestAnimationFrame(f):done&&done()})()}
@@ -202,7 +193,7 @@ $('#theme').addEventListener('click',()=>{
   function play(){
     on=true;btn.classList.add('on');btn.setAttribute('aria-pressed','true');
     if(hasFile){file=probe;file.volume=0;file.play().catch(()=>{});fade(.5,3)}
-    else{if(!ctx)ambient();ctx.resume();kick&&kick();fade(.9,4)}
+    else{if(!ctx)ambient();ctx.resume();kick&&kick();fade(.3,4)}
   }
   function stop(){
     on=false;btn.classList.remove('on');btn.setAttribute('aria-pressed','false');
