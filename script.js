@@ -550,10 +550,10 @@ $('.brand').addEventListener('click',e=>{
   const el=document.getElementById('intro'),root=document.documentElement;
   if(!el||!root.classList.contains('intro-on'))return;
   const done=()=>{root.classList.remove('intro-on');try{sessionStorage.setItem('introSeen','1')}catch(e){}};
-  const fade=setTimeout(()=>root.classList.add('intro-fade'),4350);
-  const t=setTimeout(done,5050);
-  const skip=()=>{clearTimeout(t);clearTimeout(fade);root.classList.add('intro-fade');el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(done,320)};
-  el.addEventListener('click',skip);addEventListener('keydown',skip,{once:true});
+  let gone=false;
+  const enter=()=>{if(gone)return;gone=true;root.classList.add('intro-fade');el.style.transition='opacity .6s ease';el.style.opacity='0';setTimeout(done,650)};
+  el.addEventListener('click',enter);
+  addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='Escape'){e.preventDefault();enter()}});
 })();
 
 /* hero tagline: typewriter with blinking caret (starts after the intro) */

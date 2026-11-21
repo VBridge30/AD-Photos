@@ -288,7 +288,7 @@ button:focus:not(:focus-visible){outline:none}
 
 /* opening sequence: a blue line, the name drawn in outline, then filled with light */
 #intro{display:none}
-html.intro-on #intro{position:fixed;inset:0;z-index:9999;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:inOut .7s ease 4.3s forwards}
+html.intro-on #intro{position:fixed;inset:0;z-index:9999;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
 html.intro-on body{overflow:hidden}
 .in-line{position:absolute;left:50%;top:50%;height:2px;width:0;background:#00b4ff;box-shadow:0 0 14px #00b4ff;transform:translate(-50%,-50%);animation:inLine .8s ease .1s forwards}
 .in-svg{width:min(88vw,900px);height:auto;overflow:visible;opacity:0;animation:inShow .1s linear .6s forwards}
@@ -296,6 +296,9 @@ html.intro-on body{overflow:hidden}
 .in-sub{display:flex;gap:.55em;margin:10px 0 0;font:700 clamp(15px,3.4vw,30px)/1 Orbitron,Inter,Arial,sans-serif;color:#e8f7ff;text-shadow:0 0 18px rgba(0,180,255,.65)}
 .in-sub span{opacity:0;transform:translateY(14px);filter:blur(6px);animation:inSub .6s ease calc(2.1s + var(--i)*.07s) forwards}
 .in-bar{height:2px;width:0;margin-top:20px;background:linear-gradient(90deg,transparent,#00b4ff 20%,#00b4ff 80%,transparent);box-shadow:0 0 14px #00b4ff;animation:inBar .9s cubic-bezier(.6,0,.2,1) 2.9s forwards}
+.in-hint{margin:26px 0 0;font:500 clamp(11px,1.8vw,14px)/1 Inter,Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#7cc4ff;opacity:0;animation:inHint .8s ease 3.7s forwards,inPulse 2s ease-in-out 4.5s infinite}
+@keyframes inHint{to{opacity:.85}}
+@keyframes inPulse{50%{opacity:.3}}
 @keyframes inSub{to{opacity:1;transform:none;filter:none}}
 @keyframes inBar{to{width:min(70vw,560px)}}
 @keyframes inLine{0%{width:0;opacity:0}30%{opacity:1}60%{width:46px}100%{width:46px;opacity:0}}
