@@ -293,10 +293,11 @@ html.intro-on body{overflow:hidden}
 .in-line{position:absolute;left:50%;top:50%;height:2px;width:0;background:#00b4ff;box-shadow:0 0 14px #00b4ff;transform:translate(-50%,-50%);animation:inLine .8s ease .1s forwards}
 .in-svg{width:min(88vw,900px);height:auto;overflow:visible;opacity:0;animation:inShow .1s linear .6s forwards}
 .in-t text{fill:rgba(0,180,255,0);stroke:#00b4ff;stroke-width:2.4;stroke-dasharray:2200;stroke-dashoffset:2200;animation:inDraw 1.1s ease .6s forwards,inFill .7s ease 1.5s forwards}
-.in-sub{margin:6px 0 0;font:600 clamp(13px,2.4vw,22px)/1 Inter,Arial,sans-serif;letter-spacing:.7em;padding-left:.7em;color:#9fdcff;opacity:0;transform:translateY(8px);animation:inSub .8s ease 2.1s forwards}
-.in-bar{height:2px;width:0;margin-top:18px;background:#00b4ff;box-shadow:0 0 14px #00b4ff;animation:inBar .9s cubic-bezier(.6,0,.2,1) 2.6s forwards}
-@keyframes inSub{to{opacity:1;transform:none}}
-@keyframes inBar{to{width:min(60vw,420px)}}
+.in-sub{display:flex;gap:.55em;margin:10px 0 0;font:700 clamp(15px,3.4vw,30px)/1 Orbitron,Inter,Arial,sans-serif;color:#e8f7ff;text-shadow:0 0 18px rgba(0,180,255,.65)}
+.in-sub span{opacity:0;transform:translateY(14px);filter:blur(6px);animation:inSub .6s ease calc(2.1s + var(--i)*.07s) forwards}
+.in-bar{height:2px;width:0;margin-top:20px;background:linear-gradient(90deg,transparent,#00b4ff 20%,#00b4ff 80%,transparent);box-shadow:0 0 14px #00b4ff;animation:inBar .9s cubic-bezier(.6,0,.2,1) 2.9s forwards}
+@keyframes inSub{to{opacity:1;transform:none;filter:none}}
+@keyframes inBar{to{width:min(70vw,560px)}}
 @keyframes inLine{0%{width:0;opacity:0}30%{opacity:1}60%{width:46px}100%{width:46px;opacity:0}}
 @keyframes inShow{to{opacity:1}}
 @keyframes inDraw{to{stroke-dashoffset:0}}
