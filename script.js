@@ -666,11 +666,3 @@ $('.brand').addEventListener('click',e=>{
   document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
   addEventListener('resize',()=>{if(innerWidth>600)set(false)});
 })();
-
-/* draw the mark in once the opening sequence starts to fade (or at once if there is none) */
-(function(){
-  const root=document.documentElement;
-  const go=()=>root.classList.add('mark-draw');
-  if(!root.classList.contains('intro-on'))return go();
-  new MutationObserver((m,o)=>{if(root.classList.contains('intro-fade')||!root.classList.contains('intro-on')){o.disconnect();go()}}).observe(root,{attributes:true,attributeFilter:['class']});
-})();

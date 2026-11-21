@@ -367,17 +367,5 @@ nav .filters button[data-k="all"]{display:none}
   .phone-chaps button::after{content:"\2192";float:right;color:var(--blue)}
 }
 
-/* spinning aperture mark beside the wordmark, and over the name in the intro */
-.logo{display:block;width:26px;height:26px;margin-right:10px;color:var(--ink);flex:none;animation:spinY 12s linear infinite}
-@keyframes spinY{from{transform:perspective(500px) rotateY(0)}to{transform:perspective(500px) rotateY(360deg)}}
-@media (max-width:600px){.logo{width:22px;height:22px;margin-right:7px;color:var(--blue)}.theme{width:30px;height:30px}nav .nav-right{gap:.25rem}}
-html.intro-on .in-mark{display:block;width:70px;height:70px;color:#00b4ff;margin-bottom:22px;filter:drop-shadow(0 0 12px rgba(0,180,255,.5));opacity:0;animation:inMark .5s ease .15s forwards,spinY 5s linear infinite}
-.in-mark{display:none}
-@keyframes inMark{to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.logo,.in-mark{animation:none!important}}
 
 
-/* the mark draws itself in, line by line, once the intro is done, then keeps turning */
-html.mark-wait .logo path{stroke-dasharray:1;stroke-dashoffset:1}
-html.mark-draw .logo path{animation:markDraw 1.6s ease .3s forwards}
-@keyframes markDraw{to{stroke-dashoffset:0}}
