@@ -149,7 +149,7 @@ $('#theme').addEventListener('click',()=>{
   addEventListener('keydown',hide);
 })();
 
-/* background music: plays music.mp3 if you add one next to index.html, otherwise a generated 40 Hz focus sound */
+/* background music: plays music.mp3 if you add one next to index.html, otherwise generated slow solo piano */
 (function(){
   const btn=$('#music');let on=false,file=null,ctx=null,master=null,timers=[],running=false,kick=null;
   const probe=new Audio();probe.src='music.mp3';probe.loop=true;probe.volume=0;
@@ -158,33 +158,44 @@ $('#theme').addEventListener('click',()=>{
   probe.addEventListener('error',()=>hasFile=false,{once:true});
   const hz=m=>440*Math.pow(2,(m-69)/12);
   function ambient(){
-    // 40 Hz focus sound: a soft pad pulsing 40 times a second (isochronic), plus a 200 / 240 Hz pair
-    // that gives a 40 Hz binaural beat on headphones. Slow swell on top, so it never feels mechanical.
+    // slow solo piano in the manner of Satie's Gymnopedies: the sort of thing a museum audio guide plays.
+    // Gmaj7 / Dmaj7 in 3/4, a sparse melody over it, a long hall reverb. All synthesised in the browser.
     ctx=new (window.AudioContext||window.webkitAudioContext)();
     master=ctx.createGain();master.gain.value=0;
-    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
-    const len=ctx.sampleRate*3,ir=ctx.createBuffer(2,len,ctx.sampleRate);
-    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}
-    const rev=ctx.createConvolver();rev.buffer=ir;const wet=ctx.createGain();wet.gain.value=.35;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;
+    const len=ctx.sampleRate*4.5,ir=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.4)}
+    const rev=ctx.createConvolver();rev.buffer=ir;const wet=ctx.createGain();wet.gain.value=.5;
     lp.connect(master);lp.connect(rev);rev.connect(wet);wet.connect(master);master.connect(ctx.destination);
-    // pad: A minor-ish drone, amplitude pulsed at 40 Hz (depth 40%)
-    const pulse=ctx.createGain();pulse.gain.value=.6;
-    const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=40;lg.gain.value=.4;lfo.connect(lg);lg.connect(pulse.gain);lfo.start();
-    const swell=ctx.createGain();swell.gain.value=.8;
-    const sl=ctx.createOscillator(),sg=ctx.createGain();sl.frequency.value=.07;sg.gain.value=.2;sl.connect(sg);sg.connect(swell.gain);sl.start();
-    [110,164.8,220,277.2,329.6].forEach((f,i)=>{
-      const o=ctx.createOscillator(),g=ctx.createGain();o.type=i<2?'sine':'triangle';o.frequency.value=f;g.gain.value=[.30,.22,.16,.08,.06][i];
-      o.connect(g);g.connect(pulse);o.start();
-      const d=ctx.createOscillator(),dg=ctx.createGain();d.type='sine';d.frequency.value=f*1.004;dg.gain.value=g.gain.value*.6;d.connect(dg);dg.connect(pulse);d.start();
-    });
-    pulse.connect(swell);swell.connect(lp);
-    // binaural pair: 200 Hz left, 240 Hz right (needs headphones to hear the 40 Hz beat)
-    [[200,-1],[240,1]].forEach(([f,p])=>{
-      const o=ctx.createOscillator(),g=ctx.createGain(),pan=ctx.createStereoPanner?ctx.createStereoPanner():null;
-      o.type='sine';o.frequency.value=f;g.gain.value=.07;o.connect(g);
-      if(pan){pan.pan.value=p;g.connect(pan);pan.connect(master)}else g.connect(master);
-      o.start();
-    });
+    function piano(m,vel,dur){
+      const t=ctx.currentTime+.03,f=hz(m),g=ctx.createGain();
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel,t+.008);
+      g.gain.exponentialRampToValueAtTime(vel*.35,t+.35);g.gain.exponentialRampToValueAtTime(.0003,t+dur);
+      [[1,1],[2,.38],[3,.16],[4,.08],[5,.04]].forEach(([k,a])=>{
+        const o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';o.frequency.value=f*k*(1+.0004*k*k);
+        og.gain.value=a;o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.1);
+      });
+      g.connect(lp);
+    }
+    const BEAT=.92;
+    const bass=[43,50],chord=[[59,62,66],[54,57,61]];                                 // G2 / D3 and the chord above each
+    const mel=[[[78,3]],[[81,2],[79,1]],[[78,2],[74,1]],[[76,3]],[[78,3]],[[81,2],[83,1]],[[81,2],[78,1]],[[74,3]]];
+    let bar=0,beat=0;
+    kick=()=>{if(!running)tick()};
+    function tick(){
+      if(!on){running=false;return}
+      running=true;
+      const h=bar%2;
+      if(beat===0)piano(bass[h],.20,3.2);else chord[h].forEach((m,i)=>piano(m,.075,2.2));
+      // melody: starts after a two-bar introduction
+      if(bar%16>=2){
+        let pos=0;const notes=mel[(bar-2)%8];
+        notes.forEach(([m,l])=>{if(pos===beat)piano(m,.16,l*BEAT*2.2);pos+=l});
+      }
+      beat=(beat+1)%3;if(beat===0)bar++;
+      timers.push(setTimeout(tick,BEAT*1000));
+    }
+    kick();
   }
   function fade(to,sec,done){
     if(file){const s=file.volume,t0=performance.now();(function f(){const k=Math.min(1,(performance.now()-t0)/(sec*1000));file.volume=s+(to-s)*k;k<1?requestAnimationFrame(f):done&&done()})()}
@@ -193,7 +204,7 @@ $('#theme').addEventListener('click',()=>{
   function play(){
     on=true;btn.classList.add('on');btn.setAttribute('aria-pressed','true');
     if(hasFile){file=probe;file.volume=0;file.play().catch(()=>{});fade(.5,3)}
-    else{if(!ctx)ambient();ctx.resume();kick&&kick();fade(.3,4)}
+    else{if(!ctx)ambient();ctx.resume();kick&&kick();fade(.85,4)}
   }
   function stop(){
     on=false;btn.classList.remove('on');btn.setAttribute('aria-pressed','false');
