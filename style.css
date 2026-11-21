@@ -296,7 +296,7 @@ html.intro-on body{overflow:hidden}
 .in-sub{display:flex;gap:.55em;margin:10px 0 0;font:700 clamp(15px,3.4vw,30px)/1 Orbitron,Inter,Arial,sans-serif;color:#e8f7ff;text-shadow:0 0 18px rgba(0,180,255,.65)}
 .in-sub span{opacity:0;transform:translateY(14px);filter:blur(6px);animation:inSub .6s ease calc(2.1s + var(--i)*.07s) forwards}
 .in-bar{height:2px;width:0;margin-top:20px;background:linear-gradient(90deg,transparent,#00b4ff 20%,#00b4ff 80%,transparent);box-shadow:0 0 14px #00b4ff;animation:inBar .9s cubic-bezier(.6,0,.2,1) 2.9s forwards}
-.in-hint{margin:26px 0 0;font:500 clamp(11px,1.8vw,14px)/1 Inter,Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#7cc4ff;opacity:0;animation:inHint .8s ease 3.7s forwards,inPulse 2s ease-in-out 4.5s infinite}
+.in-hint{position:absolute;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));margin:0;text-align:center;font:500 clamp(11px,1.8vw,14px)/1 Inter,Arial,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#7cc4ff;opacity:0;animation:inHint .8s ease 3.7s forwards,inPulse 2s ease-in-out 4.5s infinite}
 @keyframes inHint{to{opacity:.85}}
 @keyframes inPulse{50%{opacity:.3}}
 @keyframes inSub{to{opacity:1;transform:none;filter:none}}
