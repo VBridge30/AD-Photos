@@ -366,3 +366,24 @@ nav .filters button[data-k="all"]{display:none}
   .phone-chaps button{background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);font:inherit;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:.95rem .1rem;cursor:pointer}
   .phone-chaps button::after{content:"\2192";float:right;color:var(--blue)}
 }
+
+/* spinning aperture mark beside the wordmark, and over the name in the intro */
+.logo{display:block;width:26px;height:26px;margin-right:10px;color:var(--ink);flex:none;animation:spinY 12s linear infinite}
+@keyframes spinY{from{transform:perspective(500px) rotateY(0)}to{transform:perspective(500px) rotateY(360deg)}}
+@media (max-width:600px){.logo{width:22px;height:22px;margin-right:7px;color:var(--blue)}.theme{width:30px;height:30px}nav .nav-right{gap:.25rem}}
+html.intro-on .in-mark{display:block;width:70px;height:70px;color:#00b4ff;margin-bottom:22px;filter:drop-shadow(0 0 12px rgba(0,180,255,.5));opacity:0;animation:inMark .5s ease .15s forwards,spinY 5s linear infinite}
+.in-mark{display:none}
+@keyframes inMark{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.logo,.in-mark{animation:none!important}}
+
+/* large spinning mark on the right of the hero */
+.hero-mark{position:absolute;z-index:1;right:clamp(24px,9vw,170px);top:50%;transform:translateY(-54%);width:min(30vw,400px);aspect-ratio:1;color:#f4f1ea;pointer-events:none;filter:drop-shadow(0 0 24px rgba(0,180,255,.18))}
+.hero-mark .hm{width:100%;height:100%;display:block;animation:spinY 14s linear infinite}
+@media (max-width:700px){.hero-mark{width:30vw;right:5vw;top:11%;transform:none;opacity:.6}}
+@media (prefers-reduced-motion:reduce){.hero-mark .hm{animation:none}}
+
+/* the mark draws itself in, line by line, once the intro is done, then keeps turning */
+html.mark-wait .hm path,html.mark-wait .logo path{stroke-dasharray:1;stroke-dashoffset:1}
+html.mark-draw .hm path{animation:markDraw 2.6s cubic-bezier(.55,.1,.25,1) .1s forwards}
+html.mark-draw .logo path{animation:markDraw 1.6s ease .3s forwards}
+@keyframes markDraw{to{stroke-dashoffset:0}}
