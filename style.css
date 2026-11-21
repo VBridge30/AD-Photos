@@ -283,6 +283,8 @@ button:focus:not(:focus-visible){outline:none}
 .xo pre{margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:min(calc((100vw - 2*var(--gutter))/150),9.3px);line-height:1;color:#8a8a8a;letter-spacing:0;white-space:pre;max-width:1400px;text-align:left;-webkit-user-select:none;user-select:none}
 .xo pre b{font-weight:400;transition:opacity 1.4s ease-in-out}
 .xo pre b.dim{opacity:.12}
+.xo pre b.hi{color:#2ab0ff!important;opacity:1!important;text-shadow:0 0 8px rgba(42,176,255,.7);transition-duration:.15s}
+.xo pre b.hi2{color:#5a86a8!important;opacity:1!important;transition-duration:.15s}
 
 /* opening sequence: a blue line, the name drawn in outline, then filled with light */
 #intro{display:none}

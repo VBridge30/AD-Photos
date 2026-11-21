@@ -496,16 +496,17 @@ $('.brand').addEventListener('click',e=>{
   g.setTransform(1,0,0,1,0,0);
   const px=g.getImageData(0,0,W,H).data;
   const letterOf=c=>{const xx=c*CW+CW/2;const k=edges.findIndex(e=>xx<e);return k<0?TXT.length-1:k};
-  const lets=[];
+  const lets=[],rc=[],M=[];
   let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
   let out='';
   for(let r=0;r<R;r++){
+    M[r]=[];
     for(let c=0;c<C;c++){
       let on=0;
       for(let y=0;y<CH;y+=2)for(let x=0;x<CW;x+=2)on+=px[((r*CH+y)*W+c*CW+x)*4+3]>128?1:0;
       if(on>=6){
         const ch=rnd()<.5?'1':'0';
-        const L=letterOf(c);lets.push(L);
+        const L=letterOf(c);lets.push(L);rc.push([r,c]);M[r][c]=1;
         if(rnd()<.05)out+='<b style="color:hsl('+Math.floor(rnd()*360)+' 70% 62%)">'+ch+'</b>';
         else out+='<b>'+ch+'</b>';
       }else out+=' ';
@@ -513,6 +514,22 @@ $('.brand').addEventListener('click',e=>{
     out+='\n';
   }
   el.innerHTML='<pre aria-hidden="true">'+out.replace(/\s+$/,'')+'</pre>';
+  // hover: the digits on the edges of the letters near the cursor turn blue and trace the outline
+  (function(){
+    const pre=el.querySelector('pre'),bs=[...pre.querySelectorAll('b')],edge=[];
+    rc.forEach(([r,c],n)=>{const o=(rr,cc)=>!(M[rr]&&M[rr][cc]);if(o(r-1,c)||o(r+1,c)||o(r,c-1)||o(r,c+1))edge.push(n)});
+    let lit=[];
+    const clear=()=>{lit.forEach(n=>bs[n].classList.remove('hi','hi2'));lit=[]};
+    pre.addEventListener('pointermove',e=>{
+      const rect=pre.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pre).fontSize),cw=fs*.6,R1=fs*9,R2=fs*14;
+      clear();
+      edge.forEach(n=>{
+        const [r,c]=rc[n],dx=rect.left+(c+.5)*cw-e.clientX,dy=rect.top+(r+.5)*fs-e.clientY,d=Math.hypot(dx,dy);
+        if(d<R1){bs[n].classList.add('hi');lit.push(n)}else if(d<R2){bs[n].classList.add('hi2');lit.push(n)}
+      });
+    });
+    pre.addEventListener('pointerleave',clear);
+  })();
   // slow blink, letter by letter: A, then the next A, then S, H, I, S, H, ., I, N, and round again
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   const cells=[...el.querySelectorAll('b')],groups=[...TXT].map((_,k)=>cells.filter((_,n)=>lets[n]===k));
