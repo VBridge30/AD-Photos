@@ -64,15 +64,26 @@ fs.appendChild(fg);
 $('#about').after(fs);
 const all=document.createElement('button');all.dataset.k='all';all.textContent='All';filters.prepend(all);
 
+/* phone: "Selected Works" first; chapters are opened one at a time from the menu, never stacked */
+const phone=matchMedia('(max-width:600px)');
+const sel=document.createElement('button');sel.dataset.k='sel';sel.textContent='Selected Works';filters.prepend(sel);
+const pc=document.createElement('div');pc.className='phone-chaps';pc.innerHTML='<p>Open a chapter</p>';
+CHAPTERS.forEach(c=>{const b=document.createElement('button');b.type='button';b.dataset.k=c.k;b.textContent=c.l||c.t;pc.appendChild(b)});
+fs.appendChild(pc);
+pc.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFilter(b.dataset.k,true)});
 function setFilter(k,scroll){
+  if(phone.matches&&k==='all')k='sel';
+  if(!phone.matches&&k==='sel')k='all';
   active=k;
   filters.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
   document.querySelectorAll('.chapter').forEach(s=>s.classList.toggle('hide',k!=='all'&&s.dataset.cat!==k));
-  $('#featured')?.classList.toggle('hide',k!=='all');
-  if(scroll)$('#gallery').scrollIntoView();
+  $('#featured')?.classList.toggle('hide',k!=='all'&&k!=='sel');
+  pc.classList.toggle('hide',k!=='sel');
+  if(scroll)(k==='sel'?$('#featured'):$('#gallery')).scrollIntoView();
 }
 filters.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFilter(b.dataset.k,true)});
-setFilter('all');
+setFilter(phone.matches?'sel':'all');
+phone.addEventListener('change',()=>setFilter(phone.matches?'sel':'all'));
 // highlight current chapter while scrolling in "All" view
 const io=new IntersectionObserver(es=>{
   if(active!=='all'||scrollY<innerHeight*.6)return;

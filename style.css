@@ -354,3 +354,17 @@ html[data-theme="light"] .hl-rooms button.on{color:#1c1b19}
   nav .filters button:last-child{border-bottom:0}
   nav .filters button.on{border-color:var(--line);color:var(--blue)}
 }
+
+/* phone: browse by chapter buttons, one chapter at a time */
+.phone-chaps{display:none}
+nav .filters button[data-k="sel"]{display:none}
+.hide{display:none!important}
+@media (max-width:600px){
+  nav .filters button[data-k="all"]{display:none}
+  nav .filters button[data-k="sel"]{display:block}
+  .phone-chaps{display:flex;flex-direction:column;margin:28px auto 0;padding:0 var(--gutter);max-width:520px}
+  .phone-chaps.hide{display:none}
+  .phone-chaps p{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+  .phone-chaps button{background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);font:inherit;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:.95rem .1rem;cursor:pointer}
+  .phone-chaps button::after{content:"\2192";float:right;color:var(--blue)}
+}
