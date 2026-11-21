@@ -350,7 +350,7 @@ html[data-theme="light"] .hl-rooms button.on{color:#1c1b19}
   .wm [style*="--mute"]{fill:var(--blue)!important}
   #menuBtn{display:grid}
   nav .nav-right{gap:.4rem}
-  nav .filters{display:none;position:fixed;left:0;right:0;top:var(--navh,56px);z-index:19;flex-direction:column;gap:0;overflow:visible;background:var(--nav);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:6px var(--gutter) 14px;box-shadow:0 18px 30px rgba(0,0,0,.35)}
+  nav .filters{display:none;position:fixed;left:0;right:0;top:var(--navh,56px);z-index:19;flex-direction:column;gap:0;overflow:visible;background:var(--bg);border-bottom:1px solid var(--line);padding:6px var(--gutter) 14px;box-shadow:0 18px 30px rgba(0,0,0,.35)}
   nav.menu-open .filters{display:flex}
   nav .filters button{text-align:left;font-size:.85rem;letter-spacing:.16em;padding:.9rem .2rem;border-bottom:1px solid var(--line)}
   nav .filters button:last-child{border-bottom:0}
@@ -371,3 +371,10 @@ nav .filters button[data-k="all"]{display:none}
 
 
 
+
+/* light theme: the footer banner follows the page instead of staying a black block */
+html[data-theme="light"] .xo{background:var(--bg2);border-top:1px solid var(--line)}
+html[data-theme="light"] .xo pre{color:#6b675f}
+html[data-theme="light"] .xo pre b[style]{filter:brightness(.72) saturate(1.4)}
+html[data-theme="light"] .xo pre b.hi{color:#0a7fc2!important;text-shadow:0 0 6px rgba(10,127,194,.35)}
+html[data-theme="light"] .xo pre b.hi2{color:#5f8db0!important}
