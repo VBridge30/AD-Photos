@@ -523,3 +523,21 @@ $('.brand').addEventListener('click',e=>{
   const skip=()=>{clearTimeout(t);el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(done,320)};
   el.addEventListener('click',skip);addEventListener('keydown',skip,{once:true});
 })();
+
+/* hero tagline: typewriter with blinking caret (starts after the intro) */
+(function(){
+  const el=document.querySelector('.hero .tagline');if(!el)return;
+  const full=el.textContent.trim();
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce)return;
+  el.setAttribute('aria-label',full);
+  el.innerHTML='<span class="tw" aria-hidden="true"></span><span class="caret" aria-hidden="true"></span>';
+  const tw=el.querySelector('.tw');
+  let started=false;
+  const type=()=>{if(started)return;started=true;let i=0;
+    const step=()=>{tw.textContent=full.slice(0,++i);if(i<full.length)setTimeout(step,70+Math.random()*50)};
+    setTimeout(step,400)};
+  const root=document.documentElement;
+  if(!root.classList.contains('intro-on'))type();
+  else new MutationObserver((m,o)=>{if(!root.classList.contains('intro-on')){o.disconnect();type()}}).observe(root,{attributes:true,attributeFilter:['class']});
+})();

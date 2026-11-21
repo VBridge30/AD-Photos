@@ -300,3 +300,9 @@ html.intro-on body{overflow:hidden}
 @keyframes inRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes inBar{to{width:min(60vw,220px)}}
 @keyframes inOut{to{opacity:0;visibility:hidden}}
+
+/* tagline typewriter caret */
+.hero .tagline{min-height:1.4em}
+.hero .tagline .caret{display:inline-block;width:2px;height:1em;margin-left:4px;vertical-align:-.12em;background:#7cc4ff;animation:caretBlink 1s steps(1) infinite}
+@keyframes caretBlink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero .tagline .caret{display:none}}
