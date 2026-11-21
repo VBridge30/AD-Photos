@@ -644,3 +644,15 @@ $('.brand').addEventListener('click',e=>{
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   });
 })();
+
+/* phone menu: three-bar button opens the chapter list */
+(function(){
+  const nav=$('#nav'),btn=$('#menuBtn'),f=$('#filters');if(!nav||!btn)return;
+  const setH=()=>nav.style.setProperty('--navh',nav.offsetHeight+'px');
+  const set=o=>{setH();nav.classList.toggle('menu-open',o);btn.setAttribute('aria-expanded',o)};
+  btn.addEventListener('click',e=>{e.stopPropagation();set(!nav.classList.contains('menu-open'))});
+  f.addEventListener('click',()=>set(false));
+  document.addEventListener('click',e=>{if(!nav.contains(e.target))set(false)});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')set(false)});
+  addEventListener('resize',()=>{if(innerWidth>600)set(false)});
+})();
