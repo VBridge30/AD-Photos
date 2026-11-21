@@ -468,8 +468,9 @@ $('.brand').addEventListener('click',e=>{
 /* footer banner: "AASHISH.IN" drawn with 0 and 1 characters, a few picked out in colour */
 (function(){
   const el=$('#xo');if(!el)return;
-  const C=160,R=20,CW=10,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
-  const TXT='AASHISH.IN',FONT='800 %spx Inter,"Helvetica Neue",Arial,sans-serif';
+  const build=()=>{
+  const C=200,R=14,CW=8,CH=Math.round(CW*1.67),W=C*CW,H=R*CH;
+  const TXT='aashish.in',FONT='700 %spx Orbitron,Inter,Arial,sans-serif';
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   const g=cv.getContext('2d');g.fillStyle='#fff';g.textBaseline='alphabetic';
   // size the lettering to fit the width, with a clear gap between letters
@@ -477,10 +478,11 @@ $('.brand').addEventListener('click',e=>{
   const gapK=.16,widths=[...TXT].map(ch=>g.measureText(ch).width);
   const total=widths.reduce((a,b)=>a+b,0)+gapK*fs*(TXT.length-1);
   fs*=W*.96/total;g.font=FONT.replace('%s',fs);
+  const asc=g.measureText('h').actualBoundingBoxAscent;if(asc>H*.86)fs*=H*.86/asc;g.font=FONT.replace('%s',fs);
   const gap=gapK*fs,ws=[...TXT].map(ch=>g.measureText(ch).width),tot=ws.reduce((a,b)=>a+b,0)+gap*(TXT.length-1);
-  const sy=(H*.9)/(.72*fs);g.setTransform(1,0,0,sy,0,0);   // stretch the letters taller so they fill the rows
+  const sy=1;
   let x=(W-tot)/2;const edges=[];
-  [...TXT].forEach((ch,k)=>{g.fillText(ch,x,H*.95/sy);x+=ws[k];edges.push(x+gap/2);x+=gap});
+  [...TXT].forEach((ch,k)=>{g.fillText(ch,x,H*.93);x+=ws[k];edges.push(x+gap/2);x+=gap});
   g.setTransform(1,0,0,1,0,0);
   const px=g.getImageData(0,0,W,H).data;
   const letterOf=c=>{const xx=c*CW+CW/2;const k=edges.findIndex(e=>xx<e);return k<0?TXT.length-1:k};
@@ -512,6 +514,8 @@ $('.brand').addEventListener('click',e=>{
     grp.forEach(b=>b.classList.add('dim'));
     setTimeout(()=>grp.forEach(b=>b.classList.remove('dim')),1500);
   },1100);
+  };
+  (document.fonts&&document.fonts.load?document.fonts.load('700 100px Orbitron','aashish.in').then(build,build):Promise.resolve().then(build));
 })();
 
 /* opening sequence: shown once per visit, click or key to skip */

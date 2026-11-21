@@ -280,7 +280,7 @@ button:focus:not(:focus-visible){outline:none}
 .chapter[data-view="slider"] .seg-head{display:none}
 
 .xo{background:#0a0a0a;padding:clamp(28px,6vw,72px) var(--gutter);overflow:hidden}
-.xo pre{margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:min(calc((100vw - 2*var(--gutter))/96),14.6px);line-height:1;color:#8a8a8a;letter-spacing:0;white-space:pre;max-width:1400px;text-align:left;-webkit-user-select:none;user-select:none}
+.xo pre{margin:0 auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:min(calc((100vw - 2*var(--gutter))/120),11.7px);line-height:1;color:#8a8a8a;letter-spacing:0;white-space:pre;max-width:1400px;text-align:left;-webkit-user-select:none;user-select:none}
 .xo pre b{font-weight:400;transition:opacity 1.4s ease-in-out}
 .xo pre b.dim{opacity:.12}
 
