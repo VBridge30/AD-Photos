@@ -1,5 +1,7 @@
 /* street photographs are shown inside the Architecture chapter */
 GALLERY.architecture=GALLERY.architecture.concat(GALLERY.street);delete GALLERY.street;
+/* Landscape: wide frames first, vertical frames after (stable order) */
+const LAND_W=GALLERY.landscape.filter(p=>p.w>p.h).length;GALLERY.landscape=GALLERY.landscape.filter(p=>p.w>p.h).concat(GALLERY.landscape.filter(p=>p.w<=p.h));
 /* Light and Shadow is the second segment of the Monochrome chapter */
 const MONO_N=GALLERY.monochrome.length;GALLERY.monochrome=GALLERY.monochrome.concat(GALLERY.light);delete GALLERY.light;
 const CHAPTERS=[
@@ -41,13 +43,14 @@ CHAPTERS.forEach((c,i)=>{
     });
     s.appendChild(w);
   }else{
-    const seg=(title,items)=>{
-      if(c.k==='monochrome'){const h=document.createElement('h3');h.className='seg-head';h.textContent=title;s.appendChild(h)}
-      const g=document.createElement('div');g.className='grid '+(c.g==='c2'?'c2':'');
+    const seg=(title,items,wide)=>{
+      if(c.k==='monochrome'||c.k==='landscape'){const h=document.createElement('h3');h.className='seg-head';h.textContent=title;s.appendChild(h)}
+      const g=document.createElement('div');g.className='grid '+((wide??c.g==='c2')?'c2':'');
       items.forEach(p=>g.appendChild(tile(p,c.k)));
       s.appendChild(g);
     };
     if(c.k==='monochrome'){seg('Monochrome',list.slice(0,MONO_N));seg('Light and Shadow',list.slice(MONO_N))}
+    else if(c.k==='landscape'){seg('Wide frames',list.slice(0,LAND_W),true);seg('Vertical frames',list.slice(LAND_W),false)}
     else seg('',list);
   }
   main.appendChild(s);
