@@ -439,3 +439,4 @@ html[data-theme="light"] .feed{--g:linear-gradient(45deg,#0a7fc2,#1f6fe0 55%,#3a
 .fd-head img{box-shadow:0 0 0 3px var(--bg),0 8px 28px rgba(0,180,255,.28)}
 .fd-tile:nth-child(5n+1){background:#12283a}.fd-tile:nth-child(5n+2){background:#162a44}.fd-tile:nth-child(5n+3){background:#0f2f3f}.fd-tile:nth-child(5n+4){background:#1a2c4a}.fd-tile:nth-child(5n){background:#13303a}
 .fd-tile:focus-visible,.fd-home:focus-visible{outline-color:var(--blue)}
+.fd-head img{border-radius:10px}
