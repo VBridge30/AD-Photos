@@ -409,3 +409,25 @@ html[data-theme="light"] .xo pre b.hi2{color:#5f8db0!important}
 .fd-tile:hover img,.fd-tile:focus-visible img{opacity:.8}
 @media (min-width:700px){.fd-grid{gap:20px}}
 @media (max-width:600px){.fd-head{padding:18px 14px}.fd-grid{gap:2px}}
+/* feed pattern: one large 2x2 post per block of six, alternating left and right */
+.fd-grid{grid-auto-flow:row dense}
+.fd-tile:nth-child(12n+1){grid-column:1/span 2;grid-row:span 2;aspect-ratio:auto}
+.fd-tile:nth-child(12n+7){grid-column:2/span 2;grid-row:span 2;aspect-ratio:auto}
+/* feed colour palette: sunset gradient (gold, coral, magenta, violet, blue) */
+.feed{--g:linear-gradient(45deg,#f9b233,#f0634a 30%,#d6249f 60%,#7b3fe4 85%,#00b4ff);background:radial-gradient(ellipse at 15% 0,rgba(214,36,159,.18),transparent 55%),radial-gradient(ellipse at 90% 10%,rgba(0,180,255,.15),transparent 50%),var(--bg)}
+html[data-theme="light"] .feed{background:radial-gradient(ellipse at 15% 0,rgba(214,36,159,.10),transparent 55%),radial-gradient(ellipse at 90% 10%,rgba(0,180,255,.10),transparent 50%),var(--bg)}
+.fd-bar{border-image:var(--g) 1;border-bottom-width:2px}
+.fd-bar b{background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.15rem;letter-spacing:.04em}
+.fd-head img{border:0;padding:3px;background:var(--g);box-shadow:0 0 0 3px var(--bg),0 8px 28px rgba(214,36,159,.28)}
+.fd-head h2{font-weight:500}
+.fd-stats b{background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.fd-tab{border-top:0;position:relative;color:var(--ink)}
+.fd-tab::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:84px;height:2px;background:var(--g)}
+.fd-tile{position:relative;border-radius:2px}
+.fd-tile:nth-child(5n+1){background:#3a2a4a}.fd-tile:nth-child(5n+2){background:#4a2f2a}.fd-tile:nth-child(5n+3){background:#1f3a4a}.fd-tile:nth-child(5n+4){background:#4a3f22}.fd-tile:nth-child(5n){background:#2a4a3a}
+.fd-tile::after{content:"";position:absolute;inset:0;background:var(--g);opacity:0;mix-blend-mode:soft-light;transition:opacity .25s}
+.fd-tile:hover::after,.fd-tile:focus-visible::after{opacity:.85}
+.fd-tile:hover img,.fd-tile:focus-visible img{opacity:1;transform:scale(1.04)}
+.fd-tile img{transition:transform .35s}
+.fd-tile:focus-visible{outline:2px solid #d6249f;outline-offset:2px}
+@media (min-width:700px){.fd-tile{border-radius:6px}}
