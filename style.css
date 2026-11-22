@@ -431,3 +431,11 @@ html[data-theme="light"] .feed{background:radial-gradient(ellipse at 15% 0,rgba(
 .fd-tile img{transition:transform .35s}
 .fd-tile:focus-visible{outline:2px solid #d6249f;outline-offset:2px}
 @media (min-width:700px){.fd-tile{border-radius:6px}}
+.fd-home{background:none;border:0;cursor:pointer;padding:.2rem .8rem;font:inherit;color:inherit}
+.fd-home:hover b{filter:brightness(1.2)}.fd-home:focus-visible{outline:2px solid #d6249f;outline-offset:2px;border-radius:6px}
+/* feed palette, blue tone from the intro (replaces the sunset colours) */
+.feed{--g:linear-gradient(45deg,#00b4ff,#2f8cff 50%,#6fd6ff);background:radial-gradient(ellipse at 15% 0,rgba(0,180,255,.18),transparent 55%),radial-gradient(ellipse at 90% 10%,rgba(0,120,255,.14),transparent 50%),var(--bg)}
+html[data-theme="light"] .feed{--g:linear-gradient(45deg,#0a7fc2,#1f6fe0 55%,#3aaee8);background:radial-gradient(ellipse at 15% 0,rgba(10,127,194,.10),transparent 55%),radial-gradient(ellipse at 90% 10%,rgba(10,127,194,.08),transparent 50%),var(--bg)}
+.fd-head img{box-shadow:0 0 0 3px var(--bg),0 8px 28px rgba(0,180,255,.28)}
+.fd-tile:nth-child(5n+1){background:#12283a}.fd-tile:nth-child(5n+2){background:#162a44}.fd-tile:nth-child(5n+3){background:#0f2f3f}.fd-tile:nth-child(5n+4){background:#1a2c4a}.fd-tile:nth-child(5n){background:#13303a}
+.fd-tile:focus-visible,.fd-home:focus-visible{outline-color:var(--blue)}

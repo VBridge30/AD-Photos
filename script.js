@@ -60,7 +60,7 @@ CHAPTERS.forEach((c,i)=>{
 /* featured: six favourites, one look at the range */
 const FEATURED=[['landscape','Egret at Dusk'],['macro','Zinnia'],['architecture','The Clock at St Pancras'],['architecture','Fog and Wires'],['monochrome','Last Light, Still Water'],['landscape','Above the Clouds']];
 const fs=document.createElement('section');fs.className='featured';fs.id='featured';
-fs.innerHTML='<div class="chapter-head"><div><h2>Selected Works</h2><p>Six photographs to begin with.</p></div></div>';
+fs.innerHTML='<div class="chapter-head"><div><h2>Favourite Frames</h2><p>Six photographs to begin with.</p></div></div>';
 const fg=document.createElement('div');fg.className='fgrid';
 FEATURED.forEach(([c,t])=>{const p=GALLERY[c].find(x=>x.title===t);if(p)fg.appendChild(tile(p,c))});
 fs.appendChild(fg);
@@ -68,7 +68,7 @@ $('#about').after(fs);
 const all=document.createElement('button');all.dataset.k='all';all.textContent='All';filters.prepend(all);
 
 /* "Selected Works" first; chapters are opened one at a time from the nav or the list, never stacked */
-const sel=document.createElement('button');sel.dataset.k='sel';sel.textContent='Selected Works';filters.prepend(sel);
+const sel=document.createElement('button');sel.dataset.k='sel';sel.textContent='Favourite Frames';filters.prepend(sel);
 const pc=document.createElement('div');pc.className='phone-chaps';pc.innerHTML='<p>Open a chapter</p>';
 CHAPTERS.forEach(c=>{const b=document.createElement('button');b.type='button';b.dataset.k=c.k;b.textContent=c.l||c.t;pc.appendChild(b)});
 fs.appendChild(pc);
@@ -707,6 +707,7 @@ $('.brand').addEventListener('click',e=>{
     feed.classList.remove('show');document.body.style.overflow='';
     tm=setTimeout(()=>{feed.hidden=true},300);if(from&&from.focus)from.focus();
   }
+  $('.fd-home').addEventListener('click',()=>{closeFeed();$('.brand').click()});
   btn.addEventListener('click',openFeed);$('.fd-close').addEventListener('click',closeFeed);
   grid.addEventListener('click',e=>{
     const t=e.target.closest('.fd-tile');if(!t)return;
