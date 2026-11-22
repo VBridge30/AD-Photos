@@ -440,3 +440,23 @@ html[data-theme="light"] .feed{--g:linear-gradient(45deg,#0a7fc2,#1f6fe0 55%,#3a
 .fd-tile:nth-child(5n+1){background:#12283a}.fd-tile:nth-child(5n+2){background:#162a44}.fd-tile:nth-child(5n+3){background:#0f2f3f}.fd-tile:nth-child(5n+4){background:#1a2c4a}.fd-tile:nth-child(5n){background:#13303a}
 .fd-tile:focus-visible,.fd-home:focus-visible{outline-color:var(--blue)}
 .fd-head img{border-radius:10px}
+/* feed background: slow drifting blue light */
+.feed{overflow:hidden}
+.feed::before,.feed::after{content:"";position:absolute;z-index:0;pointer-events:none;border-radius:50%;filter:blur(70px);will-change:transform}
+.feed::before{width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:radial-gradient(circle,rgba(0,180,255,.34),transparent 65%);animation:fdA 22s ease-in-out infinite alternate}
+.feed::after{width:40vmax;height:40vmax;right:-10vmax;bottom:-12vmax;background:radial-gradient(circle,rgba(70,110,255,.30),transparent 65%);animation:fdB 28s ease-in-out infinite alternate}
+.fd-bar,.fd-scroll{position:relative;z-index:1}
+.fd-scroll{background:linear-gradient(transparent,transparent)}
+html[data-theme="light"] .feed::before{background:radial-gradient(circle,rgba(10,127,194,.22),transparent 65%)}
+html[data-theme="light"] .feed::after{background:radial-gradient(circle,rgba(31,111,224,.18),transparent 65%)}
+@keyframes fdA{to{transform:translate(38vw,22vh) scale(1.25)}}
+@keyframes fdB{to{transform:translate(-36vw,-26vh) scale(1.2)}}
+/* feed: slow ocean waves behind the profile header */
+.fd-scroll{position:relative}
+.fd-head,.fd-tab,.fd-grid{position:relative;z-index:1}
+.fd-waves{position:absolute;left:0;right:0;top:56px;height:240px;overflow:hidden;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.fd-waves i{position:absolute;left:0;right:0;bottom:0;background-repeat:repeat-x;background-size:1600px 100%;animation:fdW 38s linear infinite}
+.fd-waves i:nth-child(1){height:150px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60Q400 0 800 60T1600 60V120H0Z' fill='%2300b4ff' fill-opacity='.10'/%3E%3C/svg%3E");animation-duration:46s}
+.fd-waves i:nth-child(2){height:120px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60Q400 0 800 60T1600 60V120H0Z' fill='%232f8cff' fill-opacity='.14'/%3E%3C/svg%3E");animation-duration:32s;animation-direction:reverse}
+.fd-waves i:nth-child(3){height:90px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 120' preserveAspectRatio='none'%3E%3Cpath d='M0 60Q400 0 800 60T1600 60V120H0Z' fill='%2300b4ff' fill-opacity='.20'/%3E%3C/svg%3E");animation-duration:24s}
+@keyframes fdW{to{background-position-x:1600px}}
