@@ -390,3 +390,22 @@ html[data-theme="light"] .xo pre{color:#6b675f}
 html[data-theme="light"] .xo pre b[style]{filter:brightness(.72) saturate(1.4)}
 html[data-theme="light"] .xo pre b.hi{color:#0a7fc2!important;text-shadow:0 0 6px rgba(10,127,194,.35)}
 html[data-theme="light"] .xo pre b.hi2{color:#5f8db0!important}
+
+/* feed (Instagram-style grid of all photographs) */
+.feed{position:fixed;inset:0;z-index:95;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;opacity:0;transition:opacity .3s}
+.feed.show{opacity:1}.feed[hidden]{display:none}
+.fd-bar{display:flex;align-items:center;justify-content:center;position:relative;height:52px;border-bottom:1px solid var(--line);flex:none;font-family:var(--sans);font-weight:500;letter-spacing:.02em}
+.fd-close{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--ink);font-size:2rem;line-height:1;cursor:pointer;padding:.2rem .7rem}
+.fd-scroll{overflow-y:auto;flex:1;overscroll-behavior:contain}
+.fd-head{max-width:935px;margin:0 auto;padding:28px 20px;display:flex;gap:clamp(20px,6vw,80px);align-items:center}
+.fd-head img{width:clamp(78px,16vw,150px);aspect-ratio:1;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--line)}
+.fd-head h2{font-family:var(--sans);font-weight:400;font-size:1.25rem;margin:0 0 .6rem}
+.fd-stats{display:flex;gap:1.6rem;font-size:.95rem;margin:0 0 .6rem}
+.fd-bio{font-size:.9rem;line-height:1.5;margin:0;color:var(--mute)}.fd-bio b{color:var(--ink);font-weight:500}
+.fd-tab{max-width:935px;margin:0 auto;border-top:1px solid var(--line);text-align:center;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.9rem 0 .8rem}
+.fd-grid{max-width:935px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.fd-tile{padding:0;border:0;background:var(--bg2);aspect-ratio:1;cursor:pointer;overflow:hidden;display:block}
+.fd-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.fd-tile:hover img,.fd-tile:focus-visible img{opacity:.8}
+@media (min-width:700px){.fd-grid{gap:20px}}
+@media (max-width:600px){.fd-head{padding:18px 14px}.fd-grid{gap:2px}}
